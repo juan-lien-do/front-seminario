@@ -32,23 +32,23 @@ export default function NavBar({ desloguearse }) {
             </NavLink>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <a className="nav-link">
                 Empleados
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <a className="nav-link">
                 Solicitudes
               </a>
             </li>
             <li className="nav-item"></li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <a className="nav-link">
                 Envíos
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <a className="nav-link">
                 Devoluciones
               </a>
             </li>

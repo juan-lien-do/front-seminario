@@ -7,6 +7,10 @@ async function logear(datosLogin) {
     console.log(response)
     return response;
   } catch (err) {
+    console.log(err)
+    if(err?.response?.status == 401 || err?.response?.status == 404){
+      throw new Error("Credenciales inválidas")
+    }
     throw new Error("Error en la autenticación");
   }
 }

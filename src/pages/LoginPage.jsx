@@ -7,6 +7,7 @@ import { Navigate } from "react-router-dom";
 
 export default function LoginPage({ usuario, onLogin }) {
   const [error, setError] = useState(null);
+  const [intentos, setIntentos] = useState(0)
   const navigate = useNavigate(); 
 
   const {
@@ -16,12 +17,14 @@ export default function LoginPage({ usuario, onLogin }) {
   } = useForm();
 
   const onSubmit = async (data) => {
+    setIntentos(intentos + 1)
+    if(intentos > 2) {alert("Contacte a un administrador antes de seguir intentando y recargue la página.")}
     try {
-      const response = await logear(data);
+      const response = await logear(data);     
       onLogin(response.data); // response.data debería contener el token y la info del usuario
       navigate("/home");
     } catch (err) {
-      setError("Error al iniciar sesión");
+      setError(err.message);
     }
   };
 
@@ -68,7 +71,11 @@ export default function LoginPage({ usuario, onLogin }) {
                         Ingresar
                       </button>
                     </div>
-                    <p class="text-muted">Olvidaste tu contraseña?</p>
+                    {
+                      (intentos > 2) ?
+                      <p>Contacte a un administrador</p>
+                      : <div></div>
+                    }
                   </fieldset>
                   {error && <p className="text-danger">{error}</p>}
                 </form>
