@@ -1,14 +1,14 @@
-import axios from 'axios'
-const baseUrl = 'http://localhost:8080'
-
+import axios from 'axios';
+const baseUrl = 'http://localhost:8080';
 
 async function logear(datosLogin) {
-    try {
-        const ans = await axios.post(baseUrl+"/login", datosLogin);
-    } catch (err){
-        console.log("xd")
-    }
+  try {
+    const response = await axios.post(`${baseUrl}/login`, datosLogin);
+    console.log(response)
+    return response;
+  } catch (err) {
+    throw new Error("Error en la autenticación");
+  }
 }
 
-
-export default {logear}
+export default logear;
