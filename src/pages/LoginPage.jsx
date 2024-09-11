@@ -2,9 +2,12 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import logear from "../services/LoginService";
 import FotoUsuario from "../components/FotoUsuario";
+import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
-export default function LoginPage({ onLogin }) {
+export default function LoginPage({ usuario, onLogin }) {
   const [error, setError] = useState(null);
+  const navigate = useNavigate(); 
 
   const {
     register,
@@ -16,63 +19,56 @@ export default function LoginPage({ onLogin }) {
     try {
       const response = await logear(data);
       onLogin(response.data); // response.data debería contener el token y la info del usuario
+      navigate("/home");
     } catch (err) {
       setError("Error al iniciar sesión");
     }
   };
 
+  if (!!usuario) return (<Navigate to="/home" replace />)
   return (
-    <section class="position-relative py-4 py-xl-5">
-      <div class="container">
-        <div class="row mb-5">
-          <div class="col-md-8 col-xl-6 text-center mx-auto">
+    <section className="position-relative py-4 py-xl-5 homeimage">
+      <div className="container">
+        <div className="row mb-5">
+          <div className="col-md-8 col-xl-6 text-center mx-auto shadowtxt">
             <h2>Infraestructura Caja de Jubilaciones</h2>
-            <p class="w-lg-50">Sistema de gestión de inventario</p>
+            <p className="w-lg-50">Sistema de gestión de inventario</p>
           </div>
         </div>
-        <div class="row d-flex justify-content-center">
-          <div class="col-md-6 col-xl-4">
-            <div class="card mb-5">
-              <div class="card-body d-flex flex-column align-items-center">
+        <div className="row d-flex justify-content-center">
+          <div className="col-md-6 col-xl-4">
+            <div className="card mb-5">
+              <div className="card-body d-flex flex-column align-items-center">
                 <FotoUsuario />
                 <form className="text-center" onSubmit={handleSubmit(onSubmit)}>
                   <fieldset>
-                    <div className="row">
-                      <div className="col-sm-4 col-md-3 offset-md-1">
-                        <label className="col-form-label" htmlFor="nombre">
-                          Nombre<span className="text-danger">*</span>:
-                        </label>
-                      </div>
-                      <div className="col-sm-8 col-md-6">
-                        <input
-                          type="text"
-                          {...register("nombre", { required: true })}
-                          autoFocus
-                          className="form-control"
-                        />
-                      </div>
+                    <div className="mb-3">
+                      <input
+                        type="text"
+                        {...register("nombre", { required: true })}
+                        autoFocus
+                        className="form-control"
+                        placeholder="Usuario"
+                      />
                     </div>
-                    <div className="row">
-                      <div className="col-sm-4 col-md-3 offset-md-1">
-                        <label className="col-form-label" htmlFor="password">
-                          Contraseña<span className="text-danger">*</span>:
-                        </label>
-                      </div>
-                      <div className="col-sm-8 col-md-6">
-                        <input
-                          type="password"
-                          {...register("password", { required: true })}
-                          className="form-control"
-                        />
-                      </div>
+                    <div className="mb-3">
+                      <input
+                        type="password"
+                        {...register("password", { required: true })}
+                        className="form-control"
+                        placeholder="Contraseña"
+                      />
                     </div>
-                    <button
-                      type="submit"
-                      className="btn btn-primary"
-                      disabled={!isValid}
-                    >
-                      Ingresar
-                    </button>
+                    <div className="mb-3">
+                      <button
+                        type="submit"
+                        className="btn btn-primary d-block w-100"
+                        disabled={!isValid}
+                      >
+                        Ingresar
+                      </button>
+                    </div>
+                    <p class="text-muted">Olvidaste tu contraseña?</p>
                   </fieldset>
                   {error && <p className="text-danger">{error}</p>}
                 </form>
