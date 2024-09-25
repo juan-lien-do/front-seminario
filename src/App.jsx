@@ -65,14 +65,8 @@ function App() {
             }
           />
 
-          <Route path='/inventario' element={
-            <ProtectedRoute isAllowed={!!usuario}>
-                <NavBar desloguearse={handleLogout}/>
-                <Inventario/>
-            </ProtectedRoute>
-          } />
 
-          <Route path='/recursos' element={
+          <Route path='/inventario' element={
             <ProtectedRoute isAllowed={!!usuario}>
                 <NavBar desloguearse={handleLogout}/>
                 <Recursos/>
