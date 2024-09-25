@@ -12,6 +12,7 @@ import NavBar from './components/NavBar';
 import Inventario from './pages/Inventario';
 import Empleados from './pages/Empleados';
 import Home from './pages/Home';
+import Recursos from './pages/recursos';
 
 
 function App() {
@@ -39,7 +40,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
-      <Toaster richColors closeButton expand={false}/>
+        <Toaster richColors closeButton expand={false}/>
         <Routes>
           <Route
             path="/"
@@ -69,8 +70,15 @@ function App() {
                 <NavBar desloguearse={handleLogout}/>
                 <Inventario/>
             </ProtectedRoute>
-
           } />
+
+          <Route path='/recursos' element={
+            <ProtectedRoute isAllowed={!!usuario}>
+                <NavBar desloguearse={handleLogout}/>
+                <Recursos/>
+            </ProtectedRoute>
+          } />
+          
           <Route path="/*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>

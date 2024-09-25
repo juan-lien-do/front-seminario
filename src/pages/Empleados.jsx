@@ -1,4 +1,4 @@
-import {  useState } from 'react'
+import {  useState, useEffect } from 'react'
 import { empleadosService } from '../services/empleados.services'
 import ListadoEmpleados from '../components/ListadoEmpleados'
 import BuscadorEmpleados from '../components/BuscadorEmpleados'
@@ -18,6 +18,12 @@ export default function Empleados() {
     const data = await empleadosService.search({ nombre, activo })
     setEmpleados(data)
   }
+
+   // Use useEffect to update empleados when the page loads
+   useEffect(() => {
+    buscarEmpleados();
+  }, []); // Empty array means this runs once when the component mounts
+
 
   function agregarEmpleado() {
     const v = {

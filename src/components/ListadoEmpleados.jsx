@@ -18,10 +18,10 @@ export default function ListadoEmpleados({ empleados, modificar, desactivar, act
         <tbody>
           {
             empleados.map(empleado => (
-              <tr key={empleado.id_empleado}>
+              <tr  key={empleado.id_empleado}>
                 <td className={`text-center ${!empleado.activo ? " bg-danger text-white fw-bold" : " text-dark" }`}>{empleado.nombre}</td>
-                <td className="text-center">{empleado.mail}</td>
-                <td className="text-center">{empleado.telefono}</td>
+                <td className={`text-center ${!empleado.activo ? " bg-danger text-white fw-bold" : " text-dark" }`}>{empleado.mail}</td>
+                <td className={`text-center ${!empleado.activo ? " bg-danger text-white fw-bold" : " text-dark" }`}>{empleado.telefono}</td>
                 {/*<td className="text-center">
                 {empleado.activo ? (
                   <span className="badge bg-light" style={{color: "black"}}>SI</span>
@@ -29,8 +29,8 @@ export default function ListadoEmpleados({ empleados, modificar, desactivar, act
                   <span className="badge bg-dark">NO</span>
                 )}
               </td>*/}
-                <td className="text-center">{empleado.ws}</td>
-                <td className="text-center text-nowrap">
+                <td className={`text-center ${!empleado.activo ? " bg-danger text-white fw-bold" : " text-dark" }`}>{empleado.ws}</td>
+                <td className={`text-center ${!empleado.activo ? " bg-danger text-white fw-bold" : " text-dark" }`}>
                   {/* <button
                     className="btn btn-sm btn-outline-primary" // esto no se como hacerlo funcionar
                     title="Consultar"

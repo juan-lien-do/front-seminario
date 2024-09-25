@@ -40,6 +40,11 @@ export default function NavBar({ desloguearse }) {
               </NavLink>
             </li>
             <li className="nav-item">
+              <NavLink className="nav-link" to="/recursos">
+                Recursos
+              </NavLink>
+            </li>
+            <li className="nav-item">
               <NavLink className="nav-link" to="/empleados">
                 Empleados
               </NavLink>
