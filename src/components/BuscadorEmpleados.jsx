@@ -4,10 +4,14 @@ export default function BuscadorEmpleados({
   activo,
   setActivo,
   buscarEmpleados,
-  agregarEmpleado }) {
-
+  agregarEmpleado,
+}) {
   return (
-    <form name="FormBusqueda" onSubmit={(e) => e.preventDefault()}>
+    <form
+      className="mt-3"
+      name="FormBusqueda"
+      onSubmit={(e) => e.preventDefault()}
+    >
       <div className="container-fluid">
         <div className="row">
           <div className="col-sm-4 col-md-2">
@@ -32,9 +36,9 @@ export default function BuscadorEmpleados({
               onChange={(e) => setActivo(e.target.value)}
               value={activo}
             >
-              <option value=''>TODOS</option>
-              <option value={false}>NO</option>
               <option value={true}>SI</option>
+              <option value="">TODOS</option>
+              <option value={false}>NO</option>
             </select>
           </div>
         </div>
@@ -62,5 +66,5 @@ export default function BuscadorEmpleados({
         </div>
       </div>
     </form>
-  )
+  );
 }

@@ -10,7 +10,9 @@ export default function NavBar({ desloguearse }) {
   return (
     <nav className="navbar navbar-expand-md bg-dark py-3" data-bs-theme="dark">
       <div className="container">
-        <a className="navbar-brand d-flex align-items-center" href="#">
+        <NavLink
+          className="nav-link navbar-brand d-flex align-items-center"
+          to="/home">
           <span className="bs-icon-sm bs-icon-rounded bs-icon-primary d-flex justify-content-center align-items-center me-2 bs-icon">
             <img
               className="img-fluid shadow-logo"
@@ -20,7 +22,8 @@ export default function NavBar({ desloguearse }) {
             />
           </span>
           <span>Inicio</span>
-        </a>
+        </NavLink>
+
         <button
           data-bs-toggle="collapse"
           className="navbar-toggler"

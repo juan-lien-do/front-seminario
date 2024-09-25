@@ -1,15 +1,15 @@
 import moment from 'moment'
 
-export default function ListadoEmpleados({ empleados, modificar, borrar }) {
+export default function ListadoEmpleados({ empleados, modificar, desactivar, activar }) {
   return (
-    <div className="table-responsive">
+    <div className="mt-3 table-responsive">
       <table className="table table-hover table-sm table-bordered table-striped">
         <thead className="table-light ">
           <tr>
             <th className="text-center">Nombre</th>
             <th className="text-center">Mail</th>
             <th className="text-center">Teléfono</th>
-            <th className="text-center">Activo</th>
+            {/*<th className="text-center">Activo</th>*/}
             <th className="text-center">WS Asignado</th>
             <th className="text-center text-nowrap">Acciones</th>
           </tr>
@@ -18,16 +18,16 @@ export default function ListadoEmpleados({ empleados, modificar, borrar }) {
           {
             empleados.map(empleado => (
               <tr key={empleado.id_empleado}>
-                <td className="text-center">{empleado.nombre}</td>
+                <td className={`text-center ${!empleado.activo ? " bg-danger text-white fw-bold" : " text-dark" }`}>{empleado.nombre}</td>
                 <td className="text-center">{empleado.mail}</td>
                 <td className="text-center">{empleado.telefono}</td>
-                <td className="text-center">
+                {/*<td className="text-center">
                 {empleado.activo ? (
                   <span className="badge bg-light" style={{color: "black"}}>SI</span>
                 ) : (
                   <span className="badge bg-dark">NO</span>
                 )}
-              </td>
+              </td>*/}
                 <td className="text-center">{empleado.ws}</td>
                 <td className="text-center text-nowrap">
                   {/* <button
@@ -45,11 +45,11 @@ export default function ListadoEmpleados({ empleados, modificar, borrar }) {
                     <i className="fa fa-pencil"></i>
                   </button>
                   <button
-                    className="btn btn-sm btn-danger"
-                    title="Borrar"
-                    onClick={() => borrar(empleado.id_empleado)}
+                    className={`btn btn-sm  ${!!empleado.activo ? "btn-danger" : "btn-primary" }`}
+                    title={!!empleado.activo ? "Borrar" : "Reactivar"}
+                    onClick={!!empleado.activo ?  () => {desactivar(empleado.idEmpleado)} : () => {activar(empleado.idEmpleado)}}
                   >
-                    <i className="fa-solid fa-trash-can"></i>
+                    <i className={!!empleado.activo ? "fas fa-trash" : "fas fa-trash-restore"}></i>
                   </button>
                 </td>
               </tr>

@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { Toaster, toast } from 'sonner'
 import './App.css';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min.js";
+import '@fortawesome/fontawesome-free/css/all.min.css'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ProtectedRoute } from './utils/ProtectedRoute';
 import LoginPage from './pages/LoginPage';
@@ -9,6 +11,8 @@ import axios from 'axios';
 import NavBar from './components/NavBar';
 import Inventario from './pages/Inventario';
 import Empleados from './pages/Empleados';
+import Home from './pages/Home';
+
 
 function App() {
   const [usuario, setUsuario] = useState(null);
@@ -35,6 +39,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
+      <Toaster richColors closeButton expand={false}/>
         <Routes>
           <Route
             path="/"
@@ -54,7 +59,7 @@ function App() {
             element={
               <ProtectedRoute isAllowed={!!usuario}>
                 <NavBar desloguearse={handleLogout}/>
-                <div className=''>Hola {usuario?.nombre}</div>
+                <Home usuario={usuario}/>
               </ProtectedRoute>
             }
           />

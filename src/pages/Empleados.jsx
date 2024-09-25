@@ -7,7 +7,7 @@ import RegistroEmpleado from '../components/RegistroEmpleado'
 
 export default function Empleados() {
   const [nombre, setNombre] = useState('')
-  const [activo, setActivo] = useState('')
+  const [activo, setActivo] = useState(true)
   const [empleados, setEmpleados] = useState(null)
   const [empleado, setEmpleado] = useState(null)
   const [mostrarRegistroEmpleado, setMostrarRegistroEmpleado] = useState(false)
@@ -52,16 +52,18 @@ export default function Empleados() {
     }
   }
 
-  async function borrarEmpleado(id) {
-    const resp = window.confirm(
-      "Está seguro que quiere modificar el registro?"
-    );
-
-    if (resp){
+  async function desactivarEmpleado(id) {
     await empleadosService.remove(id)
-    }
     buscarEmpleados()
   }
+
+  async function activarEmpleado(id) {
+    await empleadosService.activar(id)
+    buscarEmpleados()
+  }
+
+
+
 
   if (mostrarRegistroEmpleado) {
     return (
@@ -89,7 +91,8 @@ export default function Empleados() {
       <ListadoEmpleados
         empleados={empleados}
         modificar={modificarEmpleado}
-        borrar={borrarEmpleado}
+        desactivar={desactivarEmpleado}
+        activar={activarEmpleado}
       />}
     </>
   );
