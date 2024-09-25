@@ -129,13 +129,13 @@ export default function RegistroEmpleado({ volver, empleado, guardar }) {
           <hr />
           <div className="row justify-content-center">
             <div className="col text-center botones">
-              <button type="submit" className="btn btn-primary" disabled={!isValid}>
+              <button type="submit" className="btn btn-primary mx-2" disabled={!isValid}>
                 <i className="fa fa-check"></i> Guardar
               </button>
         
               <button
                 type="button"
-                className="btn btn-warning"
+                className="btn btn-warning mx-2"
                 onClick={volver}
               >
                 <i className="fa fa-undo"></i>

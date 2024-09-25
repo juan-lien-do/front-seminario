@@ -50,17 +50,17 @@ export default function BuscadorEmpleados({
           <div className="col text-center botones">
             <button
               type="button"
-              className="btn btn-primary"
+              className="btn btn-primary mx-2"
               onClick={buscarEmpleados}
             >
               <i className="fa fa-search"> </i> Buscar
             </button>
             <button
               type="button"
-              className="btn btn-warning"
+              className="btn btn-warning mx-2"
               onClick={agregarEmpleado}
             >
-              <i className="fa fa-plus"> </i> Agregar
+              <i className="fa fa-plus "> </i> Agregar
             </button>
           </div>
         </div>

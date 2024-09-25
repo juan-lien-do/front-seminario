@@ -1,4 +1,5 @@
 import moment from 'moment'
+import imagen from '../assets/ratita_perdida.png'
 
 export default function ListadoEmpleados({ empleados, modificar, desactivar, activar }) {
   return (
@@ -56,6 +57,16 @@ export default function ListadoEmpleados({ empleados, modificar, desactivar, act
             ))}
         </tbody>
       </table>
+
+      {/*
+        !!empleados ? "" : <img
+        className="img-fluid shadow-logo"
+        src={imagen}
+        alt="imagen de ejemplo"
+        style={{ width: "40em" }}
+      /> 
+*/
+      }
     </div>
   )
 }

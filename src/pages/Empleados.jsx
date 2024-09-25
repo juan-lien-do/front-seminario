@@ -4,6 +4,8 @@ import ListadoEmpleados from '../components/ListadoEmpleados'
 import BuscadorEmpleados from '../components/BuscadorEmpleados'
 import RegistroEmpleado from '../components/RegistroEmpleado'
 
+import imagen from '../assets/ratita_perdida.png'
+
 
 export default function Empleados() {
   const [nombre, setNombre] = useState('')
@@ -87,13 +89,20 @@ export default function Empleados() {
         
       />
 
-      {empleados &&
+      {!!empleados ?
       <ListadoEmpleados
         empleados={empleados}
         modificar={modificarEmpleado}
         desactivar={desactivarEmpleado}
         activar={activarEmpleado}
-      />}
+      /> : ""
+      /*<img
+        className="mx-auto"
+        src={imagen}
+        alt="imagen de ejemplo"
+        style={{ width: "20em" }}
+      /> */
+      }
     </>
   );
 }
