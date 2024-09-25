@@ -1,9 +1,10 @@
 import axios from "axios";
+import instance from '../../axios.config'
 
 const urlResource = "http://localhost:8080/recursos";
 
 async function Buscar(nombre, activo) {
-    const resp = await axios.get(urlResource, {
+    const resp = await instance.get(urlResource, {
     params: { nombre:nombre, activo:activo },
     });
     return resp.data;
@@ -11,19 +12,19 @@ async function Buscar(nombre, activo) {
 
 
 async function BuscarPorId(id_recurso) {
-    const resp = await axios.get(urlResource + "/" + id_recurso);
+    const resp = await instance.get(urlResource + "/" + id_recurso);
     return resp.data;
 }
 
 async function ActivarDesactivar(item) {
-    await axios.delete(urlResource + "/" + item.id_recurso);
+    await instance.delete(urlResource + "/" + item.id_recurso);
 }
 
 async function Guardar(item) {
     if (item.id_recurso === 0) {
-    await axios.post(urlResource, item);
+    await instance.post(urlResource, item);
     } else {
-    await axios.put(urlResource + "/" + item.id_recurso, item);
+    await instance.put(urlResource + "/" + item.id_recurso, item);
     }
 }
 

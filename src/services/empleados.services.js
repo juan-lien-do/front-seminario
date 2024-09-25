@@ -1,11 +1,13 @@
-import axios from "axios";
+//import axios from "axios";
+//import axios from 'axios';
+import instance from '../../axios.config'
 import { Toaster, toast } from "sonner";
 
 const baseUrl = "http://localhost:8080/empleados/";
 
 async function search({ nombre, activo }) {
   try {
-    const response = await axios.get(baseUrl, {
+    const response = await instance.get(baseUrl, {
       params: { nombre: nombre, activo: activo },
     });
     return response.data;
@@ -30,7 +32,7 @@ async function getById(id) {
 async function save(empleado) {
   if (empleado.id_empleado === 0) {
     try {
-      await axios.post(baseUrl, empleado);
+      await instance.post(baseUrl, empleado);
       toast.success("Se cargó un empleado nuevo.")
 
     } catch (err) {
@@ -43,7 +45,7 @@ async function save(empleado) {
 
   try {
     const url = `${baseUrl}`;
-    await axios.put(url, empleado);
+    await instance.put(url, empleado);
     toast.success("Se actualizaron los datos del empleado con ID: "+empleado.idEmpleado)
 
   } catch (err) {
@@ -57,7 +59,7 @@ async function remove(id) {
   const url = `${baseUrl}desactivar/${id}`;
 
   try {
-    await axios.patch(url);
+    await instance.patch(url);
     toast.success("Se desactivó un empleado existente.")
 
   } catch (error) {
@@ -71,7 +73,7 @@ async function activar(id) {
   const url = `${baseUrl}activar/${id}`;
 
   try {
-    await axios.patch(url);
+    await instance.patch(url);
     toast.success("Se activó un empleado existente.")
   } catch (error) {
     console.error(error);
