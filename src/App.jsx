@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage';
 import axios from 'axios';
 import NavBar from './components/NavBar';
 import Inventario from './pages/Inventario';
+import Empleados from './pages/Empleados';
 
 function App() {
   const [usuario, setUsuario] = useState(null);
@@ -38,6 +39,15 @@ function App() {
           <Route
             path="/"
             element={<LoginPage usuario={usuario} onLogin={handleLogin} />}
+          />
+          <Route
+            path="/empleados"
+            element={
+              <ProtectedRoute isAllowed={!!usuario}>
+                <NavBar desloguearse={handleLogout}/>
+                <Empleados/>
+              </ProtectedRoute>
+            }
           />
           <Route
             path="/home"

@@ -1,5 +1,5 @@
 import React from "react";
-import imagen from '../assets/icono2.png';
+import imagen from "../assets/icono2.png";
 import { NavLink } from "react-router-dom";
 
 export default function NavBar({ desloguearse }) {
@@ -12,7 +12,12 @@ export default function NavBar({ desloguearse }) {
       <div className="container">
         <a className="navbar-brand d-flex align-items-center" href="#">
           <span className="bs-icon-sm bs-icon-rounded bs-icon-primary d-flex justify-content-center align-items-center me-2 bs-icon">
-            <img className="img-fluid shadow-logo" src={imagen} alt="imagen de ejemplo" style={{width:"1.6em"}} />
+            <img
+              className="img-fluid shadow-logo"
+              src={imagen}
+              alt="imagen de ejemplo"
+              style={{ width: "1.6em" }}
+            />
           </span>
           <span>Inicio</span>
         </a>
@@ -27,30 +32,24 @@ export default function NavBar({ desloguearse }) {
         <div className="collapse navbar-collapse" id="navcol-5">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
-            <NavLink className="nav-link" to="/inventario">
-              Inventario
-            </NavLink>
+              <NavLink className="nav-link" to="/inventario">
+                Inventario
+              </NavLink>
             </li>
             <li className="nav-item">
-              <a className="nav-link">
+              <NavLink className="nav-link" to="/empleados">
                 Empleados
-              </a>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <a className="nav-link">
-                Solicitudes
-              </a>
+              <a className="nav-link">Solicitudes</a>
             </li>
             <li className="nav-item"></li>
             <li className="nav-item">
-              <a className="nav-link">
-                Envíos
-              </a>
+              <a className="nav-link">Envíos</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link">
-                Devoluciones
-              </a>
+              <a className="nav-link">Devoluciones</a>
             </li>
           </ul>
           <a href="#"></a>
