@@ -2,10 +2,10 @@ import React from "react";
 import ModalExistencias from "./ModalExistencias";
 import { useState } from "react";
 
-export default function RecursosListado({
+export default function ListadoRecursos({
   Items,
-  Modificar,
-  ActivarDesactivar,
+  activar,
+  desactivar
 }) {
   const [show, setShow] = useState(false);
   const [datosExistencias, setDatosExistencias] = useState([])
@@ -22,8 +22,8 @@ export default function RecursosListado({
 
       <div className="card" id="TableSorterCard">
         <div className="table-responsive">
-          <table className="table table-striped">
-            <thead className="thead-dark">
+          <table className="table table-hover table-sm table-bordered table-striped">
+            <thead className="table-light">
               <tr>
                 <th className="text-end"> Nombre </th>
                 <th className="text-end">Cantidad</th>
@@ -39,7 +39,6 @@ export default function RecursosListado({
                   <tr key={Item.id}>
                     <td className={`text-center ${!Item.activo ? " bg-danger text-white fw-bold" : " text-dark" }`}>{Item.nombre}</td>
                     <td className="text-end">{Item.cantidad}</td>
-
                     <td className="text-end">{Item.categoria}</td>
                     <td className="text-end">{Item.descripcion}</td>
                     <td className="text-center">
@@ -56,7 +55,7 @@ export default function RecursosListado({
                         title="Modificar"
                         onClick={() => {
                           console.log(Item);
-                          Modificar(Item);
+                          //Modificar(Item);
                         }}
                       >
                         <i className="fa fa-pencil"></i>

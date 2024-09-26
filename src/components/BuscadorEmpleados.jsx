@@ -13,11 +13,11 @@ export default function BuscadorEmpleados({
       onSubmit={(e) => e.preventDefault()}
     >
       <div className="container-fluid">
-        <div className="row">
-          <div className="col-sm-4 col-md-2">
-            <label className="col-form-label">Nombre:</label>
+        <div className="row ">
+          <div className="col-sm-4 col-md-1 mt-2">
+            <label className="col-form-label ">Nombre:</label>
           </div>
-          <div className="col-sm-8 col-md-4">
+          <div className="col-sm-8 col-md-4 mt-2">
             <input
               type="text"
               className="form-control"
@@ -27,43 +27,40 @@ export default function BuscadorEmpleados({
               autoFocus
             />
           </div>
-          <div className="col-sm-4 col-md-2">
-            <label className="col-form-label">Activo:</label>
-          </div>
-          <div className="col-sm-8 col-md-4">
-            <select
-              className="form-control"
-              onChange={(e) => setActivo(e.target.value)}
-              value={activo}
-            >
-              <option value={true}>SI</option>
-              <option value="">TODOS</option>
-              <option value={false}>NO</option>
-            </select>
+
+          <div className="col-sm-8 col-md-4 my-2">
+            <div className="form-check ">
+              <input
+                className="form-check-input mt-2"
+                type="checkbox"
+                id="activo"
+                checked={activo} // Para reflejar el estado del checkbox
+                onChange={(e) => setActivo(e.target.checked)} // Cambia el estado basado en si está marcado o no
+              />
+              <label className="form-check-label" htmlFor="activo">
+                Activo
+              </label>
+
+              <button
+                type="button"
+                className="btn btn-primary mx-1"
+                onClick={buscarEmpleados}
+              >
+                <i className="fa fa-search"> </i> Buscar
+              </button>
+
+              <button
+                type="button"
+                className="btn btn-warning mx-1"
+                onClick={agregarEmpleado}
+              >
+                <i className="fa fa-plus "> </i> Agregar
+              </button>
+            </div>
           </div>
         </div>
 
-        <hr />
-
-        {/* Botones */}
-        <div className="row">
-          <div className="col text-center botones">
-            <button
-              type="button"
-              className="btn btn-primary mx-2"
-              onClick={buscarEmpleados}
-            >
-              <i className="fa fa-search"> </i> Buscar
-            </button>
-            <button
-              type="button"
-              className="btn btn-warning mx-2"
-              onClick={agregarEmpleado}
-            >
-              <i className="fa fa-plus "> </i> Agregar
-            </button>
-          </div>
-        </div>
+        <hr />        
       </div>
     </form>
   );

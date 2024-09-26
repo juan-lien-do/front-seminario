@@ -12,6 +12,7 @@ async function search({ nombre, activo }) {
     });
     return response.data;
   } catch (error) {
+    if(error.response.status === 401) {toast.error("Inicie sesión nuevamente")}
     console.error(error);
   }
 }
