@@ -2,18 +2,27 @@
 //import axios from 'axios';
 import instance from '../../axios.config'
 import { Toaster, toast } from "sonner";
+import sonidoExito from '../assets/mixkit-gaming-lock-2848.mp3'
+import sonidoError from '../assets/mixkit-tech-break-fail-2947.mp3'
+
+const audioExito = new Audio(sonidoExito);
+const audioError = new Audio(sonidoError);
 
 const baseUrl = "http://localhost:8080/empleados/";
+
 
 async function search({ nombre, activo }) {
   try {
     const response = await instance.get(baseUrl, {
       params: { nombre: nombre, activo: activo },
     });
+    //audioExito.play()
+
     return response.data;
   } catch (error) {
     if(error.response.status === 401) {toast.error("Inicie sesión nuevamente")}
     console.error(error);
+    audioError.play();
   }
 }
 
@@ -35,10 +44,12 @@ async function save(empleado) {
     try {
       await instance.post(baseUrl, empleado);
       toast.success("Se cargó un empleado nuevo.")
+      audioExito.play()
 
     } catch (err) {
       console.error(err);
       toast.error("Surgió un error")
+      audioError.play();
 
     }
     return;
@@ -47,11 +58,13 @@ async function save(empleado) {
   try {
     const url = `${baseUrl}`;
     await instance.put(url, empleado);
-    toast.success("Se actualizaron los datos del empleado con ID: "+empleado.idEmpleado)
+    toast.success("Se actualizaron los datos del empleado")
+    audioExito.play()
 
   } catch (err) {
     console.error(err);
     toast.error("Surgió un error")
+    audioError.play();
 
   }
 }
@@ -62,10 +75,12 @@ async function remove(id) {
   try {
     await instance.patch(url);
     toast.success("Se desactivó un empleado existente.")
+    audioExito.play()
 
   } catch (error) {
     console.error(error);
     toast.error("Surgió un error")
+    audioError.play();
 
   }
 }
@@ -76,9 +91,12 @@ async function activar(id) {
   try {
     await instance.patch(url);
     toast.success("Se activó un empleado existente.")
+    audioExito.play()
+
   } catch (error) {
     console.error(error);
     toast.error("Surgió un error")
+    audioError.play();
 
   }
 

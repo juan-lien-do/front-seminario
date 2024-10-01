@@ -10,6 +10,7 @@ export default function ListadoEmpleados({ empleados, modificar, desactivar, act
             <th className="text-center">Nombre</th>
             <th className="text-center">Mail</th>
             <th className="text-center">Teléfono</th>
+            <th className="text-center">CUIL</th>
             {/*<th className="text-center">Activo</th>*/}
             <th className="text-center">WS Asignado</th>
             <th className="text-center text-nowrap">Acciones</th>
@@ -22,6 +23,8 @@ export default function ListadoEmpleados({ empleados, modificar, desactivar, act
                 <td className={`text-center ${!empleado.activo ? " bg-danger text-white fw-bold" : " text-dark" }`}>{empleado.nombre}</td>
                 <td className={`text-center ${!empleado.activo ? " bg-danger text-white fw-bold" : " text-dark" }`}>{empleado.mail}</td>
                 <td className={`text-center ${!empleado.activo ? " bg-danger text-white fw-bold" : " text-dark" }`}>{empleado.telefono}</td>
+                <td className={`text-center ${!empleado.activo ? " bg-danger text-white fw-bold" : " text-dark" }`}>{empleado.cuil}</td>
+
                 {/*<td className="text-center">
                 {empleado.activo ? (
                   <span className="badge bg-light" style={{color: "black"}}>SI</span>

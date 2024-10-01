@@ -11,8 +11,11 @@ export default function Home({usuario}) {
   return (
     <div className="container mt-5">
       <div className="card p-5 shadow">
-        <h1 className="display-4 mb-4">¡Bienvenido {usuario.nombre} a Almacen It!</h1>
-        {!!usuario.isAdmin ? <h2 className="display-5 mb-4">Nos honra la visita del admin</h2> : ""}
+        <h1 className="display-4 mb-4">¡Bienvenido <strong>{usuario.nombre}</strong> a Almacen It!</h1>
+        {!!usuario.isAdmin ? <h2 className="display-5 mb-4">Usted es ADMIN</h2> : ""}
+
+
+        {/*
         <p className="lead">
           ¡Este sistema es nuestro proyecto de Seminario Integrador para
           recibirnos de Analista de Sistemas!
@@ -31,8 +34,8 @@ export default function Home({usuario}) {
               </div>
             ))}
           </div>
-        </div>
-        
+        </div>*/
+        }
       </div>
     </div>
   );
