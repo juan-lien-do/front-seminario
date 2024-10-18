@@ -20,7 +20,7 @@ export default function Empleados() {
   }
 
    // Use useEffect to update empleados when the page loads
-   useEffect(() => {
+  useEffect(() => {
     buscarEmpleados();
   }, []); // Empty array means this runs once when the component mounts
 
@@ -33,7 +33,7 @@ export default function Empleados() {
       mail: null,
       telefono: null,
       activo: true,
-      ws: null,
+      ws: null, 
     }
 
     setEmpleado(v)

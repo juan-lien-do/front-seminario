@@ -5,7 +5,8 @@ import { useState } from "react";
 export default function ListadoRecursos({
   Items,
   activar,
-  desactivar
+  desactivar,
+  modificar
 }) {
   const [show, setShow] = useState(false);
   const [datosExistencias, setDatosExistencias] = useState([])
@@ -25,7 +26,7 @@ export default function ListadoRecursos({
           <table className="table table-hover table-sm table-bordered table-striped">
             <thead className="table-light">
               <tr>
-                <th className="text-end"> Nombre </th>
+                <th className="text-end">Nombre </th>
                 <th className="text-end">Cantidad</th>
                 <th className="text-end">Categoria</th>
                 <th className="text-end">Descripción</th>
@@ -48,15 +49,12 @@ export default function ListadoRecursos({
                         Ver{" "}
                       </button>{" "}
                     </td>
-
+                  
                     <td className="text-center text-nowrap">
                       <button
                         className="btn btn-sm btn-warning me-2"
                         title="Modificar"
-                        onClick={() => {
-                          console.log(Item);
-                          //Modificar(Item);
-                        }}
+                        onClick={() => modificar(recurso)}
                       >
                         <i className="fa fa-pencil"></i>
                       </button>

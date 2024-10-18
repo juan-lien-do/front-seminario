@@ -1,12 +1,12 @@
 import instance from '../../axios.config'
 import { toast } from 'sonner';
 
-const urlResource = "http://localhost:8080/recursos";
+const urlResource = "http://localhost:8080/recursos/";
 
 async function Buscar({ activo }) {
     try {
       console.log(activo)
-      const response = await instance.get(urlResource+"/", {
+      const response = await instance.get(urlResource, {
         params: { activo: activo },
       });
       return response.data;
@@ -32,15 +32,45 @@ async function desactivar(id) {
 async function activar(id) {
     await instance.patch(urlResource + "/activar/" + id);
 }
+/*
+async function save(recurso) {
+  if (recurso.id_recurso === 0) {
+    try {
+      await instance.post(baseUrl, recurso);
+      toast.success("Se cargó un recurso nuevo.")
+      audioExito.play()
 
-async function Guardar(item) {
-    if (item.id_recurso === 0) {
+    } catch (err) {
+      console.error(err);
+      toast.error("Surgió un error")
+      audioError.play();
+
+    }
+    return;
+  }
+
+  try {
+    const url = `${urlResource}`;
+    await instance.put(url, recurso);
+    toast.success("Se actualizaron los datos del recurso")
+    audioExito.play()
+
+  } catch (err) {
+    console.error(err);
+    toast.error("Surgió un error")
+    audioError.play();
+
+  }
+}
+*/
+
+async function save(item) {
+    if (item.id === 0) {
     await instance.post(urlResource, item);
     } else {
-    await instance.put(urlResource + "/" + item.id_recurso, item);
+    await instance.put(urlResource + "/" + item.id, item);
     }
 }
-
 export const recursosService = {
-    Buscar, activar, desactivar, Guardar
+    Buscar, activar, desactivar, save
 };
