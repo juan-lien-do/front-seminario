@@ -33,7 +33,7 @@ export default function ListadoEmpleados({ empleados, modificar, desactivar, act
                 )}
               </td>*/}
                 <td className={`text-center ${!empleado.activo ? " bg-danger text-white fw-bold" : " text-dark" }`}>{empleado.ws}</td>
-                <td className={`text-center ${!empleado.activo ? " bg-danger text-white fw-bold" : " text-dark" }`}>
+                <td className={`text-center text-nowrap ${!empleado.activo ? " bg-danger text-white fw-bold" : " text-dark" }`}>
                   {/* <button
                     className="btn btn-sm btn-outline-primary" // esto no se como hacerlo funcionar
                     title="Consultar"

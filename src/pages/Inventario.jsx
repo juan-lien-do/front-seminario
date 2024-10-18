@@ -1,29 +1,57 @@
-import { useState } from "react";
-import ListadoComputadoras from "../components/ListadoComputadoras";
+import React, { useState } from "react";
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
+import BuscadorRecursos from "../components/BuscadorRecursos";
+import BuscadorComputadoras from "../components/BuscadorComputadoras";
+import Recursos from "./recursos";
+import Computadoras from "./Computadoras";
 
+function Inventario() {
+  //const [seccion, setSeccion] = useState("recursos"); // Estado inicial es 'recursos'
 
+  /*const cambiarSeccion = (nuevaSeccion) => {
+    console.log("Cambiando a la sección:", nuevaSeccion);
+    setSeccion(nuevaSeccion); // Cambia la sección activa
+  };*/
 
-export default function Inventario() {
-    const [estadoInventario, setEstadoInventario] = useState(0);
-
-    function volver(){
-      setEstadoInventario(0)
+  // Definimos qué componente mostrar en el buscador dependiendo de la sección activa
+  /*
+  const renderBuscador = () => {
+    if (seccion === "recursos") {
+      return <BuscadorRecursos cambiarSeccion={cambiarSeccion} />;
+    } else if (seccion === "computadoras") {
+      return <BuscadorComputadoras cambiarSeccion={cambiarSeccion} />;
     }
+  };
 
-    if (estadoInventario == 0){
-      return (
-        <ListadoComputadoras setEstadoInventario={setEstadoInventario}/>
-      )
+  // Definimos qué contenido mostrar dependiendo de la sección activa
+  const renderContenido = () => {
+    if (seccion === "recursos") {
+      return <Recursos />;
+    } else if (seccion === "computadoras") {
+      return <Computadoras />;
     }
-    if (estadoInventario == 1){
-      return(
-        <div>
-          hola mundo
-          <button onClick={volver}> hola </button>
-        </div>
-        
-      )
-    }
-    
-  }
-  
+  };*/
+
+  return (
+    <div>
+      <Tabs
+        defaultActiveKey="recursos"
+        id="uncontrolled-tab-example"
+        className="mb-3 mt-1 ms-4"
+      >
+        <Tab eventKey="recursos" title="Recursos">
+          <Recursos />;
+        </Tab>
+        <Tab eventKey="computadoras" title="Computadoras">
+        <Computadoras />;
+        </Tab>
+      </Tabs>
+      {/* Renderizamos dinámicamente el buscador y el contenido basado en la sección */}
+      {/*renderBuscador()*/}
+      {/*renderContenido()*/}
+    </div>
+  );
+}
+
+export default Inventario;

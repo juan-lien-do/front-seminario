@@ -10,9 +10,11 @@ export default function NavBar({ desloguearse }) {
   return (
     <nav className="navbar navbar-expand-md bg-dark py-3" data-bs-theme="dark">
       <div className="container">
+        {/* Logo y enlace "Inicio" */}
         <NavLink
           className="nav-link navbar-brand d-flex align-items-center"
-          to="/home">
+          to="/home"
+        >
           <span className="bs-icon-sm bs-icon-rounded bs-icon-primary d-flex justify-content-center align-items-center me-2 bs-icon">
             <img
               className="img-fluid shadow-logo"
@@ -24,6 +26,7 @@ export default function NavBar({ desloguearse }) {
           <span>Inicio</span>
         </NavLink>
 
+        {/* Botón para colapsar en pantallas pequeñas */}
         <button
           data-bs-toggle="collapse"
           className="navbar-toggler"
@@ -32,6 +35,8 @@ export default function NavBar({ desloguearse }) {
           <span className="visually-hidden">Toggle navigation</span>
           <span className="navbar-toggler-icon"></span>
         </button>
+
+        {/* Menú colapsable */}
         <div className="collapse navbar-collapse" id="navcol-5">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
@@ -39,7 +44,6 @@ export default function NavBar({ desloguearse }) {
                 Inventario
               </NavLink>
             </li>
-            
             <li className="nav-item">
               <NavLink className="nav-link" to="/empleados">
                 Empleados
@@ -48,18 +52,20 @@ export default function NavBar({ desloguearse }) {
             <li className="nav-item">
               <a className="nav-link">Solicitudes</a>
             </li>
-            <li className="nav-item"></li>
             <li className="nav-item">
-              <a className="nav-link">Envíos</a>
+              <NavLink className="nav-link" to="/envios">
+                Envíos
+              </NavLink>
             </li>
             <li className="nav-item">
               <a className="nav-link">Devoluciones</a>
             </li>
           </ul>
-          <a href="#"></a>
+
+          {/* Botón "Cerrar Sesión" */}
           <button
-            className="btn btn-primary ms-md-2"
-            onClick={handleLogout} // Evento de click para desloguear
+            className="btn btn-primary ms-md-2 mt-2 mt-md-0"
+            onClick={handleLogout}
           >
             Cerrar Sesión
           </button>

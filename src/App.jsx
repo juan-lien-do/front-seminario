@@ -15,6 +15,7 @@ import Home from './pages/Home';
 import Recursos from './pages/recursos';
 
 
+
 function App() {
   const [usuario, setUsuario] = useState(null);
 
@@ -69,7 +70,7 @@ function App() {
           <Route path='/inventario' element={
             <ProtectedRoute isAllowed={!!usuario}>
                 <NavBar desloguearse={handleLogout}/>
-                <Recursos/>
+                <Inventario/> 
             </ProtectedRoute>
           } />
           

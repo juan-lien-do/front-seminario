@@ -1,53 +1,73 @@
+import React from "react";
+import Recursos from "../pages/recursos";
+import Button from "react-bootstrap/Button";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
 
 export default function BuscadorRecursos({
   activo,
   setActivo,
   buscarRecursos,
-  
-}){
-    return(
+  agregarRecurso,
+  handleTodos,
+  handleComponentes,
+  handlePerifericos,
+}) {
+  return (
     <form
-      className="mt-3"
-      name="FormBusqueda"
-      onSubmit={(e) => e.preventDefault()}
-    >
-      <div className="container-fluid">
-        <div className="row ">
-          <div className="col-sm-8 col-md-4 my-2 mx-auto">
-            <div className="form-check ">
-              <input
-                className="form-check-input mt-2"
-                type="checkbox"
-                id="activo"
-                checked={activo} // Para reflejar el estado del checkbox
-                onChange={(e) => setActivo(e.target.checked)} // Cambia el estado basado en si está marcado o no
-              />
-              <label className="form-check-label" htmlFor="activo">
-                Activo
-              </label>
-
-              <button
-                type="button"
-                className="btn btn-primary mx-1"
-                onClick={buscarRecursos}
-              >
-                <i className="fa fa-search"> </i> Buscar
-              </button>
-
-              <button
-                type="button"
-                className="btn btn-warning mx-1"
-                onClick={()=>{console.log("xd")}}
-              >
-                <i className="fa fa-plus "> </i> Agregar
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <hr />        
+  className="mt-1"
+  name="FormBusqueda"
+  onSubmit={(e) => e.preventDefault()}
+>
+  <div className="container-fluid">
+    <div className="row d-flex align-items-center justify-content-between flex-column flex-md-row mx-auto">
+      <div className="col-sm-4 col-md-4 mt-2">
+        <ButtonGroup aria-label="Basic example">
+          <Button variant="primary" onClick={handleTodos}>
+            Todos
+          </Button>
+          <Button variant="primary" onClick={handlePerifericos}>
+            Perifericos
+          </Button>
+          <Button variant="primary" onClick={handleComponentes}>
+            Componentes
+          </Button>
+        </ButtonGroup>
       </div>
-    </form>
-    );
 
+      <div className="col-12 col-md-auto mt-2">
+        <div className="form-check d-flex align-items-center">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            id="activo"
+            checked={activo}
+            onChange={(e) => setActivo(e.target.checked)}
+          />
+          <label className="form-check-label ms-2" htmlFor="activo">
+            Activo
+          </label>
+
+          <button
+            type="button"
+            className="btn btn-primary mx-1 ms-3"
+            onClick={buscarRecursos}
+          >
+            <i className="fa fa-search"></i> Buscar
+          </button>
+          <button
+            type="button"
+            className="btn btn-warning mx-2 ms-3"
+            onClick={agregarRecurso}
+          >
+            <i className="fa fa-plus"></i> Agregar Item
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+  </div>
+</form>
+
+  );
 }
