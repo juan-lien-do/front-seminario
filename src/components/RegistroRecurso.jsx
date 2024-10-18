@@ -33,7 +33,7 @@ export default function RegistroRecurso({ volver, recurso, guardar }) {
             </div>
             </div>
 
-          {/* campo cantidad */}
+          {/* campo cantidad 
             <div className="row">
             <div className="col-sm-4 col-md-3 offset-md-1">
                 <label className="col-form-label" htmlFor="cantidad">
@@ -48,7 +48,7 @@ export default function RegistroRecurso({ volver, recurso, guardar }) {
                 className="form-control "
                 />
             </div>
-            </div>
+            </div>*/}
 
 
           {/* campo categoria */}
@@ -59,11 +59,20 @@ export default function RegistroRecurso({ volver, recurso, guardar }) {
                 </label>
             </div>
             <div className="col-sm-8 col-md-6">
-                <input
+                <select className='form-control' {
+                    ...register("categoria", {required: true})
+                }>
+                    <option value={1}> Periféricos </option>
+                    <option value={2}> Componentes </option>
+                </select>
+                {
+                    /*
+                    <input
                 type="text"
                 {...register("categoria", { required: true})}
                 className="form-control"
-                />
+                />*/
+                }
             </div>
             </div>
 
@@ -93,6 +102,7 @@ export default function RegistroRecurso({ volver, recurso, guardar }) {
             <div className="col-sm-8 col-md-6">
                 <select
                 name="activo"
+                disabled={true}
                 {...register("activo", {
                     required: { value: true, message: "Activo es requerido" },
                 })}
@@ -109,7 +119,8 @@ export default function RegistroRecurso({ volver, recurso, guardar }) {
             </div>
             </div>
             
-            {/* campo existencia */}
+
+            {/* campo existencia 
             <div className="row">
             <div className="col-sm-4 col-md-3 offset-md-1">
                 <label className="col-form-label" htmlFor="existencia">
@@ -123,7 +134,7 @@ export default function RegistroRecurso({ volver, recurso, guardar }) {
                 className="form-control"
                 />
             </div>
-            </div>
+            </div>*/}
 
           {/* Botones' */}
             <hr />

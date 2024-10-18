@@ -5,10 +5,11 @@ const urlResource = "http://localhost:8080/recursos/";
 
 async function Buscar({ activo }) {
     try {
-      console.log(activo)
+      //console.log(activo)
       const response = await instance.get(urlResource, {
         params: { activo: activo },
       });
+      console.log(response.data)
       return response.data;
     } catch (error) {
       //if()
@@ -68,7 +69,10 @@ async function save(item) {
     if (item.id === 0) {
     await instance.post(urlResource, item);
     } else {
-    await instance.put(urlResource + "/" + item.id, item);
+      console.log(item)
+
+
+    await instance.put(urlResource + item.id, {...item, existencias:[]});
     }
 }
 export const recursosService = {

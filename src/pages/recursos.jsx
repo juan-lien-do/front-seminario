@@ -6,9 +6,24 @@ import RegistroRecurso from "../components/RegistroRecurso.jsx";
 
 export default function Recursos() {
   const [activo, setActivo] = useState(true);
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(0)
   const [Recursos, setRecursos] = useState([]);
   const [recurso, setRecurso] = useState(null);
   const [mostrarRegistroRecurso, setMostrarRegistroRecurso] = useState(false);
+
+  function handleTodos(){
+    setCategoriaSeleccionada(0)
+  }
+
+  // esto esta al reves porque en realidad es la categoria que no queremos mostrar
+  function handlePerifericos(){
+    setCategoriaSeleccionada(2)
+  }
+
+  // esto esta al reves porque en realidad es la categoria que no queremos mostrar
+  function handleComponentes(){
+    setCategoriaSeleccionada(1)
+  }
 
   // Función para buscar recursos
   async function Buscar() {
@@ -18,7 +33,7 @@ export default function Recursos() {
 
   useEffect(() => {
     Buscar();
-  }, [activo]);
+  }, []);
 
   // Función para agregar un nuevo recurso
   function agregarRecurso() {
@@ -28,7 +43,7 @@ export default function Recursos() {
       cantidad: 0,
       categoria: "",
       descripcion: "",
-      existencia: [],
+      existencias: [],
       activo: true,
     };
     setRecurso(nuevoRecurso);
@@ -88,12 +103,16 @@ export default function Recursos() {
         setActivo={setActivo}
         buscarRecursos={Buscar}
         agregarRecurso={agregarRecurso}
+        handleComponentes={handleComponentes}
+        handleTodos={handleTodos}
+        handlePerifericos={handlePerifericos}
       />
       <ListadoRecursos
-        Recursos={Recursos}
-        Modificar={modificarRecurso}
+        Items={Recursos}
+        modificar={modificarRecurso}
         activar={activarRecurso}
         desactivar={desactivarRecurso}
+        categoriaSeleccionada={categoriaSeleccionada}
       />
 
       {/* Componente BuscadorRecursos */}
