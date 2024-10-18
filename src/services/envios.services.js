@@ -24,7 +24,7 @@ const envios = [
                 idDetalle:1,
                 cantidad:10,
                 nombreRecurso:"procesador i7 3770",
-                nombreDepósito:"Depósito 2"
+                nombreDeposito:"Depósito 2"
             }
         ],
         detallesEnvioComputadora:[
