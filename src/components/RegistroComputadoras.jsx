@@ -25,7 +25,7 @@ export default function RegistroRecurso({ volver, recurso, guardar }) {
             </div>
             <div className="col-sm-8 col-md-6">
                 <input
-                type="number"
+                type="text"
                 {...register("nroSerie", { required: true})}
                 autoFocus
                 className="form-control "
@@ -103,18 +103,18 @@ export default function RegistroRecurso({ volver, recurso, guardar }) {
            {/* campo Activo */}
             <div className="row">
             <div className="col-sm-4 col-md-3 offset-md-1">
-                <label className="col-form-label" htmlFor="activo">
+                <label className="col-form-label" htmlFor="esActivo">
                 Activo<span className="text-danger">*</span>:
                 </label>
             </div>
             <div className="col-sm-8 col-md-6">
                 <select
-                name="activo"
-                {...register("activo", {
+                name="esActivo"
+                {...register("esActivo", {
                     required: { value: true, message: "Activo es requerido" },
                 })}
                 className={
-                    "form-control" + (errors?.Activo ? " is-invalid" : "")
+                    "form-control" + (errors?.esActivo ? " is-invalid" : "")
                 }
                 
                 >
@@ -122,7 +122,7 @@ export default function RegistroRecurso({ volver, recurso, guardar }) {
                 <option value={false}>NO</option>
                 <option value={true}>SI</option>
                 </select>
-                <div className="invalid-feedback">{errors?.activo?.message}</div>
+                <div className="invalid-feedback">{errors?.esActivo?.message}</div>
             </div>
             </div>
             
@@ -135,12 +135,12 @@ export default function RegistroRecurso({ volver, recurso, guardar }) {
             </div>
             <div className="col-sm-8 col-md-6">
                 <select
-                name="masterizado"
-                {...register("masterizado", {
+                name="esMasterizado"
+                {...register("esMasterizado", {
                     required: { value: true, message: "masterizado es requerido" },
                 })}
                 className={
-                    "form-control" + (errors?.Masterizado ? " is-invalid" : "")
+                    "form-control" + (errors?.esMasterizado ? " is-invalid" : "")
                 }
                 
                 >
@@ -148,7 +148,7 @@ export default function RegistroRecurso({ volver, recurso, guardar }) {
                 <option value={false}>NO</option>
                 <option value={true}>SI</option>
                 </select>
-                <div className="invalid-feedback">{errors?.masterizado?.message}</div>
+                <div className="invalid-feedback">{errors?.esMasterizado?.message}</div>
             </div>
             </div>
             

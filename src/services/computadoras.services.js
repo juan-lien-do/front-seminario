@@ -3,11 +3,11 @@ import { toast } from 'sonner';
 
 const urlResource = "http://localhost:8080/computadoras";
 
-async function Buscar({ activo }) {
+async function Buscar({ esActivo }) {
     try {
-        console.log(activo)
+        console.log(esActivo)
         const response = await instance.get(urlResource+"/", {
-            params: { activo: activo },
+            params: { esActivo: esActivo },
         });
         console.log("Respuesta de la API:", response);
         return response.data;
@@ -26,19 +26,20 @@ async function BuscarPorId(id_computadora) {
     return resp.data;
 }*/
 
-async function desactivar(id) {
-    await instance.patch(urlResource + "/desactivar/" + id);
+async function desactivar(idComputadora) {
+    await instance.patch(urlResource + "/desactivar/" + idComputadora);
 }
 
-async function activar(id) {
-    await instance.patch(urlResource + "/activar/" + id);
+async function activar(idComputadora) {
+    await instance.patch(urlResource + "/activar/" + idComputadora);
 }
 
-async function save(computadora) {
-    if (computadora.idComputadora === 0) {
-    await instance.post(urlResource, computadora);
+async function save(Item) {
+    if (Item.idComputadora === 0) {
+    await instance.post(urlResource, Item);
     } else {
-        console.log(computadora)
+        console.log(Item)
+        await instance.put(urlResource + Item, {Item, masterizado: false});
     }
 }
 

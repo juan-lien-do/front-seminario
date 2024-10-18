@@ -33,10 +33,10 @@ export default function ListadoCopmputadoras({
               {Items &&
                 Items.map((Item) => (
                   <tr key={Item.idComputadora}>
-                    <td className={`text-center ${!Item.activo ? " bg-danger text-white fw-bold" : " text-dark" }`}>{Item.nroSerie}</td>
+                    <td className={`text-center ${!Item.esActivo ? " bg-danger text-white fw-bold" : " text-dark" }`}>{Item.nroSerie}</td>
                     <td className="text-end">{Item.idTipo}</td>
                     <td className="text-end">{Item.descripcion}</td>
-                    <td className="text-end">{Item.nroWS}</td>
+                    <td className="text-end">{Item.nroWs}</td>
                     <td className="text-end">{Item.idDeposito} </td>
                     {/*
                     <td className="text-center">
@@ -51,16 +51,16 @@ export default function ListadoCopmputadoras({
                       <button
                         className="btn btn-sm btn-warning me-2"
                         title="Modificar"
-                        onClick={() => modificar(computadora)}
+                        onClick={() => modificar(Item)}
                       >
                         <i className="fa fa-pencil"></i>
                       </button>
                       <button
-                        className={`btn btn-sm  ${!!Item.activo ? "btn-danger" : "btn-primary" }`}
-                        title={!!Item.activo ? "Borrar" : "Reactivar"}
-                        onClick={!!Item.activo ?  () => {desactivar(Item.idComputadora)} : () => {activar(Item.idComputadora)}}
+                        className={`btn btn-sm  ${!!Item.esActivo ? "btn-danger" : "btn-primary" }`}
+                        title={!!Item.esActivo ? "Borrar" : "Reactivar"}
+                        onClick={!!Item.esActivo ?  () => {desactivar(Item.idComputadora)} : () => {activar(Item.idComputadora)}}
                       >
-                        <i className={!!Item.activo ? "fas fa-trash" : "fas fa-trash-restore"}></i>
+                        <i className={!!Item.esActivo ? "fas fa-trash" : "fas fa-trash-restore"}></i>
                       </button>
                     </td>
                   </tr>

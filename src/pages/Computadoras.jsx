@@ -7,14 +7,14 @@ import BuscadorComputadoras from "../components/BuscadorComputadoras.jsx";
 import { useEffect} from "react";
 
 function Computadoras() {
-    const [activo, setActivo] = useState(true);
+    const [esActivo, setActivo] = useState(true);
     const [masterizado, setMasterizado] = useState(false);	
     const [Computadoras, setComputadoras] = useState([]);
     const [computadora, setComputadora] = useState(null);
     const [mostrarRegistroComputadora, setMostrarRegistroComputadora] = useState(false);
 
     async function Buscar() {
-    const data = await computadorasService.Buscar({ activo });
+    const data = await computadorasService.Buscar({ esActivo });
     console.log("Datos obtenidos:", data);
     setComputadoras(data);
     }
@@ -26,19 +26,19 @@ function Computadoras() {
         const nuevoComputadora = {
             idComputadora: 0,
             idTipo: 0,
-            numeroserie: "",
+            nroSerie: "",
             descripcion: "",
             idDeposito: 0,
-            nroWSs: 0,
-            activo: true,
-            masterizado: false,
+            nroWs: 0,
+            esActivo: true,
+            esMasterizado: false,
     };
     setComputadora(nuevoComputadora);
     setMostrarRegistroComputadora(true);
     }
 
     function modificarComputadora(computadora) {
-        if (!computadora.activo) {
+        if (!computadora.esActivo) {
             alert("No puede modificarse un registro Inactivo.");
             return;
         }
@@ -49,7 +49,7 @@ function Computadoras() {
     async function guardarComputadora(data) {
         const resp = window.confirm(
             "Está seguro que quiere " +
-            (data.activo ? "desactivar" : "activar") +
+            (data.esActivo ? "desactivar" : "activar") +
             " el registro?"
         );
         if (resp) {
@@ -88,7 +88,7 @@ function Computadoras() {
     <>
 
         <BuscadorComputadoras
-        activo={activo}
+        esActivo={esActivo}
         masterizado={masterizado}
         setMasterizado={setMasterizado}
         setActivo={setActivo}
