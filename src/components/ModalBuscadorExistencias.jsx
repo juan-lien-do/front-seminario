@@ -137,7 +137,6 @@ export default function ModalBuscadorExistencias({
             </div>
         }
 
-        <button className="btn btn-dark mt-2" onClick={()=>{/*console.log(recursoElegido)*/}}> xd</button>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>

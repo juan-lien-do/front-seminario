@@ -27,11 +27,11 @@ async function BuscarPorId(id_recurso) {
 }*/
 
 async function desactivar(id) {
-    await instance.patch(urlResource + "/desactivar/" + id);
+    await instance.patch(urlResource + "desactivar/" + id);
 }
 
 async function activar(id) {
-    await instance.patch(urlResource + "/activar/" + id);
+    await instance.patch(urlResource + "activar/" + id);
 }
 /*
 async function save(recurso) {

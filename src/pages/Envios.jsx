@@ -3,10 +3,14 @@ import RegistrarEnvio from "../components/RegistrarEnvio";
 import { usuariosService } from "../services/usuarios.services.js";
 import { recursosService } from "../services/recursos.services.js";
 import { empleadosService } from "../services/empleados.services.js";
+import envioServices from "../services/envios.services.js";
+import BuscadorEnvios from "../components/BuscadorEnvios.jsx";
+import ListadoEnvios from "../components/ListadoEnvios.jsx";
 
 function Envios() {
   const [registrarEnvio, setRegistrarEnvio] = useState(false);
   const [envio, setEnvio] = useState(null);
+  const [envios, setEnvios] = useState(envioServices.buscar());
   const [empleados, setEmpleados] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
   const [recursos, setRecursos] = useState([]);
@@ -53,14 +57,20 @@ function Envios() {
     // Aquí podrías implementar la lógica para guardar el envío en la base de datos
   }
 
+  function buscarEnvios(){
+    const data = envioServices.buscar();
+    console.log(data)
+    setEnvios(data)
+  }
+
+  useEffect(()=>{buscarEnvios()},[])
+
   return (
     <>
       {!registrarEnvio ? (
         <>
-          <h1>Envíos</h1>
-          <button className="mx-auto btn btn-warning" onClick={handleRegistrarEnvio}>
-            Registrar envío
-          </button>
+          <BuscadorEnvios handleRegistrarEnvio={handleRegistrarEnvio} buscarEnvios={buscarEnvios}></BuscadorEnvios>
+          <ListadoEnvios envios={envios}></ListadoEnvios>
         </>
       ) : (
         <RegistrarEnvio

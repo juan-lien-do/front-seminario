@@ -12,7 +12,12 @@ export default function Empleados() {
   const [activo, setActivo] = useState(true)
   const [empleados, setEmpleados] = useState(null)
   const [empleado, setEmpleado] = useState(null)
+  const [buscaActivos, setBuscaActivos] = useState(activo)
   const [mostrarRegistroEmpleado, setMostrarRegistroEmpleado] = useState(false)
+
+  useEffect(()=>{
+    setBuscaActivos(empleados?.at(0).activo)
+  },[empleados])
 
   async function buscarEmpleados() {
     const data = await empleadosService.search({ nombre, activo })
@@ -101,6 +106,7 @@ export default function Empleados() {
         modificar={modificarEmpleado}
         desactivar={desactivarEmpleado}
         activar={activarEmpleado}
+        buscaActivos={buscaActivos}
       /> : ""
       /*<img
         className="mx-auto"
