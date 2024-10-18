@@ -1,7 +1,7 @@
 import moment from 'moment'
 import imagen from '../assets/ratita_perdida.png'
 
-export default function ListadoEmpleados({ empleados, modificar, desactivar, activar }) {
+export default function ListadoEmpleados({ empleados, modificar, desactivar, activar, buscaActivos }) {
   return (
     <div className="mt-3 table-responsive">
       <table className="table table-hover table-sm table-bordered table-striped">
@@ -13,7 +13,14 @@ export default function ListadoEmpleados({ empleados, modificar, desactivar, act
             <th className="text-center">CUIL</th>
             {/*<th className="text-center">Activo</th>*/}
             <th className="text-center">WS Asignado</th>
+            { buscaActivos ?
+              <></>
+              :
+              <th className='text-center'>Fecha de baja</th>
+            }
+              
             <th className="text-center text-nowrap">Acciones</th>
+
           </tr>
         </thead>
         <tbody>
@@ -33,6 +40,13 @@ export default function ListadoEmpleados({ empleados, modificar, desactivar, act
                 )}
               </td>*/}
                 <td className={`text-center ${!empleado.activo ? " bg-danger text-white fw-bold" : " text-dark" }`}>{empleado.ws}</td>
+                { buscaActivos ?
+                  <></>
+                  :
+                  <td className="text-center bg-danger text-white fw-bold">
+                    {new Date().toLocaleDateString()}
+                  </td>
+                }
                 <td className={`text-center text-nowrap ${!empleado.activo ? " bg-danger text-white fw-bold" : " text-dark" }`}>
                   {/* <button
                     className="btn btn-sm btn-outline-primary" // esto no se como hacerlo funcionar
