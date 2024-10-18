@@ -28,7 +28,7 @@ function Computadoras() {
             idTipo: 0,
             nroSerie: "",
             descripcion: "",
-            idDeposito: 0,
+            idDeposito: 1,
             nroWs: 0,
             esActivo: true,
             esMasterizado: false,

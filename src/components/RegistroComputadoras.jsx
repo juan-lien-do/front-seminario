@@ -1,11 +1,11 @@
 import { useForm } from 'react-hook-form'
 
-export default function RegistroRecurso({ volver, recurso, guardar }) {
+export default function RegistroComputadoras({ volver, computadora, guardar }) {
     const {
     register,
     handleSubmit,
     formState: { errors, touchedFields, isValid, isSubmitted },
-    } = useForm({ values: recurso });
+    } = useForm({ values: computadora });
 
     const onSubmit = (data) => {
     guardar(data)
@@ -36,7 +36,7 @@ export default function RegistroRecurso({ volver, recurso, guardar }) {
             <div className="row">
             <div className="col-sm-4 col-md-3 offset-md-1">
                 <label className="col-form-label" htmlFor="idTipo">
-                Categoria<span className="text-danger">*</span>:
+                Tipo<span className="text-danger">*</span>:
                 </label>
             </div>
             <div className="col-sm-8 col-md-6">
@@ -59,7 +59,7 @@ export default function RegistroRecurso({ volver, recurso, guardar }) {
             <div className="col-sm-8 col-md-6">
                 <input
                 type="number"
-                {...register("nwoWs", { required: true})}
+                {...register("nroWs", { required: { value: true, message: "Nro WS es requerido" }})}
                 autoFocus
                 className="form-control "
                 />
