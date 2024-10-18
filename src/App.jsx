@@ -13,6 +13,7 @@ import Inventario from './pages/Inventario';
 import Empleados from './pages/Empleados';
 import Home from './pages/Home';
 import Recursos from './pages/recursos';
+import Envios from './pages/Envios';
 
 
 
@@ -53,6 +54,15 @@ function App() {
               <ProtectedRoute isAllowed={!!usuario}>
                 <NavBar desloguearse={handleLogout}/>
                 <Empleados/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/envios"
+            element={
+              <ProtectedRoute isAllowed={!!usuario}>
+                <NavBar desloguearse={handleLogout}/>
+                <Envios/>
               </ProtectedRoute>
             }
           />
