@@ -7,8 +7,9 @@ async function Buscar({ activo }) {
     try {
         console.log(activo)
         const response = await instance.get(urlResource+"/", {
-        params: { activo: activo },
+            params: { activo: activo },
         });
+        console.log("Respuesta de la API:", response);
         return response.data;
     } catch (error) {
       //if()
@@ -34,10 +35,10 @@ async function activar(id) {
 }
 
 async function save(computadora) {
-    if (computadora.id_computadora === 0) {
+    if (computadora.idComputadora === 0) {
     await instance.post(urlResource, computadora);
     } else {
-    await instance.put(urlResource + "/" + computadora.id, computadora);
+        console.log(computadora)
     }
 }
 

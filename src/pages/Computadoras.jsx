@@ -8,26 +8,28 @@ import { useEffect} from "react";
 
 function Computadoras() {
     const [activo, setActivo] = useState(true);
+    const [masterizado, setMasterizado] = useState(false);	
     const [Computadoras, setComputadoras] = useState([]);
     const [computadora, setComputadora] = useState(null);
     const [mostrarRegistroComputadora, setMostrarRegistroComputadora] = useState(false);
 
-    async function BuscarComputadoras() {
-    console.warn(activo)
-    const data = await computadorasService.Buscar({activo});
+    async function Buscar() {
+    const data = await computadorasService.Buscar({ activo });
+    console.log("Datos obtenidos:", data);
     setComputadoras(data);
     }
     useEffect(() => {
-    BuscarComputadoras();
+    Buscar();
     }, []);
 
     function agregarComputadora() {   
         const nuevoComputadora = {
-            id: 0,
-            nombre: "",
-            numeroserie: 0,
+            idComputadora: 0,
+            idTipo: 0,
+            numeroserie: "",
             descripcion: "",
-            ubiacion: "",
+            idDeposito: 0,
+            nroWSs: 0,
             activo: true,
             masterizado: false,
     };
@@ -44,27 +46,27 @@ function Computadoras() {
         setMostrarRegistroComputadora(true);
         }
 
-        async function guardarComputadora(data) {
-            const resp = window.confirm(
-                "Está seguro que quiere " +
-                (data.activo ? "desactivar" : "activar") +
-                " el registro?"
-            );
-            if (resp) {
-                await computadorasService.save(data);
-                setMostrarRegistroComputadora(false);
-                BuscarComputadoras();
-            }
-            }
+    async function guardarComputadora(data) {
+        const resp = window.confirm(
+            "Está seguro que quiere " +
+            (data.activo ? "desactivar" : "activar") +
+            " el registro?"
+        );
+        if (resp) {
+            await computadorasService.save(data);
+            setMostrarRegistroComputadora(false);
+            Buscar();
+        }
+        }
 
     async function desactivarComputadora(id) {
     await computadorasService.desactivar(id);
-    BuscarComputadoras();
+    Buscar();
     }
 
     async function activarComputadora(id) {
     await computadorasService.activar(id);
-    BuscarComputadoras();
+    Buscar();
     }
 
     if (mostrarRegistroComputadora) {
@@ -77,9 +79,6 @@ function Computadoras() {
         );
         }
 
-    function Volver() {
-    setMostrarRegistroComputadora(false);
-    }
 
     {
     /* todavía no hay registro de Computadora */
@@ -90,15 +89,18 @@ function Computadoras() {
 
         <BuscadorComputadoras
         activo={activo}
+        masterizado={masterizado}
+        setMasterizado={setMasterizado}
         setActivo={setActivo}
-        buscarComputadoras={BuscarComputadoras}
+        buscarComputadoras={Buscar}
         agregarComputadora={agregarComputadora}
         />
 
         <ListadoComputadoras
-        Computadoras={Computadoras}
+        Items={Computadoras}
         activar={activarComputadora}
         desactivar={desactivarComputadora}
+        modificar={modificarComputadora}
         />
         
     </>

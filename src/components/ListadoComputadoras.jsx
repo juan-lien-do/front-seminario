@@ -4,8 +4,10 @@ import { useState } from "react";
 export default function ListadoCopmputadoras({
   Items,
   activar,
-  desactivar
+  desactivar,
+  modificar
 }) {
+  console.log("Items recibidos:", Items);
   const [show, setShow] = useState(false);
   const [datosComputadoras, setDatosComputadoras] = useState([])
   const handleClose = () => setShow(false);
@@ -19,10 +21,10 @@ export default function ListadoCopmputadoras({
           <table className="table table-hover table-sm table-bordered table-striped">
             <thead className="table-light">
               <tr>
-                <th className="text-end">Nombre </th>
+                <th className="text-end">Nro de Serie </th>
                 <th className="text-end">Categoria</th>
-                <th className="text-end">Nro de Serie</th>
                 <th className="text-end">Descripción</th>
+                <th className="text-end">Numero WS</th>
                 <th className="text-end">Ubicacion</th>
                 <th className="text-end">Acciones</th>
               </tr>
@@ -30,10 +32,13 @@ export default function ListadoCopmputadoras({
             <tbody>
               {Items &&
                 Items.map((Item) => (
-                  <tr key={Item.id}>
-                    <td className={`text-center ${!Item.activo ? " bg-danger text-white fw-bold" : " text-dark" }`}>{Item.nombre}</td>
-                    <td className="text-end">{Item.categoria}</td>
+                  <tr key={Item.idComputadora}>
+                    <td className={`text-center ${!Item.activo ? " bg-danger text-white fw-bold" : " text-dark" }`}>{Item.nroSerie}</td>
+                    <td className="text-end">{Item.idTipo}</td>
                     <td className="text-end">{Item.descripcion}</td>
+                    <td className="text-end">{Item.nroWS}</td>
+                    <td className="text-end">{Item.idDeposito} </td>
+                    {/*
                     <td className="text-center">
                       {" "}
                       <button className="btn btn-info" onClick={() => { handleShow(); setDatosComputadoras(Item.computadoras); console.log(Item.computadoras) }}>
@@ -41,7 +46,7 @@ export default function ListadoCopmputadoras({
                         Ver{" "}
                       </button>{" "}
                     </td>
-
+                    */}
                     <td className="text-center text-nowrap">
                       <button
                         className="btn btn-sm btn-warning me-2"
@@ -53,7 +58,7 @@ export default function ListadoCopmputadoras({
                       <button
                         className={`btn btn-sm  ${!!Item.activo ? "btn-danger" : "btn-primary" }`}
                         title={!!Item.activo ? "Borrar" : "Reactivar"}
-                        onClick={!!Item.activo ?  () => {desactivar(Item.id)} : () => {activar(Item.id)}}
+                        onClick={!!Item.activo ?  () => {desactivar(Item.idComputadora)} : () => {activar(Item.idComputadora)}}
                       >
                         <i className={!!Item.activo ? "fas fa-trash" : "fas fa-trash-restore"}></i>
                       </button>

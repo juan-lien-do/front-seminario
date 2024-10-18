@@ -33,37 +33,6 @@ async function desactivar(id) {
 async function activar(id) {
     await instance.patch(urlResource + "/activar/" + id);
 }
-/*
-async function save(recurso) {
-  if (recurso.id_recurso === 0) {
-    try {
-      await instance.post(baseUrl, recurso);
-      toast.success("Se cargó un recurso nuevo.")
-      audioExito.play()
-
-    } catch (err) {
-      console.error(err);
-      toast.error("Surgió un error")
-      audioError.play();
-
-    }
-    return;
-  }
-
-  try {
-    const url = `${urlResource}`;
-    await instance.put(url, recurso);
-    toast.success("Se actualizaron los datos del recurso")
-    audioExito.play()
-
-  } catch (err) {
-    console.error(err);
-    toast.error("Surgió un error")
-    audioError.play();
-
-  }
-}
-*/
 
 async function save(item) {
     if (item.id === 0) {
