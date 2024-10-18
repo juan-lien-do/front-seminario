@@ -50,13 +50,14 @@ export default function NavBar({ desloguearse }) {
             </li>
             <li className="nav-item"></li>
             <li className="nav-item">
-              <a className="nav-link">Envíos</a>
+              <NavLink className="nav-link" to="/envios">
+                Envios
+              </NavLink>
             </li>
             <li className="nav-item">
               <a className="nav-link">Devoluciones</a>
             </li>
           </ul>
-          <a href="#"></a>
           <button
             className="btn btn-primary ms-md-2"
             onClick={handleLogout} // Evento de click para desloguear
