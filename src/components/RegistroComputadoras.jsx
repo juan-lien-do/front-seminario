@@ -9,7 +9,7 @@ export default function RegistroComputadoras({ volver, computadora, guardar }) {
         handleSubmit,
         formState: { errors, isValid },
         setValue,
-        watch,
+        getValues, // Asegúrate de incluir getValues aquí
     } = useForm({
         defaultValues: computadora // Asegúrate de que los valores por defecto sean los correctos
     });
@@ -29,15 +29,6 @@ export default function RegistroComputadoras({ volver, computadora, guardar }) {
         setShowModal(true);
     };
 
-    // Manejar la selección de depósito
-    const handleDepositoChange = (event) => {
-        const value = event.target.value;
-        setValue("idDeposito", value);
-        if (value) {
-            setValue("nroWs", ""); // Resetear el campo nroWs si se selecciona un depósito
-        }
-    };
-
     // Efecto para cargar el valor de la ubicación al editar
     useEffect(() => {
         if (computadora) {
@@ -45,16 +36,29 @@ export default function RegistroComputadoras({ volver, computadora, guardar }) {
         }
     }, [computadora, setValue]);
 
+    // Efecto para manejar cambios en el idDeposito y resetear nroWs
+    useEffect(() => {
+        const idDeposito = getValues("idDeposito"); // Obtiene el valor actual de idDeposito
+        if (idDeposito) {
+            setValue("nroWs", ""); // Resetear el campo nroWs si se selecciona un depósito
+        }
+    }, [getValues, setValue]); // Aquí usas getValues para obtener el estado actual
+
     // Efecto para manejar cambios en esMasterizado
     useEffect(() => {
         setValue("nroWs", isMasterizado ? "" : ""); // Reinicia el campo nroWs
     }, [isMasterizado, setValue]);
 
+    // Manejador del cambio en la selección de depósito
+    const handleDepositoChange = (event) => {
+        const value = event.target.value;
+        setValue("idDeposito", value);
+    };
+
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="container-fluid">
                 <fieldset>
-
                     {/* campo nroSerie */}
                     <div className="row">
                         <div className="col-sm-4 col-md-3 offset-md-1">
@@ -204,8 +208,8 @@ export default function RegistroComputadoras({ volver, computadora, guardar }) {
                                     <option value={3}>Depósito 3</option> {/* idDeposito 3 */}
                                 </select>
                                 <div className="invalid-feedback">{errors?.idDeposito?.message}</div>
-                                <Button className="ms-2" onClick={() => handleModalShow(watch("idDeposito"))}>
-                                    Ver más
+                                <Button className="mx-2" variant="info" onClick={() => handleModalShow(getValues("idDeposito"))}>
+                                    <i className="fa fa-info-circle"></i>
                                 </Button>
                             </div>
                         </div>
