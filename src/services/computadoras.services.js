@@ -37,10 +37,10 @@ async function activar(idComputadora) {
 async function save(Item) {
     if (Item.idComputadora === 0) {
     console.log(Item)
-    await instance.post(urlResource, {Item});
+    await instance.post(urlResource, {...Item, idTipo: parseInt(Item.idTipo), esMasterizado: (Item.esMasterizado) === "true" ? true : false});
     } else {
         console.log(Item)
-        await instance.put(urlResource + Item.idComputadora, {...Item, idComputadora:null, masterizado:false});
+        await instance.put(urlResource + Item.idComputadora, {...Item, masterizado: false});
     }
 }
 
