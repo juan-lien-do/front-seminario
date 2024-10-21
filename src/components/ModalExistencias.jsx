@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Button } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
+import existenciasService from "../services/existencias.service";
 
 export default function ModalExistencias({ show, handleClose, existencias, idRecurso }) {
   const [mostrarIncorporar, setMostrarIncorporar] = useState(false);
   const [mostrarDisminuir, setMostrarDisminuir] = useState(false);
+  const [canSubmit, setCanSubmit] = useState(true)
 
   const [idDeposito, setIdDeposito] = useState(1)
   const [cantidad, setCantidad] = useState(0)
@@ -23,24 +25,33 @@ export default function ModalExistencias({ show, handleClose, existencias, idRec
     setCantidad(num)
   }
 
-  function IncorporarExistencias(){
-    const data = {
+  async function IncorporarExistencias(){
+    setCanSubmit(false)
+    const ex = {
       cantidad:cantidad,
       idDeposito:parseInt(idDeposito),
       idRecurso:idRecurso
     }
-    console.log(data)
-    handleClose()
+    console.log(ex)
+    if(await existenciasService.incorporar(ex)){
+      handleVolver()
+      handleClose()
+    }
+    setCanSubmit(true)
   }
 
-  function DisminuirExistencias(){
-    const data = {
-      cantidad:(-cantidad),
+  async function DisminuirExistencias(){
+    setCanSubmit(false)
+    const ex = {
+      cantidad:cantidad,
       idDeposito:parseInt(idDeposito),
       idRecurso:idRecurso
     }
-    console.log(data)
-    handleClose()
+    if (await existenciasService.disminuir(ex)){
+      handleVolver()
+      handleClose()
+    }
+    setCanSubmit(true)    
   }
 
 
@@ -98,7 +109,7 @@ export default function ModalExistencias({ show, handleClose, existencias, idRec
           </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={IncorporarExistencias} disabled={cantidad===0}>Incorporar</Button>
+            <Button variant="primary" onClick={IncorporarExistencias} disabled={cantidad===0 || !canSubmit}>Incorporar</Button>
             <Button variant="secondary" onClick={handleVolver}>Volver</Button>
           </Modal.Footer>
         </>
@@ -140,7 +151,7 @@ export default function ModalExistencias({ show, handleClose, existencias, idRec
           </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="warning" onClick={DisminuirExistencias} disabled={cantidad===0}>Disminuir</Button>
+            <Button variant="warning" onClick={DisminuirExistencias} disabled={cantidad===0 || !canSubmit}>Disminuir</Button>
             <Button variant="secondary" onClick={handleVolver}>Volver</Button>
           </Modal.Footer>
         </>
