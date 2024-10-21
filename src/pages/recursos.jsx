@@ -10,6 +10,7 @@ export default function Recursos() {
   const [Recursos, setRecursos] = useState([]);
   const [recurso, setRecurso] = useState(null);
   const [mostrarRegistroRecurso, setMostrarRegistroRecurso] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   function handleTodos(){
     setCategoriaSeleccionada(0)
@@ -84,6 +85,18 @@ export default function Recursos() {
     Buscar();
   }
 
+  // Función para buscar recursos por nombre
+  const handleSearch = () => {
+    if (searchTerm.trim() === "") {
+      Buscar(); // Si el término está vacío, busca todos
+    } else {
+      const filteredRecursos = Recursos.filter(recurso =>
+        recurso.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setRecursos(filteredRecursos);
+    }
+  };
+
   // Si `mostrarRegistroRecurso` es verdadero, muestra el formulario de registro
   if (mostrarRegistroRecurso) {
     return (
@@ -97,15 +110,15 @@ export default function Recursos() {
 
   return (
     <>
-      {/* Componente ListadoRecursos con funciones para modificar, activar y desactivar */}
       <BuscadorRecursos
         activo={activo}
         setActivo={setActivo}
-        buscarRecursos={Buscar}
+        buscarRecursos={handleSearch} // Cambiar a handleSearch
         agregarRecurso={agregarRecurso}
         handleComponentes={handleComponentes}
         handleTodos={handleTodos}
         handlePerifericos={handlePerifericos}
+        setSearchTerm={setSearchTerm}
       />
       <ListadoRecursos
         Items={Recursos}
