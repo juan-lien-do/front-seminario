@@ -8,13 +8,30 @@ import { useEffect} from "react";
 
 function Computadoras() {
     const [esActivo, setActivo] = useState(true);
-    const [masterizado, setMasterizado] = useState(false);	
+    const [esMasterizado, setMasterizado] = useState(false);	
     const [Computadoras, setComputadoras] = useState([]);
     const [computadora, setComputadora] = useState(null);
     const [mostrarRegistroComputadora, setMostrarRegistroComputadora] = useState(false);
+    const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(0)
+
+    function handleTodos() {
+        setCategoriaSeleccionada(0); // Mostrar todos
+        }
+        
+    function handleNotebooks() {
+        setCategoriaSeleccionada(1); // Mostrar solo notebooks
+        }
+        
+    function handlePC() {
+        setCategoriaSeleccionada(2); // Mostrar solo PC
+        }
+    
+    function handleAllinOne() {
+        setCategoriaSeleccionada(3); // Mostrar solo All in One
+        }
 
     async function Buscar() {
-    const data = await computadorasService.Buscar({ esActivo });
+    const data = await computadorasService.Buscar({ esActivo, esMasterizado });
     console.log("Datos obtenidos:", data);
     setComputadoras(data);
     }
@@ -25,11 +42,11 @@ function Computadoras() {
     function agregarComputadora() {   
         const nuevoComputadora = {
             idComputadora: 0,
-            idTipo: 0,
+            idTipo: 1,
             nroSerie: "",
             descripcion: "",
             idDeposito: 1,
-            nroWs: 0,
+            nroWs: null,
             esActivo: true,
             esMasterizado: false,
     };
@@ -48,9 +65,7 @@ function Computadoras() {
 
     async function guardarComputadora(data) {
         const resp = window.confirm(
-            "Está seguro que quiere " +
-            (data.esActivo ? "desactivar" : "activar") +
-            " el registro?"
+            "Está seguro que desea guardar el registro?"
         );
         if (resp) {
             await computadorasService.save(data);
@@ -89,11 +104,15 @@ function Computadoras() {
 
         <BuscadorComputadoras
         esActivo={esActivo}
-        masterizado={masterizado}
+        masterizado={esMasterizado}
         setMasterizado={setMasterizado}
         setActivo={setActivo}
         buscarComputadoras={Buscar}
         agregarComputadora={agregarComputadora}
+        handleAllinOne={handleAllinOne}
+        handlePC={handlePC}
+        handleNotebooks={handleNotebooks}
+        handleTodos={handleTodos}
         />
 
         <ListadoComputadoras
@@ -101,6 +120,7 @@ function Computadoras() {
         activar={activarComputadora}
         desactivar={desactivarComputadora}
         modificar={modificarComputadora}
+        categoriaSeleccionada={categoriaSeleccionada}
         />
         
     </>

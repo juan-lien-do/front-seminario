@@ -33,7 +33,7 @@ export default function RegistroRecurso({ volver, recurso, guardar }) {
             </div>
             </div>
 
-          {/* campo cantidad 
+            {/* campo cantidad 
             <div className="row">
             <div className="col-sm-4 col-md-3 offset-md-1">
                 <label className="col-form-label" htmlFor="cantidad">

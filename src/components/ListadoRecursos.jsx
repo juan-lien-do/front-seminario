@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import ModalExistencias from "./ModalExistencias";
-import { useState } from "react";
-import OffCanvasDescripcion from "./OffCanvasDescripcion";
+import { Modal, Button } from "react-bootstrap"; // Importamos Modal y Button de react-bootstrap
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function ListadoRecursos({
   Items,
@@ -10,43 +10,53 @@ export default function ListadoRecursos({
   modificar,
   categoriaSeleccionada,
 }) {
-  const [idRecurso, setIdRecurso] = useState(null)
+  const [idRecurso, setIdRecurso] = useState(null);
   const [show, setShow] = useState(false);
-  const [datosExistencias, setDatosExistencias] = useState([])
+  const [datosExistencias, setDatosExistencias] = useState([]);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-
-  const [showDescripcion, setShowDescripcion] = useState(false)
-  const [textoDescripcion, setTextoDescripcion] = useState("")
+  // Estados para la descripción
+  const [showDescripcion, setShowDescripcion] = useState(false);
+  const [textoDescripcion, setTextoDescripcion] = useState("");
   const handleDescripcionClose = () => setShowDescripcion(false);
   const handleDescripcionShow = () => setShowDescripcion(true);
 
-  function verDescripcion(texto){
-    handleDescripcionShow()
-    setTextoDescripcion(texto)
+  // Función para mostrar la descripción
+  function verDescripcion(texto) {
+    setTextoDescripcion(texto);
+    handleDescripcionShow();
   }
 
   return (
     <div className="container-fluid">
-      <OffCanvasDescripcion
-        show={showDescripcion}
-        handleClose={handleDescripcionClose}
-        texto={textoDescripcion}
-      ></OffCanvasDescripcion>
+      {/* Modal para la descripción */}
+      <Modal show={showDescripcion} onHide={handleDescripcionClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Descripción</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{textoDescripcion}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleDescripcionClose}>
+            Cerrar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Modal para las existencias */}
       <ModalExistencias
         show={show}
         handleClose={handleClose}
         existencias={datosExistencias}
         idRecurso={idRecurso}
-      ></ModalExistencias>
+      />
 
       <div className="card" id="TableSorterCard">
         <div className="table-responsive">
           <table className="table table-hover table-sm table-bordered table-striped">
             <thead className="table-light">
               <tr>
-                <th className="text-center">Nombre </th>
+                <th className="text-center">Nombre</th>
                 <th className="text-end">Cantidad</th>
                 <th className="text-center">Categoria</th>
                 <th className="text-center">Descripción</th>
@@ -62,8 +72,8 @@ export default function ListadoRecursos({
                       <td
                         className={`text-center ${
                           !Item.activo
-                            ? " bg-danger text-white fw-bold"
-                            : " text-dark"
+                            ? "bg-danger text-white fw-bold"
+                            : "text-dark"
                         }`}
                       >
                         {Item.nombre}
@@ -78,32 +88,26 @@ export default function ListadoRecursos({
                       <td className="text-center ">
                         {Item.categoria === 1 ? "Periférico" : "Componente"}
                       </td>
-                      <td className="text-center ">
+                      <td className="text-center">
                         <button
                           className="btn btn-info"
-                          onClick={() => {
-                            verDescripcion(Item.descripcion);
-                          }}
+                          onClick={() => verDescripcion(Item.descripcion)}
                         >
                           Ver descripción
                         </button>
                       </td>
                       <td className="text-center">
-                        {" "}
                         <button
                           className="btn btn-info"
                           onClick={() => {
                             handleShow();
                             setDatosExistencias(Item.existencias);
-                            setIdRecurso(Item.id)
-                            console.log(Item.existencias);
+                            setIdRecurso(Item.id);
                           }}
                         >
-                          {" "}
-                          Ver{" "}
-                        </button>{" "}
+                          Ver
+                        </button>
                       </td>
-
                       <td className="text-center text-nowrap">
                         <button
                           className="btn btn-sm btn-warning me-2"
@@ -113,18 +117,14 @@ export default function ListadoRecursos({
                           <i className="fa fa-pencil"></i>
                         </button>
                         <button
-                          className={`btn btn-sm  ${
+                          className={`btn btn-sm ${
                             !!Item.activo ? "btn-danger" : "btn-primary"
                           }`}
                           title={!!Item.activo ? "Borrar" : "Reactivar"}
                           onClick={
                             !!Item.activo
-                              ? () => {
-                                  desactivar(Item.id);
-                                }
-                              : () => {
-                                  activar(Item.id);
-                                }
+                              ? () => desactivar(Item.id)
+                              : () => activar(Item.id)
                           }
                         >
                           <i
@@ -137,9 +137,7 @@ export default function ListadoRecursos({
                         </button>
                       </td>
                     </tr>
-                  ) : (
-                    <></>
-                  )
+                  ) : null
                 )}
             </tbody>
           </table>
