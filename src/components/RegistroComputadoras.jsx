@@ -1,11 +1,11 @@
 import { useForm } from 'react-hook-form'
 
-export default function RegistroRecurso({ volver, recurso, guardar }) {
+export default function RegistroComputadoras({ volver, computadora, guardar }) {
     const {
     register,
     handleSubmit,
     formState: { errors, touchedFields, isValid, isSubmitted },
-    } = useForm({ values: recurso });
+    } = useForm({ values: computadora });
 
     const onSubmit = (data) => {
     guardar(data)
@@ -16,40 +16,50 @@ export default function RegistroRecurso({ volver, recurso, guardar }) {
         <div className="container-fluid">
         <fieldset>
 
-          {/* campo nombre */}
+          {/* campo nroSerie */}
             <div className="row">
             <div className="col-sm-4 col-md-3 offset-md-1">
-                <label className="col-form-label" htmlFor="nombre">
-                Nombre<span className="text-danger">*</span>:
+                <label className="col-form-label" htmlFor="nroSerie">
+                Numero de Serie<span className="text-danger">*</span>:
                 </label>
             </div>
             <div className="col-sm-8 col-md-6">
                 <input
                 type="text"
-                {...register("nombre", { required: true})}
+                {...register("nroSerie", { required: true})}
                 autoFocus
                 className="form-control "
                 />
             </div>
             </div>
 
-            <div className="col-sm-4 col-md-3 offset-md-1">
-                <label className="col-form-label" htmlFor="categoria">
-                Categoria<span className="text-danger">*</span>:
-                </label>
-            </div>
-
-          {/* campo nroserie */}
             <div className="row">
             <div className="col-sm-4 col-md-3 offset-md-1">
-                <label className="col-form-label" htmlFor="nroserie">
-                Nro Serie<span className="text-danger">*</span>:
+                <label className="col-form-label" htmlFor="idTipo">
+                Tipo<span className="text-danger">*</span>:
                 </label>
             </div>
             <div className="col-sm-8 col-md-6">
                 <input
                 type="number"
-                {...register("nroserie", { required: true})}
+                {...register("idTipo", { required: true})}
+                autoFocus
+                className="form-control "
+                />
+            </div>
+            </div>
+
+          {/* campo nroWs */}
+            <div className="row">
+            <div className="col-sm-4 col-md-3 offset-md-1">
+                <label className="col-form-label" htmlFor="nroWs">
+                Numero WS<span className="text-danger">*</span>:
+                </label>
+            </div>
+            <div className="col-sm-8 col-md-6">
+                <input
+                type="number"
+                {...register("nroWs", { required: { value: true, message: "Nro WS es requerido" }})}
                 autoFocus
                 className="form-control "
                 />
@@ -57,53 +67,54 @@ export default function RegistroRecurso({ volver, recurso, guardar }) {
             </div>
 
 
-          {/* campo categoria */}
+          {/* campo descripcion */}
             <div className="row">
             <div className="col-sm-4 col-md-3 offset-md-1">
-                <label className="col-form-label" htmlFor="categoria">
+                <label className="col-form-label" htmlFor="descripcion">
                 Descripcion<span className="text-danger">*</span>:
                 </label>
             </div>
             <div className="col-sm-8 col-md-6">
                 <input
                 type="text"
-                {...register("categoria", { required: true})}
-                className="form-control"
-                />
-            </div>
-            </div>
-
-          {/* campo descripcion */}
-            <div className="row">
-            <div className="col-sm-4 col-md-3 offset-md-1">
-                <label className="col-form-label" htmlFor="descripcion">
-                Ubicacion<span className="text-danger">*</span>:
-                </label>
-            </div>
-            <div className="col-sm-8 col-md-6">
-                <input
-                type="edescripcion"
                 {...register("descripcion", { required: true})}
                 className="form-control"
                 />
             </div>
             </div>
 
+          {/* campo ubicacion */}
+            {/*
+            <div className="row">
+            <div className="col-sm-4 col-md-3 offset-md-1">
+                <label className="col-form-label" htmlFor="idDeposito">
+                Ubicacion<span className="text-danger">*</span>:
+                </label>
+            </div>
+            <div className="col-sm-8 col-md-6">
+                <input
+                type="number"
+                {...register("descripcion", { required: true})}
+                className="form-control"
+                />
+            </div>
+            </div>
+            */}
            {/* campo Activo */}
             <div className="row">
             <div className="col-sm-4 col-md-3 offset-md-1">
-                <label className="col-form-label" htmlFor="activo">
+                <label className="col-form-label" htmlFor="esActivo">
                 Activo<span className="text-danger">*</span>:
                 </label>
             </div>
             <div className="col-sm-8 col-md-6">
                 <select
-                name="activo"
-                {...register("activo", {
+                name="esActivo"
+                {...register("esActivo", {
                     required: { value: true, message: "Activo es requerido" },
                 })}
                 className={
-                    "form-control" + (errors?.Activo ? " is-invalid" : "")
+                    "form-control" + (errors?.esActivo ? " is-invalid" : "")
                 }
                 
                 >
@@ -111,16 +122,25 @@ export default function RegistroRecurso({ volver, recurso, guardar }) {
                 <option value={false}>NO</option>
                 <option value={true}>SI</option>
                 </select>
-                <div className="invalid-feedback">{errors?.activo?.message}</div>
+                <div className="invalid-feedback">{errors?.esActivo?.message}</div>
+            </div>
+            </div>
+            
+            {/* campo masterizado */}
+            <div className="row">
+            <div className="col-sm-4 col-md-3 offset-md-1">
+                <label className="col-form-label" htmlFor="masterizado">
+                Masterizado<span className="text-danger">*</span>:
+                </label>
             </div>
             <div className="col-sm-8 col-md-6">
                 <select
-                name="masterizado"
-                {...register("masterizado", {
-                    required: { value: true, message: "Masterizado es requerido" },
+                name="esMasterizado"
+                {...register("esMasterizado", {
+                    required: { value: true, message: "masterizado es requerido" },
                 })}
                 className={
-                    "form-control" + (errors?.Masterizado ? " is-invalid" : "")
+                    "form-control" + (errors?.esMasterizado ? " is-invalid" : "")
                 }
                 
                 >
@@ -128,11 +148,12 @@ export default function RegistroRecurso({ volver, recurso, guardar }) {
                 <option value={false}>NO</option>
                 <option value={true}>SI</option>
                 </select>
-                <div className="invalid-feedback">{errors?.masterizado?.message}</div>
+                <div className="invalid-feedback">{errors?.esMasterizado?.message}</div>
             </div>
             </div>
             
             {/* campo existencia */}
+            {/*}
             <div className="row">
             <div className="col-sm-4 col-md-3 offset-md-1">
                 <label className="col-form-label" htmlFor="existencia">
