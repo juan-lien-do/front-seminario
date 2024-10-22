@@ -47,13 +47,11 @@ async function save(empleado) {
       try {
         await instance.post(baseUrl, empleado);
         toast.success("Se cargó un empleado nuevo.")
-        audioExito.play()
         return true;
 
       } catch (err) {
-        console.error(err);
+        console.log("Header xd:", err.response.headers['xd']);
         toast.error("Surgió un error")
-        audioError.play();
         return false;
       }
     }
@@ -65,16 +63,28 @@ async function save(empleado) {
       const url = `${baseUrl}`;
       await instance.put(url, empleado);
       toast.success("Se actualizaron los datos del empleado")
-      audioExito.play()
       return true;
 
     } catch (err) {
-      console.error(err);
       toast.error("Surgió un error")
-      audioError.play();
       return false
 
     }
+    return;
+  }
+
+  try {
+    const url = `${baseUrl}`;
+    await instance.put(url, empleado);
+    toast.success("Se actualizaron los datos del empleado")
+    audioExito.play()
+
+  } catch (err) {
+    console.error(err);
+    toast.error("Surgió un error")
+    audioError.play();
+
+    
   }
 }
 
@@ -86,12 +96,10 @@ async function remove(id) {
     try {
       await instance.patch(url);
       toast.success("Se desactivó un empleado existente.")
-      audioExito.play()
 
     } catch (error) {
       console.error(error);
       toast.error("Surgió un error")
-      audioError.play();
 
     }
   }
@@ -100,19 +108,18 @@ async function remove(id) {
 async function activar(id) {
   const url = `${baseUrl}activar/${id}`;
 
-  const respuesta = await sonnerQuestion.pregunta("¿Desea activar el empleado")
+  const respuesta = await sonnerQuestion.pregunta("¿Desea activar el empleado?")
   if(respuesta){
     try {
       await instance.patch(url);
       toast.success("Se activó un empleado existente.")
-      audioExito.play()
 
     } catch (error) {
       console.error(error);
       toast.error("Surgió un error")
-      audioError.play();
 
     }
+
   }
 }
 
@@ -122,4 +129,4 @@ export const empleadosService = {
   save,
   remove,
   activar,
-};
+}

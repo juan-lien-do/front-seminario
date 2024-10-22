@@ -3,6 +3,7 @@ import { empleadosService } from '../services/empleados.services'
 import ListadoEmpleados from '../components/ListadoEmpleados'
 import BuscadorEmpleados from '../components/BuscadorEmpleados'
 import RegistroEmpleado from '../components/RegistroEmpleado'
+import { toast } from 'sonner'
 
 import imagen from '../assets/ratita_perdida.png'
 
@@ -46,6 +47,10 @@ export default function Empleados() {
   }
 
   function modificarEmpleado(empleado) {
+    if (!empleado.activo) {
+      toast.error("No puede modificarse un registro inactivo")
+      return;
+  }
     console.log(empleado)
     setEmpleado(empleado)
     setMostrarRegistroEmpleado(true)

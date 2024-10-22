@@ -3,6 +3,7 @@ import ListadoRecursos from "../components/ListadoRecursos.jsx";
 import { recursosService } from "../services/recursos.services.js";
 import BuscadorRecursos from "../components/BuscadorRecursos.jsx";
 import RegistroRecurso from "../components/RegistroRecurso.jsx";
+import { toast } from "sonner";
 
 export default function Recursos() {
   const [activo, setActivo] = useState(true);
@@ -54,7 +55,7 @@ export default function Recursos() {
   // Función para modificar un recurso existente
   function modificarRecurso(recurso) {
     if (!recurso.activo) {
-      alert("No puede modificarse un registro Inactivo.");
+      toast.error("No puede modificarse un registro Inactivo.");
       return;
   }
     setRecurso(recurso);
@@ -63,11 +64,8 @@ export default function Recursos() {
 
   // Función para guardar el recurso (tanto nuevo como modificado)
   async function guardarRecurso(data) {
-    const resp = window.confirm(
-      `¿Está seguro que quiere ${data.activo ? "desactivar" : "activar"} el registro?`
-    );
-    if (resp) {
-      await recursosService.save(data);
+    
+    if (!(await recursosService.save(data))) {
       setMostrarRegistroRecurso(false);
       Buscar();
     }

@@ -1,5 +1,5 @@
 import instance from "../../axios.config";
-
+import sonnerQuestion from '../utils/sonnerQuestion';
 
 const urlResource = "http://localhost:8080/envios";
 
@@ -47,7 +47,13 @@ async function buscar() {
 }
 
 async function guardar(envio) {
-    await instance.post(urlResource+"/", envio);
+    const respuesta = await sonnerQuestion.pregunta("¿Desea registrar el envío?")
+    if(respuesta){
+        await instance.post(urlResource+"/", envio);
+        return true
+    } else{
+        return false
+    }
 }
 
 

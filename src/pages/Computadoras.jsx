@@ -3,6 +3,7 @@ import ListadoComputadoras from "../components/ListadoComputadoras.jsx";
 import RegistroComputadoras from "../components/RegistroComputadoras.jsx";
 import { computadorasService } from "../services/computadoras.services.js";
 import BuscadorComputadoras from "../components/BuscadorComputadoras.jsx";
+import { toast } from "sonner";
 
 function Computadoras() {
     const [esActivo, setActivo] = useState(true);
@@ -67,7 +68,7 @@ function Computadoras() {
 
     function modificarComputadora(computadora) {
         if (!computadora.esActivo) {
-            alert("No puede modificarse un registro Inactivo.");
+            toast.error("No puede modificarse un registro inactivo")
             return;
         }
         setComputadora(computadora);
@@ -75,9 +76,7 @@ function Computadoras() {
     }
 
     async function guardarComputadora(data) {
-        const resp = window.confirm("Está seguro que desea guardar el registro?");
-        if (resp) {
-            await computadorasService.save(data);
+        if (!(await computadorasService.save(data))) {
             setMostrarRegistroComputadora(false);
             Buscar();
         }

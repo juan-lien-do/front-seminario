@@ -1,5 +1,6 @@
 import instance from '../../axios.config'
 import { toast } from 'sonner';
+import sonnerQuestion from '../utils/sonnerQuestion';
 
 const urlResource = "http://localhost:8080/recursos/";
 
@@ -27,21 +28,34 @@ async function BuscarPorId(id_recurso) {
 }*/
 
 async function desactivar(id) {
+  const respuesta = await sonnerQuestion.pregunta("¿Desea desactivar el recurso?")
+  if(respuesta){
     await instance.patch(urlResource + "desactivar/" + id);
+    return true
+  } return false
 }
 
 async function activar(id) {
+  const respuesta = await sonnerQuestion.pregunta("¿Desea activar el recurso?")
+  if(respuesta){
     await instance.patch(urlResource + "activar/" + id);
+  }
 }
 
 async function save(item) {
+  
     if (item.id === 0) {
-    await instance.post(urlResource, item);
+      const respuesta = await sonnerQuestion.pregunta("¿Desea registrar el recurso?")
+      if(respuesta){
+        await instance.post(urlResource, item);
+      }
     } else {
       console.log(item)
 
-
-    await instance.put(urlResource + item.id, {...item, existencias:[]});
+      const respuesta = await sonnerQuestion.pregunta("¿Desea actualizar el recurso?")
+      if(respuesta){
+        await instance.put(urlResource + item.id, {...item, existencias:[]});
+      }
     }
 }
 export const recursosService = {
