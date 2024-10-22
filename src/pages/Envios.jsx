@@ -57,11 +57,24 @@ function Envios() {
   }
 
   async function guardarEnvio(data) {
+    const payload = {
+      idEmpleado:data.idEmpleado,
+      nombreUsuario:data.nombreUsuario,
+      detallesEnvioRecurso:data.detallesEnvioRecurso,
+    }
 
-    await envioServices.guardar(data);
+    const detallesEnvioComputadora = []
+    data.detallesEnvioComputadora?.forEach(det => {
+      detallesEnvioComputadora.push({idComputadora:det.idComputadora})
+    });
+
+    payload.detallesEnvioComputadora = detallesEnvioComputadora;
+
+    console.log(payload)
+
+    await envioServices.guardar(payload);
     setRegistrarEnvio(false);
     console.log("Envio guardado:", data);
-    // Aquí podrías implementar la lógica para guardar el envío en la base de datos
   }
 
   async function buscarEnvios(){

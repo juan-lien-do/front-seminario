@@ -10,6 +10,7 @@ export default function ModalDetallesEnvio({show, handleClose, envio}){
       <Modal.Body>
 
         <div className="table-responsive">
+          <h3 className="fs-5" >Recursos </h3>
           <table className="table table-striped">
             <thead className="thead-dark">
               <tr>
@@ -37,6 +38,37 @@ export default function ModalDetallesEnvio({show, handleClose, envio}){
                     
                     )
                 }
+            </tbody>
+          </table>
+          <h3 className="fs-5">Computadoras</h3>
+          <table className="table table-striped">
+            <thead className="thead-dark">
+              <tr>
+                <th className="text-center"> Número de serie </th>
+                <th className="text-center"> Masterizado </th>
+                <th className="text-center"> Número de ws </th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                envio?.detallesEnvioComputadora?.map((det) => 
+                <tr>
+                  <td className="text-center">
+                      {det.computadoraDTO.nroSerie}
+                  </td>
+                  <td className="text-center">
+                      {det.computadoraDTO.esMasterizado ?
+                      <i className="fa-solid fa-check"></i>
+                      :
+                      <i class="fa-solid fa-xmark"></i>
+                      }
+                  </td>
+                  <td className="text-center">
+                      {det.computadoraDTO.nroSerie}
+                  </td>
+                </tr>
+                )
+              }
             </tbody>
           </table>
         </div>
