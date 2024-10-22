@@ -1,7 +1,7 @@
 import { Button } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
 
-export default function ModalBuscadorComputadoras({ show, handleClose, existencias}) {
+export default function ModalBuscadorComputadoras({ show, handleClose, computadoras}) {
     // a este le di poca bola
   return (
     <Modal show={show} onHide={handleClose} size="lg"
@@ -22,17 +22,16 @@ export default function ModalBuscadorComputadoras({ show, handleClose, existenci
             </thead>
             <tbody>
                 {
-                    existencias.map((existencia) =>
+                    computadoras.map((computadora) =>
 
-                        <tr key={existencia.id}>
+                        <tr key={computadora.id}>
                             <td className="text-center">
-                                {existencia.cantidad}
                             </td>
                             <td className="text-center">
-                                {existencia.deposito?.nombre}
+                                {computadora.deposito?.nombre}
                             </td>
                             <td className="text-center">
-                                {existencia.deposito?.ubicacion}
+                                {computadora.deposito?.ubicacion}
                             </td>
                         </tr>
                     

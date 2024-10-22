@@ -22,15 +22,15 @@ export default function ModalDetallesEnvio({show, handleClose, envio}){
                 {
                     envio?.detallesEnvioRecurso?.map((det) =>
 
-                        <tr key={det.idDetalle}>
+                        <tr key={det.idDetalleRecurso}>
                             <td className="text-center">
                                 {det.cantidad}
                             </td>
                             <td className="text-center">
-                                {det.nombreRecurso}
+                                {det.existenciaDTO.nombreRecurso}
                             </td>
                             <td className="text-center">
-                                {det.nombreDeposito}
+                                {det.existenciaDTO.nombreDeposito}
                             </td>
                             
                         </tr>

@@ -10,6 +10,19 @@ export default function ListadoEnvios({ envios }) {
     function handleShow(envio){
         setShow(true)
         setEnvio(envio)
+        console.log(envios)
+    }
+
+    function translateEstados(nro){
+      switch (nro) {
+        case 1:
+          return "Pendiente"
+          break;
+      
+        default:
+          return "error"
+          break;
+      }
     }
 
   return (
@@ -27,47 +40,51 @@ export default function ListadoEnvios({ envios }) {
           </tr>
         </thead>
         <tbody>
-          {envios?.map((envio) => {return (
+          {envios.map((envio) => {return (
             <tr key={envio.idEnvio}>
-              <td
-                className={`text-center`}
-              >
+              <td className={`text-center`}>
                 {envio?.nombreEmpleado}
+                {"-"}
+                <code>{envio?.cuilEmpleado}</code>
               </td>
-              <td
-                className={`text-center`}
-              >
-                {envio.nombreUsuario}
+              <td className={`text-center`}>{envio.nombreUsuario}</td>
+              <td className={`text-center`}>
+                <span class="badge text-bg-secondary fs-6 mx-0 ">
+                  {translateEstados(
+                    envio?.listaCambiosEstado?.filter((x) => !x.fechaFin).at(0)
+                      .idEstadoEnvio
+                  )}
+                </span>
+                <span class="badge text-bg-secondary rounded-start fs-6">
+                  {
+                    envio?.listaCambiosEstado?.filter((x) => !x.fechaFin).at(0)
+                      .fechaInicio
+                  }
+                </span>
               </td>
-              <td
-                className={`text-center`}
-              >
-                {envio?.cambiosEstado.at(0).estado}
-              </td>
-              <td className="text-center">
-                    {new Date().toLocaleDateString()}
-                  </td>
+              <td className="text-center">{envio?.fechaPreparacion}</td>
 
-              <td
-                className={`text-center`}
-              >
-                <button className="btn btn-info" onClick={()=>{handleShow(envio)}}>Ver detalles</button>
+              <td className={`text-center`}>
+                <button
+                  className="btn btn-info"
+                  onClick={() => {
+                    handleShow(envio);
+                  }}
+                >
+                  Ver detalles
+                </button>
               </td>
-              <td
-                className={`text-center`}
-              >
-
+              <td className={`text-center`}>
                 <button
                   className="btn btn-sm btn-warning me-2"
                   title="Modificar"
                   onClick={() => modificar(envio)}
                 >
-                  <i className="fa fa-pencil"></i>
+                  <i class="fa-solid fa-box-open"></i>{" "}
                 </button>
-
               </td>
             </tr>
-          )})}
+          );})}
         </tbody>
       </table>
 

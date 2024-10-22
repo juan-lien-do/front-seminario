@@ -11,6 +11,7 @@ export default function RegistrarEnvio({
   recursos,
   handleVolverAtras,
   guardarEnvio,
+  computadoras,
 }) {
   const {
     register,

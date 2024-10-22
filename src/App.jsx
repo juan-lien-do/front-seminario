@@ -14,6 +14,7 @@ import Empleados from './pages/Empleados';
 import Home from './pages/Home';
 import Recursos from './pages/recursos';
 import Envios from './pages/Envios';
+import UnderConstruction from './pages/UnderConstruction';
 
 
 
@@ -42,7 +43,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Toaster richColors closeButton expand={false}/>
+        <Toaster richColors closeButton expand={false} position="top-right"/>
         <Routes>
           <Route
             path="/"
@@ -81,6 +82,13 @@ function App() {
             <ProtectedRoute isAllowed={!!usuario}>
                 <NavBar desloguearse={handleLogout}/>
                 <Inventario/> 
+            </ProtectedRoute>
+          } />
+
+          <Route path='/underconstruction' element={
+            <ProtectedRoute isAllowed={!!usuario}>
+                <NavBar desloguearse={handleLogout}/>
+                <UnderConstruction/> 
             </ProtectedRoute>
           } />
           

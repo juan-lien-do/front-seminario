@@ -53,16 +53,11 @@ export default function Empleados() {
 
 
   async function guardarEmpleado(data) {
-    const resp = window.confirm(
-      "Está seguro que quiere " +
-        (empleado.activo ? "desactivar" : "activar") +
-        " el registro?"
-    );
-    if (resp) {
-    await empleadosService.save(data)
-    setMostrarRegistroEmpleado(false)
-    buscarEmpleados()
+    if (await empleadosService.save(data)){
+      setMostrarRegistroEmpleado(false)
+      buscarEmpleados()
     }
+    
   }
 
   async function desactivarEmpleado(id) {
