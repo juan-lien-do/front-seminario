@@ -7,6 +7,7 @@ export default function BuscadorEnvios({ handleRegistrarEnvio, buscarEnvios }) {
       <button
         type="button"
         className="btn btn-primary mx-1 ms-3"
+        onClick={buscarEnvios}
       >
         <i className="fa fa-search"></i> Buscar
       </button>

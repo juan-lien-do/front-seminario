@@ -1,3 +1,9 @@
+import instance from "../../axios.config";
+
+
+const urlResource = "http://localhost:8080/envios";
+
+
 function convertirEnFecha(fecha){
     const month = fecha.getMonth() + 1;
     const year = fecha.getFullYear();
@@ -34,11 +40,17 @@ const envios = [
 ]
 
 
-function buscar() {
-    return envios;
+async function buscar() {
+    const res = await instance.get(urlResource);
+    console.log(res)
+    return res.data;
+}
+
+async function guardar(envio) {
+    await instance.post(urlResource+"/", envio);
 }
 
 
 
-const envioServices = {buscar}
+const envioServices = {buscar, guardar}
 export default envioServices;

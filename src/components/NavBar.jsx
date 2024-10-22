@@ -41,27 +41,42 @@ export default function NavBar({ desloguearse }) {
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
               <NavLink className="nav-link" to="/inventario">
+                <i class="fa-solid fa-boxes-stacked"></i> {" "}
                 Inventario
               </NavLink>
-            </li>
+             </li>
             <li className="nav-item">
               <NavLink className="nav-link" to="/empleados">
+                <i class="fa-solid fa-user-tie"></i> {" "}
                 Empleados
               </NavLink>
             </li>
+            {
+            /*
+            
+            */
+            }
             <li className="nav-item">
-              <a className="nav-link">Solicitudes</a>
+              <NavLink className="nav-link" to="/underconstruction">
+                <i class="fa-solid fa-file-invoice"></i> {" "}
+                Solicitudes
+              </NavLink>
+
             </li>
             <li className="nav-item">
               <NavLink className="nav-link" to="/envios">
+                <i class="fa-solid fa-paper-plane"></i> {" "}
                 Envíos
               </NavLink>
             </li>
             <li className="nav-item">
-              <a className="nav-link">Devoluciones</a>
+              <NavLink className="nav-link" to="/underconstruction">
+              <i class="fa-solid fa-parachute-box"></i>{" "}
+                Devoluciones
+              </NavLink>
+
             </li>
           </ul>
-
           {/* Botón "Cerrar Sesión" */}
           <button
             className="btn btn-primary ms-md-2 mt-2 mt-md-0"
