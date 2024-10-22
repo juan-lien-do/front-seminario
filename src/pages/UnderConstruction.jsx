@@ -6,7 +6,7 @@ export default function UnderConstruction(){
                     <i class="fa-solid fa-person-digging fa-bounce fa-2x"></i>                
                 </div>
                 <div className="mx-auto">
-                    Esta sección todavía está en construcción. 🍷🗿
+                    Esta sección todavía está en construcción. 
                 </div>
             </div>
         </div>

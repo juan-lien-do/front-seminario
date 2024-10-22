@@ -87,9 +87,9 @@ export default function ModalExistencias({ show, handleClose, existencias, idRec
                 <select 
                 className="form-control"
                 onChange={handleDeposito}>
-                  <option defaultValue value={1}>Depósito 1</option>
-                  <option value={2}>Depósito 2</option>
-                  <option value={3}>Depósito "Temporal" 3</option>
+                  <option defaultValue value={1}>Depósito Ascensor</option>
+                  <option value={2}>Depósito Estacionamiento</option>
+                  <option value={3}>Depósito Armario Granja</option>
                 </select>
               </div>
             </div>
@@ -129,9 +129,9 @@ export default function ModalExistencias({ show, handleClose, existencias, idRec
                 <select 
                 className="form-control"
                 onChange={handleDeposito}>
-                  <option defaultValue value={1}>Depósito 1</option>
-                  <option value={2}>Depósito 2</option>
-                  <option value={3}>Depósito "Temporal" 3</option>
+                  <option defaultValue value={1}>Depósito Ascensor</option>
+                  <option value={2}>Depósito Estacionamiento</option>
+                  <option value={3}>Depósito Armario Granja</option>
                 </select>
               </div>
             </div>

@@ -2,8 +2,8 @@ import { useState } from "react";
 
 export default function BuscadorEnvios({ handleRegistrarEnvio, buscarEnvios }) {
   return (
-    <div className="mx-auto">
-      <h1 className="">Envíos</h1>
+    <div className="mx-auto mt-3">
+      <h1 className="ms-3">Envíos</h1>
       <button
         type="button"
         className="btn btn-primary mx-1 ms-3"

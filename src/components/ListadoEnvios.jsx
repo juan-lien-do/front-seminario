@@ -18,6 +18,9 @@ export default function ListadoEnvios({ envios }) {
         case 1:
           return "Pendiente"
           break;
+        case 2:
+          return "En preparacion"
+          break;
       
         default:
           return "error"

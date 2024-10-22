@@ -188,8 +188,9 @@ export default function RegistrarEnvio({
 
   return (
     <div className="row register-form mx-2">
-      <button onClick={()=>{console.log(detallesEnvioComputadora)}}>a</button>
-      <div className="col-md-8 offset-md-2">
+      {/* Botón comentado, no sé que hace
+       <button onClick={() => {console.log(detallesEnvioComputadora)}}>a</button> */}
+      <div className="col-md-8 offset-md-2 mt-3">
         <form className="custom-form" onSubmit={handleSubmit(onSubmit)}>
           <h1>Nuevo Envío</h1>
           <ModalBuscadorComputadoras

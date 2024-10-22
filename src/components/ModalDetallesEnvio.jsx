@@ -15,7 +15,7 @@ export default function ModalDetallesEnvio({show, handleClose, envio}){
             <thead className="thead-dark">
               <tr>
                 <th className="text-center"> Cantidad </th>
-                <th className="text-center"> Deposito </th>
+                <th className="text-center"> Recurso </th>
                 <th className="text-center"> Ubicacion </th>
               </tr>
             </thead>
@@ -64,7 +64,7 @@ export default function ModalDetallesEnvio({show, handleClose, envio}){
                       }
                   </td>
                   <td className="text-center">
-                      {det.computadoraDTO.nroSerie}
+                      {det.computadoraDTO.nroWs}
                   </td>
                 </tr>
                 )
