@@ -57,7 +57,7 @@ export default function NavBar({ desloguearse }) {
             */
             }
             <li className="nav-item">
-              <NavLink className="nav-link" to="/underconstruction">
+              <NavLink className="nav-link" to="/solicitudes">
                 <i class="fa-solid fa-file-invoice"></i> {" "}
                 Solicitudes
               </NavLink>
