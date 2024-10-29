@@ -44,7 +44,7 @@ export default function NavBar({ desloguearse }) {
                 <i class="fa-solid fa-boxes-stacked"></i> {" "}
                 Inventario
               </NavLink>
-             </li>
+              </li>
             <li className="nav-item">
               <NavLink className="nav-link" to="/empleados">
                 <i class="fa-solid fa-user-tie"></i> {" "}
@@ -70,7 +70,7 @@ export default function NavBar({ desloguearse }) {
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/underconstruction">
+              <NavLink className="nav-link" to="/devoluciones">
               <i class="fa-solid fa-parachute-box"></i>{" "}
                 Devoluciones
               </NavLink>

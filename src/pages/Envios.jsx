@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import RegistrarEnvio from "../components/RegistrarEnvio";
+import RegistrarEnvio from "../components/envios/RegistrarEnvio";
 import { usuariosService } from "../services/usuarios.services.js";
 import { recursosService } from "../services/recursos.services.js";
 import { empleadosService } from "../services/empleados.services.js";
 import envioServices from "../services/envios.services.js";
-import BuscadorEnvios from "../components/BuscadorEnvios.jsx";
-import ListadoEnvios from "../components/ListadoEnvios.jsx";
+import BuscadorEnvios from "../components/envios/BuscadorEnvios.jsx";
+import ListadoEnvios from "../components/envios/ListadoEnvios.jsx";
 import { computadorasService } from "../services/computadoras.services.js";
 
 function Envios() {
@@ -16,6 +16,8 @@ function Envios() {
   const [empleados, setEmpleados] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
   const [recursos, setRecursos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [estadoSeleccionado, setEstadoSeleccionado] = useState("")
 
   // Cargar los datos al abrir el formulario de registro de envío
   async function cargarDatosParaEnvio() {
@@ -77,11 +79,28 @@ function Envios() {
     console.log("Envio guardado:", data);
   }
 
-  async function buscarEnvios(){
-    const data = await envioServices.buscar();
-    console.log(data)
-    setEnvios(data)
+  async function buscarEnvios() {
+    setLoading(true);
+    try {
+      const data = await envioServices.buscar();
+      setEnvios(data);
+    } catch (error) {
+      console.error("Error al cargar envíos:", error);
+    } finally {
+      setLoading(false);
+    }
   }
+
+  const handleEstadoChange = (nuevoEstado) => {
+    setEstadoSeleccionado(nuevoEstado);
+  };
+
+  const enviosFiltrados = estadoSeleccionado
+  ? envios.filter((envio) => {
+      const estadoActual = envio.listaCambiosEstado?.filter((x) => !x.fechaFin).at(0)?.idEstadoEnvio;
+      return estadoActual === parseInt(estadoSeleccionado);
+    })
+  : envios;
 
   useEffect(()=>{buscarEnvios()},[])
 
@@ -89,8 +108,18 @@ function Envios() {
     <>
       {!registrarEnvio ? (
         <>
-          <BuscadorEnvios handleRegistrarEnvio={handleRegistrarEnvio} buscarEnvios={buscarEnvios}></BuscadorEnvios>
-          <ListadoEnvios envios={envios}></ListadoEnvios>
+          <BuscadorEnvios
+            handleRegistrarEnvio={handleRegistrarEnvio}
+            buscarEnvios={buscarEnvios}
+            onEstadoChange={handleEstadoChange}
+          />
+          {loading ? (
+            <div className="text-center">
+              <p>Cargando envíos...</p>
+            </div>
+          ) : (
+            <ListadoEnvios envios={enviosFiltrados} />
+          )}
         </>
       ) : (
         <RegistrarEnvio
@@ -101,7 +130,7 @@ function Envios() {
           usuarios={usuarios}
           recursos={recursos}
           computadoras={computadoras}
-          guardarEnvio={guardarEnvio} // Pasamos la función para guardar el envío
+          guardarEnvio={guardarEnvio}
         />
       )}
     </>

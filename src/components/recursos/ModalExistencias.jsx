@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
-import existenciasService from "../services/existencias.service";
+import existenciasService from "../../services/existencias.service";
 
 export default function ModalExistencias({ show, handleClose, existencias, idRecurso }) {
   const [mostrarIncorporar, setMostrarIncorporar] = useState(false);

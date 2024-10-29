@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import ListadoComputadoras from "../components/ListadoComputadoras.jsx";
-import RegistroComputadoras from "../components/RegistroComputadoras.jsx";
+import ListadoComputadoras from "../components/computadoras/ListadoComputadoras.jsx";
+import RegistroComputadoras from "../components/computadoras/RegistroComputadoras.jsx";
 import { computadorasService } from "../services/computadoras.services.js";
-import BuscadorComputadoras from "../components/BuscadorComputadoras.jsx";
+import BuscadorComputadoras from "../components/computadoras/BuscadorComputadoras.jsx";
 import { toast } from "sonner";
 
 function Computadoras() {
