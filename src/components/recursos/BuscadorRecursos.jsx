@@ -10,8 +10,22 @@ export default function BuscadorRecursos({
   handleTodos,
   handleComponentes,
   handlePerifericos,
-  setSearchTerm
+  setSearchTerm,
+  categoriaSeleccionada,
 }) {
+  const estadoActivo = activo ? "" : "inactivos";
+  let tipoSeleccionado = "Todos recursos"; 
+  switch (categoriaSeleccionada) {
+    case 1:
+      tipoSeleccionado = "Componentes";
+      break;
+    case 2:
+      tipoSeleccionado = "Periféricos";
+      break;
+    default:
+      tipoSeleccionado = "Todos los recursos";
+  }
+
   return (
     <form
       className="mt-1"
@@ -71,6 +85,11 @@ export default function BuscadorRecursos({
                 <i className="fa fa-plus"></i> Agregar Item
               </button>
             </div>
+
+            {/* Encabezado que muestra el estado, debajo de los filtros */}
+            <h5 className="text-center">
+              Se están mostrando {tipoSeleccionado} {estadoActivo}
+            </h5>
           </div>
         </div>
         <hr />

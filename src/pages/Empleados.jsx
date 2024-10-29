@@ -1,8 +1,8 @@
 import {  useState, useEffect } from 'react'
 import { empleadosService } from '../services/empleados.services'
-import ListadoEmpleados from '../components/ListadoEmpleados'
-import BuscadorEmpleados from '../components/BuscadorEmpleados'
-import RegistroEmpleado from '../components/RegistroEmpleado'
+import ListadoEmpleados from '../components/empleados/ListadoEmpleados'
+import BuscadorEmpleados from '../components/empleados//BuscadorEmpleados'
+import RegistroEmpleado from '../components/empleados//RegistroEmpleado'
 import { toast } from 'sonner'
 
 import imagen from '../assets/ratita_perdida.png'

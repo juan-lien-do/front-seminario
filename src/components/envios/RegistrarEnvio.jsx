@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Select from "react-select";
-import ModalBuscadorExistencias from "./ModalBuscadorExistencias";
-import ModalDetalle from "./ModalDetalle";
-import ModalBuscadorComputadoras from "./ModalBuscadorComputadoras";
+import ModalBuscadorExistencias from "../recursos/ModalBuscadorExistencias";
+import ModalDetalle from "../ModalDetalle";
+import ModalBuscadorComputadoras from "../computadoras/ModalBuscadorComputadoras";
 
 export default function RegistrarEnvio({
   envio,

@@ -1,5 +1,4 @@
 import moment from 'moment'
-import imagen from '../assets/ratita_perdida.png'
 
 export default function ListadoEmpleados({ empleados, modificar, desactivar, activar, buscaActivos }) {
   return (

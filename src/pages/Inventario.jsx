@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
-import BuscadorRecursos from "../components/BuscadorRecursos";
-import BuscadorComputadoras from "../components/BuscadorComputadoras";
+import BuscadorRecursos from "../components/recursos/BuscadorRecursos";
+import BuscadorComputadoras from "../components/computadoras/BuscadorComputadoras";
 import Recursos from "./recursos";
 import Computadoras from "./Computadoras";
 

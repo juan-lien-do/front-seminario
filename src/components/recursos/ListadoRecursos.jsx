@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ModalExistencias from "./ModalExistencias";
+import ModalExistencias from "../recursos//ModalExistencias";
 import { Modal, Button } from "react-bootstrap"; // Importamos Modal y Button de react-bootstrap
 import 'bootstrap/dist/css/bootstrap.min.css';
 

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import ListadoRecursos from "../components/ListadoRecursos.jsx";
+import ListadoRecursos from "../components/recursos//ListadoRecursos.jsx";
 import { recursosService } from "../services/recursos.services.js";
-import BuscadorRecursos from "../components/BuscadorRecursos.jsx";
-import RegistroRecurso from "../components/RegistroRecurso.jsx";
+import BuscadorRecursos from "../components/recursos/BuscadorRecursos.jsx";
+import RegistroRecurso from "../components/recursos//RegistroRecurso.jsx";
 import { toast } from "sonner";
 
 export default function Recursos() {
