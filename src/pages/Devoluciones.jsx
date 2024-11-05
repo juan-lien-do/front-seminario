@@ -20,15 +20,30 @@ function Devoluciones() {
 
   const handleConfirmDevolucion = (productos) => {
     if (!envioSeleccionado) return;
-
+  
     const updatedEnvios = devolucionesPendientes.map((envio) => {
       if (envio.idEnvio === envioSeleccionado.idEnvio) {
-        // Aquí se asume que se actualizará el estado del envío a "devuelto"
+        const nuevosDetallesRecurso = envio.detallesEnvioRecurso.map((detalle) => {
+          if (productos.recursos.some((p) => p.idDetalleRecurso === detalle.idDetalleRecurso)) {
+            return { ...detalle, devuelto: true };
+          }
+          return detalle;
+        });
+  
+        const nuevosDetallesComputadora = envio.detallesEnvioComputadora.map((detalle) => {
+          if (productos.computadoras.some((p) => p.idDetalleComputadora === detalle.idDetalleComputadora)) {
+            return { ...detalle, devuelto: true };
+          }
+          return detalle;
+        });
+  
         return {
           ...envio,
+          detallesEnvioRecurso: nuevosDetallesRecurso,
+          detallesEnvioComputadora: nuevosDetallesComputadora,
           listaCambiosEstado: [
             ...envio.listaCambiosEstado,
-            { idEstadoEnvio: 4, fechaFin: new Date().toISOString() } // Simulamos que ahora está devuelto
+            { idEstadoEnvio: 5, fechaFin: new Date().toISOString() } // Nuevo estado parcial
           ]
         };
       }
@@ -44,15 +59,16 @@ function Devoluciones() {
 
   const actualizarListas = (actualizados) => {
     const parciales = actualizados.filter((envio) => {
-      const estados = envio.listaCambiosEstado;
-      return estados.some((estado) => estado.idEstadoEnvio === 4 && estado.fechaFin) &&
-             estados.some((estado) => estado.idEstadoEnvio !== 4); // Hay elementos no devueltos
+      const devueltoCompleto = envio.detallesEnvioRecurso.every((det) => det.devuelto) &&
+                              envio.detallesEnvioComputadora.every((det) => det.devuelto);
+      return !devueltoCompleto;
     });
-
+  
     const completas = actualizados.filter((envio) =>
-      envio.listaCambiosEstado.every((estado) => estado.idEstadoEnvio === 4)
+      envio.detallesEnvioRecurso.every((det) => det.devuelto) &&
+      envio.detallesEnvioComputadora.every((det) => det.devuelto)
     );
-
+  
     setDevolucionesParciales(parciales);
     setDevolucionesCompletas(completas);
   };
