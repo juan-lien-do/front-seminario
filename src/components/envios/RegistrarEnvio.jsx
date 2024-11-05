@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Select from "react-select";
-import ModalBuscadorExistencias from "./ModalBuscadorExistencias";
-import ModalDetalle from "./ModalDetalle";
+import ModalBuscadorExistencias from "../recursos/ModalBuscadorExistencias";
+import ModalDetalle from "../ModalDetalle";
+import ModalBuscadorComputadoras from "../computadoras/ModalBuscadorComputadoras";
 
 export default function RegistrarEnvio({
   envio,
@@ -11,6 +12,7 @@ export default function RegistrarEnvio({
   recursos,
   handleVolverAtras,
   guardarEnvio,
+  computadoras,
 }) {
   const {
     register,
@@ -21,6 +23,12 @@ export default function RegistrarEnvio({
     values: envio,
     mode: "onChange", // Valida el formulario en tiempo real
   });
+
+  const [detallesEnvioComputadora, setDetallesEnvioComputadora] = useState([]);
+  const [mostrarBuscadorComputadoras, setMostrarBuscadorComputadoras] =
+    useState(false);
+  const [computadoraElegida, setComputadoraElegida] = useState(null);
+  
 
   const [empleadosFiltrados, setEmpleadosFiltrados] = useState([]);
   const [ubicacion, setUbicacion] = useState(envio?.ubicacion); // tengo que hacer esto sino se borra cuando cambio el empleado
@@ -83,10 +91,7 @@ export default function RegistrarEnvio({
     setRecursosSeleccionados(nuevosRecursos);
   }, [detallesEnvioRecurso, recursos, recursoElegido]);
 
-  const [detallesEnvioComputadora, setDetallesEnvioComputadora] = useState([]);
-  const [mostrarBuscadorComputadoras, setMostrarBuscadorComputadoras] =
-    useState(false);
-  const [computadoraElegida, setComputadoraElegida] = useState(null);
+
 
   function agregarDetallesRecurso(detalle) {
     let nuevoDetalles = detallesEnvioRecurso;
@@ -95,6 +100,14 @@ export default function RegistrarEnvio({
     });
     //console.log(nuevoDetalles);
     setDetallesEnvioRecurso(nuevoDetalles);
+  }
+
+  function agregarDetalleComputadora(detalle){
+    console.log(detalle)
+    let nuevoDetalles = detallesEnvioComputadora;
+    nuevoDetalles.push(detalle)
+    //console.log(nuevoDetalles);
+    setDetallesEnvioComputadora(nuevoDetalles);
   }
 
   function handleUbicacionChange(e) {
@@ -135,6 +148,14 @@ export default function RegistrarEnvio({
     setDetallesEnvioRecurso(_detallesEnvioRecurso);
   }
 
+  function eliminarComputadora(idComputadora){
+    let _detallesEnvioComputadora = detallesEnvioComputadora.filter((com) => {
+      return com.idComputadora !== idComputadora;
+    });
+
+    setDetallesEnvioComputadora(_detallesEnvioComputadora);
+  }
+
   const handleEmpleadoChange = (selectedOption) => {
     setValue("idEmpleado", selectedOption ? selectedOption.value : null);
     setHayEmpleadoSeleccionado(!selectedOption);
@@ -155,11 +176,32 @@ export default function RegistrarEnvio({
     //console.log(detallesEnvioRecurso);
   }
 
+  function translateTipoComputadora(tipo){
+    return tipo === 1
+      ? "Notebook"
+      : tipo === 2
+      ? "PC"
+      : tipo === 3
+      ? "All in One"
+      : "Categoría desconocida"
+  }
+
   return (
     <div className="row register-form mx-2">
-      <div className="col-md-8 offset-md-2">
+      {/* Botón comentado, no sé que hace
+       <button onClick={() => {console.log(detallesEnvioComputadora)}}>a</button> */}
+      <div className="col-md-8 offset-md-2 mt-3">
         <form className="custom-form" onSubmit={handleSubmit(onSubmit)}>
-          <h1>Nuevo Envio</h1>
+          <h1>Nuevo Envío</h1>
+          <ModalBuscadorComputadoras
+            show={mostrarBuscadorComputadoras}
+            handleClose={handleCerrarModalComputadoras}
+            computadoras={computadoras}
+            computadoraElegida={computadoraElegida}
+            setComputadoraElegida={setComputadoraElegida}
+            agregarDetalleComputadora={agregarDetalleComputadora}
+          />
+
           <ModalDetalle
             show={mostrarModalDetalle}
             handleClose={cerrarDetalleModal}
@@ -219,31 +261,12 @@ export default function RegistrarEnvio({
             </div>
           </div>
 
-          {/* campo ubicacion 
-          <div className="row form-group my-2">
-            <div className="col-sm-4 label-column">
-              <label className="col-form-label" htmlFor="ubicacion">
-                Ubicación<span className="text-danger">*</span>:
-              </label>
-            </div>
-            <div className="col-sm-4 input-column">
-              <input
-                type="text"
-                {...register("ubicacion", { required: false })}
-                autoFocus
-                onChange={handleUbicacionChange}
-                className="form-control "
-              />
-            </div>
-          </div>*/}
-
-          
 
           <h4>Detalles</h4>
           <div className="mx-auto my-2">
             <button
               type="button"
-              className="btn btn-primary mx-1"
+              className="btn btn-primary mx-1 my-1"
               onClick={handleBuscarComputadoras}
             >
               agregar computadora
@@ -256,9 +279,9 @@ export default function RegistrarEnvio({
               agregar recurso
             </button>
           </div>
-          <div className="card py-2 px-2 bg-light col-10">
+          <div className="card py-2 px-3 bg-light col-10">
             {detallesEnvioComputadora + detallesEnvioRecurso == 0 ? (
-              <h4 className="mx-auto my-4">No hay detalles para mostrar</h4>
+              <h4 className="mx-auto my-4">Agregá un recurso o computadora</h4>
             ) : (
               <>
                 {recursosSeleccionados?.map((rec) => (
@@ -270,7 +293,7 @@ export default function RegistrarEnvio({
                             <div className="col-6">
                               <strong>{rec.nombre}</strong>
                             </div>
-                            <div className="col-2 text-end mx-auto">
+                            <div className="col-2 text-end ">
                               <button
                                 type="button"
                                 onClick={() => {
@@ -296,7 +319,7 @@ export default function RegistrarEnvio({
                                 elementos
                               </span>
                             </div>
-                            <div className="col-2 text-end mx-auto">
+                            <div className="col-2 text-end ">
                               <button
                                 type="button"
                                 className="btn btn-primary btn-sm"
@@ -315,8 +338,42 @@ export default function RegistrarEnvio({
                   </>
                 ))}
 
-                {detallesEnvioComputadora?.map((detalle) => (
-                  <div className="card"> detalle computadora</div>
+                {detallesEnvioComputadora?.map((cmpElegida) => (
+                  <div className="card mt-2 mx-2 px-2 py-2">
+                    <div className="row">
+                      <div className="col-6">
+                        <label>
+                          Número de serie:{" "}
+                          <span className="badge bg-primary">
+                            {" "}
+                            {cmpElegida?.nroSerie}{" "}
+                          </span>{" "}
+                        </label>
+                        <label>
+                          Tipo PC:{" "}
+                          <span className="badge bg-primary">
+                            {translateTipoComputadora(cmpElegida?.idTipo)}
+                          </span>
+                        </label>
+                        <label>Descripción: </label>
+                        <div className="card px-2 bg-light">{cmpElegida?.descripcion}</div>
+                      </div>
+                      <div className="col-2 text-end ">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  eliminarComputadora(cmpElegida.idComputadora);
+                                }}
+                                className="btn btn-danger btn-sm"
+                              >
+                                <i className="fas fa-trash"></i>
+                                Eliminar
+                              </button>
+                            </div>
+                    </div>
+                    
+                    
+                  </div>
                 ))}
               </>
             )}
@@ -325,7 +382,13 @@ export default function RegistrarEnvio({
           <button
             className="my-2 btn btn-warning submit-button"
             type="submit"
-            disabled={!isValid || envio.idEmpleado === null || envio.idEmpleado === 0 || (detallesEnvioComputadora.length + detallesEnvioRecurso.length) === 0}
+            disabled={
+              !isValid ||
+              envio.idEmpleado === null ||
+              envio.idEmpleado === 0 ||
+              detallesEnvioComputadora.length + detallesEnvioRecurso.length ===
+                0
+            }
           >
             Agregar Envio
           </button>

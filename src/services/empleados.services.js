@@ -1,5 +1,6 @@
 //import axios from "axios";
 //import axios from 'axios';
+import sonnerQuestion from '../utils/sonnerQuestion';
 import instance from '../../axios.config'
 import { Toaster, toast } from "sonner";
 import sonidoExito from '../assets/mixkit-gaming-lock-2848.mp3'
@@ -41,15 +42,32 @@ async function getById(id) {
 
 async function save(empleado) {
   if (empleado.id_empleado === 0) {
+    const respuesta = await sonnerQuestion.pregunta("¿Desea registrar el empleado")
+    if(respuesta){
+      try {
+        await instance.post(baseUrl, empleado);
+        toast.success("Se cargó un empleado nuevo.")
+        return true;
+
+      } catch (err) {
+        console.log("Header xd:", err.response.headers['xd']);
+        toast.error("Surgió un error")
+        return false;
+      }
+    }
+    return;
+  }
+  const respuesta = await sonnerQuestion.pregunta("¿Desea actualizar el empleado")
+  if(respuesta){
     try {
-      await instance.post(baseUrl, empleado);
-      toast.success("Se cargó un empleado nuevo.")
-      audioExito.play()
+      const url = `${baseUrl}`;
+      await instance.put(url, empleado);
+      toast.success("Se actualizaron los datos del empleado")
+      return true;
 
     } catch (err) {
-      console.error(err);
       toast.error("Surgió un error")
-      audioError.play();
+      return false
 
     }
     return;
@@ -66,40 +84,43 @@ async function save(empleado) {
     toast.error("Surgió un error")
     audioError.play();
 
+    
   }
 }
 
 async function remove(id) {
   const url = `${baseUrl}desactivar/${id}`;
 
-  try {
-    await instance.patch(url);
-    toast.success("Se desactivó un empleado existente.")
-    audioExito.play()
+  const respuesta = await sonnerQuestion.pregunta("¿Desea desactivar el empleado")
+  if(respuesta){
+    try {
+      await instance.patch(url);
+      toast.success("Se desactivó un empleado existente.")
 
-  } catch (error) {
-    console.error(error);
-    toast.error("Surgió un error")
-    audioError.play();
+    } catch (error) {
+      console.error(error);
+      toast.error("Surgió un error")
 
+    }
   }
 }
 
 async function activar(id) {
   const url = `${baseUrl}activar/${id}`;
 
-  try {
-    await instance.patch(url);
-    toast.success("Se activó un empleado existente.")
-    audioExito.play()
+  const respuesta = await sonnerQuestion.pregunta("¿Desea activar el empleado?")
+  if(respuesta){
+    try {
+      await instance.patch(url);
+      toast.success("Se activó un empleado existente.")
 
-  } catch (error) {
-    console.error(error);
-    toast.error("Surgió un error")
-    audioError.play();
+    } catch (error) {
+      console.error(error);
+      toast.error("Surgió un error")
+
+    }
 
   }
-
 }
 
 export const empleadosService = {
@@ -108,4 +129,4 @@ export const empleadosService = {
   save,
   remove,
   activar,
-};
+}

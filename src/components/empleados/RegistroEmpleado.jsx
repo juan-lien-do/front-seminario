@@ -13,6 +13,7 @@ export default function RegistroEmpleado({ volver, empleado, guardar }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <h1 className='ms-3'>Registrar empleado</h1>
       <div className="container-fluid">
         <fieldset>
 
@@ -99,6 +100,7 @@ export default function RegistroEmpleado({ volver, empleado, guardar }) {
                 className={
                   "form-control" + (errors?.Activo ? " is-invalid" : "")
                 }
+                disabled={empleado.id_empleado === 0}
                 
               >
                 <option value={null}></option>
@@ -113,13 +115,13 @@ export default function RegistroEmpleado({ volver, empleado, guardar }) {
             <div className="row">
             <div className="col-sm-4 col-md-3 offset-md-1">
               <label className="col-form-label" htmlFor="ws">
-                Working Station<span className="text-danger">*</span>:
+                Working Station:
               </label>
             </div>
             <div className="col-sm-8 col-md-6">
               <input
                 type="text"
-                {...register("ws", { required: true})}
+                {...register("ws", { required: false})}
                 className="form-control"
               />
             </div>

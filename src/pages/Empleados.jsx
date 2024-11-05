@@ -1,8 +1,9 @@
 import {  useState, useEffect } from 'react'
 import { empleadosService } from '../services/empleados.services'
-import ListadoEmpleados from '../components/ListadoEmpleados'
-import BuscadorEmpleados from '../components/BuscadorEmpleados'
-import RegistroEmpleado from '../components/RegistroEmpleado'
+import ListadoEmpleados from '../components/empleados/ListadoEmpleados'
+import BuscadorEmpleados from '../components/empleados//BuscadorEmpleados'
+import RegistroEmpleado from '../components/empleados//RegistroEmpleado'
+import { toast } from 'sonner'
 
 import imagen from '../assets/ratita_perdida.png'
 
@@ -46,6 +47,10 @@ export default function Empleados() {
   }
 
   function modificarEmpleado(empleado) {
+    if (!empleado.activo) {
+      toast.error("No puede modificarse un registro inactivo")
+      return;
+  }
     console.log(empleado)
     setEmpleado(empleado)
     setMostrarRegistroEmpleado(true)
@@ -53,16 +58,11 @@ export default function Empleados() {
 
 
   async function guardarEmpleado(data) {
-    const resp = window.confirm(
-      "Está seguro que quiere " +
-        (empleado.activo ? "desactivar" : "activar") +
-        " el registro?"
-    );
-    if (resp) {
-    await empleadosService.save(data)
-    setMostrarRegistroEmpleado(false)
-    buscarEmpleados()
+    if (await empleadosService.save(data)){
+      setMostrarRegistroEmpleado(false)
+      buscarEmpleados()
     }
+    
   }
 
   async function desactivarEmpleado(id) {

@@ -14,7 +14,40 @@ export default function BuscadorComputadoras({
     handlePC,
     handleAllinOne,
     setSearchTerm,
+    categoriaSeleccionada, // Prop para la categoría seleccionada
 }) {
+    // Determina el texto de estado
+    const estadoActivo = esActivo ? "" : "inactivas";
+    let tipoSeleccionado = "todas las computadoras"; // Por defecto
+    let estadoMasterizado = "";
+
+    // Determina el estado de masterizado
+    if (masterizado === "todos") {
+        estadoMasterizado = "";
+    } else if (masterizado === "masterizado") {
+        estadoMasterizado = "masterizadas";
+    } else if (masterizado === "noMasterizado") {
+        estadoMasterizado = "no masterizadas";
+    }
+
+    // Determina el tipo de computadoras según la categoría seleccionada
+    switch (categoriaSeleccionada) {
+        case 0 && handleTodos:
+            tipoSeleccionado = "todas las computadoras";
+            break;
+        case 1 && handleNotebooks:
+            tipoSeleccionado = "Notebooks";
+            break;
+        case 2 && handlePC:
+            tipoSeleccionado = "PC";
+            break;
+        case 3 && handleAllinOne:
+            tipoSeleccionado = "All in One";
+            break;
+        default:
+            tipoSeleccionado = "todas las computadoras";
+    }
+
     return (
         <form
             className="mt-3"
@@ -55,7 +88,6 @@ export default function BuscadorComputadoras({
                                         </label>
                                     </div>
 
-                                    {/* Menú desplegable para filtrar por masterizado */}
                                     <div className="d-flex align-items-center mx-3">
                                         <select
                                             id="masterizado"
@@ -97,6 +129,12 @@ export default function BuscadorComputadoras({
                         </div>
                     </div>
                 </div>
+
+                {/* Encabezado que muestra el estado y tipo de computadoras, debajo de los filtros */}
+                <h5 className="text-center">
+                    Se están mostrando: {tipoSeleccionado} {estadoActivo} {estadoMasterizado && `(${estadoMasterizado})`}
+                </h5>
+
                 <hr />
             </div>
         </form>

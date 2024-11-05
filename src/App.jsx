@@ -14,6 +14,9 @@ import Empleados from './pages/Empleados';
 import Home from './pages/Home';
 import Recursos from './pages/recursos';
 import Envios from './pages/Envios';
+import UnderConstruction from './pages/UnderConstruction';
+import Devoluciones from './pages/devoluciones';
+import Solicitudes from './pages/Solicitudes';
 
 
 
@@ -42,7 +45,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Toaster richColors closeButton expand={false}/>
+        <Toaster richColors closeButton expand={false} position="top-right"/>
         <Routes>
           <Route
             path="/"
@@ -81,6 +84,27 @@ function App() {
             <ProtectedRoute isAllowed={!!usuario}>
                 <NavBar desloguearse={handleLogout}/>
                 <Inventario/> 
+            </ProtectedRoute>
+          } />
+
+          <Route path='/devoluciones' element={
+            <ProtectedRoute isAllowed={!!usuario}>
+                <NavBar desloguearse={handleLogout}/>
+                <Devoluciones/> 
+            </ProtectedRoute>
+          } />
+
+          <Route path='/underconstruction' element={
+            <ProtectedRoute isAllowed={!!usuario}>
+                <NavBar desloguearse={handleLogout}/>
+                <UnderConstruction/> 
+            </ProtectedRoute>
+          } />
+
+          <Route path='/solicitudes' element={
+            <ProtectedRoute isAllowed={!!usuario}>
+                <NavBar desloguearse={handleLogout}/>
+                <Solicitudes/>
             </ProtectedRoute>
           } />
           
