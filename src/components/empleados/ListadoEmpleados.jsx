@@ -1,4 +1,5 @@
 import moment from 'moment'
+import '../../App.css'
 
 export default function ListadoEmpleados({ empleados, modificar, desactivar, activar, buscaActivos }) {
   return (
@@ -25,7 +26,7 @@ export default function ListadoEmpleados({ empleados, modificar, desactivar, act
         <tbody>
           {
             empleados?.map(empleado => (
-              <tr class={empleado.activo && "table-danger"} key={empleado.id_empleado}>
+              <tr className={!empleado.activo && "efecto-desactivado"} key={empleado.id_empleado}>
                 <td className={`text-center text-dark" }`}>{empleado.nombre}</td>
                 <td className={`text-center text-dark" }`}>{empleado.mail}</td>
                 <td className={`text-center text-dark" }`}>{empleado.telefono}</td>
@@ -42,7 +43,7 @@ export default function ListadoEmpleados({ empleados, modificar, desactivar, act
                 { buscaActivos ?
                   <></>
                   :
-                  <td className="text-center bg-danger text-white fw-bold">
+                  <td className="text-center">
                     {empleado?.deleteDate}
                   </td>
                 }

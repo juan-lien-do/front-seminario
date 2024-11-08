@@ -62,11 +62,9 @@ const DownloadPDFButton = ({setMostrarLista}) => {
   };
 
   return (
-    <div className="col-12 text-center">
-      <button onClick={downloadPDF} className="btn btn-primary mx-auto">
+      <button onClick={downloadPDF} className="btn btn-primary mx-2">
         Descargar solicitud de reposición
       </button>
-    </div>
   );
 };
 
