@@ -1,18 +1,41 @@
+import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 
 function ModalDevoluciones({ show, handleClose, envio, onConfirmDevolucion }) {
+  const [productosSeleccionados, setProductosSeleccionados] = useState({
+    recursos: {},
+    computadoras: {},
+  });
+
+  const handleCheckboxChange = (tipo, id, devuelto) => {
+    if (devuelto) return; // No permitir seleccionar si ya está devuelto
+    setProductosSeleccionados((prev) => ({
+      ...prev,
+      [tipo]: {
+        ...prev[tipo],
+        [id]: !prev[tipo][id], // Cambiar el estado de selección
+      },
+    }));
+  };
+
   const confirmarDevolucion = () => {
-    // Implementar la lógica de confirmación aquí
-    console.log("Devolución confirmada");
-    onConfirmDevolucion(envio); // Pasar los productos a la función de confirmación
+    const productosADevolver = {
+      recursos: envio.detallesEnvioRecurso.filter(
+        (det) => productosSeleccionados.recursos[det.idDetalleRecurso]
+      ),
+      computadoras: envio.detallesEnvioComputadora.filter(
+        (det) => productosSeleccionados.computadoras[det.idDetalleComputadora]
+      ),
+    };
+
+    console.log("Productos a devolver:", productosADevolver); // Verifica la estructura aquí
+
+    onConfirmDevolucion(productosADevolver);
     handleClose();
   };
 
   return (
     <Modal show={show} onHide={handleClose} size="lg" centered>
-      <Modal.Header closeButton>
-        <Modal.Title>Detalles del Envío para Devolución</Modal.Title>
-      </Modal.Header>
       <Modal.Body>
         <h3>Recursos</h3>
         <table className="table table-striped">
@@ -30,6 +53,10 @@ function ModalDevoluciones({ show, handleClose, envio, onConfirmDevolucion }) {
                 <td>
                   <input
                     type="checkbox"
+                    checked={productosSeleccionados.recursos[det.idDetalleRecurso] || false}
+                    onChange={() =>
+                      handleCheckboxChange("recursos", det.idDetalleRecurso, det.devuelto)
+                    }
                     disabled={det.devuelto} // Deshabilitar si ya fue devuelto
                   />
                 </td>
@@ -46,9 +73,9 @@ function ModalDevoluciones({ show, handleClose, envio, onConfirmDevolucion }) {
           <thead>
             <tr>
               <th>Seleccionar</th>
-              <th>Cantidad</th>
-              <th>Computadora</th>
-              <th>Número de Serie</th>
+              <th>Número de serie</th>
+              <th>Masterizado</th>
+              <th>Número de WS</th>
             </tr>
           </thead>
           <tbody>
@@ -57,12 +84,22 @@ function ModalDevoluciones({ show, handleClose, envio, onConfirmDevolucion }) {
                 <td>
                   <input
                     type="checkbox"
+                    checked={productosSeleccionados.computadoras[det.idDetalleComputadora] || false}
+                    onChange={() =>
+                      handleCheckboxChange("computadoras", det.idDetalleComputadora, det.devuelto)
+                    }
                     disabled={det.devuelto} // Deshabilitar si ya fue devuelto
                   />
                 </td>
-                <td>{det.cantidad}</td>
-                <td>{det.computadoraDTO.nombreComputadora}</td>
-                <td>{det.computadoraDTO.numeroSerie}</td>
+                <td>{det.computadoraDTO.nroSerie}</td>
+                <td>
+                  {det.computadoraDTO.esMasterizado ? (
+                    <i className="fa-solid fa-check"></i>
+                  ) : (
+                    <i className="fa-solid fa-xmark"></i>
+                  )}
+                </td>
+                <td>{det.computadoraDTO.nroWs}</td>
               </tr>
             ))}
           </tbody>

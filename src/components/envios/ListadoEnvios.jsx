@@ -11,7 +11,10 @@ export default function ListadoEnvios({ envios }) {
     { id: 1, nombre: "Pendiente" },
     { id: 2, nombre: "En preparación" },
     { id: 3, nombre: "Enviado" },
-    { id: 4, nombre: "Entregado" }, // Estado "Entregado" es el que nos interesa para aplicar la clase
+    { id: 4, nombre: "Entregado" }, 
+    { id: 5, nombre: "Devuelto Parcialmente" },
+    { id: 6, nombre: "Devuelto Completo" },
+    { id: 7, nombre: "Cancelado" },
   ];
 
   function handleClose() {

@@ -133,7 +133,7 @@ function Computadoras() {
                 handleTodos={handleTodos}
                 setSearchTerm={setSearchTerm}
             />
-
+            
             <ListadoComputadoras
                 Items={computadoras}
                 activar={activarComputadora}
