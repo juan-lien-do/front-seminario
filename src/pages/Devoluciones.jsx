@@ -3,6 +3,7 @@ import ListadoDevoluciones from "../components/devoluciones/ListadoDevoluciones"
 import devolucionesServices from "../services/devoluciones.services";
 import ModalDevoluciones from "../components/devoluciones/ModalDevoluciones";
 import { Nav } from "react-bootstrap";
+import LoaderPacman from "../components/LoaderPacman";
 
 function Devoluciones() {
   const [devolucionesPendientes, setDevolucionesPendientes] = useState([]);
@@ -122,7 +123,7 @@ function Devoluciones() {
       </Nav>
 
       {loading ? (
-        <p>Cargando devoluciones...</p>
+        <LoaderPacman texto={"Cargando devoluciones..."}></LoaderPacman>
       ) : (
         <>
           {tabSeleccionada === "pendientes" && (

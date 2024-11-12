@@ -9,6 +9,7 @@ export default function ListadoRecursos({
   desactivar,
   modificar,
   categoriaSeleccionada,
+  Buscar,
 }) {
   const [idRecurso, setIdRecurso] = useState(null);
   const [show, setShow] = useState(false);
@@ -49,6 +50,7 @@ export default function ListadoRecursos({
         handleClose={handleClose}
         existencias={datosExistencias}
         idRecurso={idRecurso}
+        Buscar={Buscar}
       />
 
       <div className="card" id="TableSorterCard">
@@ -58,6 +60,7 @@ export default function ListadoRecursos({
               <tr>
                 <th className="text-center">Nombre</th>
                 <th className="text-end">Cantidad</th>
+                <th className="text-end">Cantidad crítica</th>
                 <th className="text-center">Categoria</th>
                 <th className="text-center">Descripción</th>
                 <th className="text-center">Existencias</th>
@@ -84,6 +87,11 @@ export default function ListadoRecursos({
                             accumulator + currentValue.cantidad,
                           0
                         )}
+                      </td>
+                      <td
+                        className={`text-end`}
+                      >
+                        {Item.cantidadCritica}
                       </td>
                       <td className="text-center ">
                         {Item.categoria === 1 ? "Periférico" : "Componente"}

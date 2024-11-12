@@ -3,7 +3,7 @@ import { Button } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
 import existenciasService from "../../services/existencias.service";
 
-export default function ModalExistencias({ show, handleClose, existencias, idRecurso }) {
+export default function ModalExistencias({ show, handleClose, existencias, idRecurso, Buscar }) {
   const [mostrarIncorporar, setMostrarIncorporar] = useState(false);
   const [mostrarDisminuir, setMostrarDisminuir] = useState(false);
   const [canSubmit, setCanSubmit] = useState(true)
@@ -36,6 +36,7 @@ export default function ModalExistencias({ show, handleClose, existencias, idRec
     if(await existenciasService.incorporar(ex)){
       handleVolver()
       handleClose()
+      Buscar()
     }
     setCanSubmit(true)
   }
@@ -50,6 +51,7 @@ export default function ModalExistencias({ show, handleClose, existencias, idRec
     if (await existenciasService.disminuir(ex)){
       handleVolver()
       handleClose()
+      Buscar()
     }
     setCanSubmit(true)    
   }

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import DownloadPDFButton from "../DownloadPDFButton";
 
-export default function RegistrarSolicitud({handleVolver, nombreUsuario}) {
+export default function RegistrarSolicitud({handleVolver, nombreUsuario, guardarSolicitud}) {
   const [mostrarLista, setMostrarLista] = useState(true);
   const [cantElementos, setCantElementos] = useState(1);
   const [elementos, setElementos] = useState([
@@ -13,6 +13,14 @@ export default function RegistrarSolicitud({handleVolver, nombreUsuario}) {
       descripcion: "",
     },
   ]);
+
+  function handleGuardar(){
+    const solicitud = {
+      nombreUsuario: nombreUsuario,
+      detallesSolicitud: elementos.map(elem => { return {cantidad:elem.cantidad, nombre:elem.cantidad, descripcion:elem.descripcion }})
+    }
+    guardarSolicitud(solicitud);
+  }
 
   useEffect(() => {
     if (cantElementos >= elementos.length) {
@@ -208,7 +216,7 @@ export default function RegistrarSolicitud({handleVolver, nombreUsuario}) {
               </div>*/}
               <div className="col-4">
                 <button className="btn btn-secondary mx-2" onClick={handleVolver}>Volver</button>
-                <button className="btn btn-primary mx-2">Guardar solicitud</button>
+                <button className="btn btn-primary mx-2" onClick={handleGuardar}>Guardar solicitud</button>
               </div>
             </div>
           </>

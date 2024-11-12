@@ -27,6 +27,19 @@ export default function Solicitudes({}) {
     setSolicitudes(datos);
   }
 
+  async function guardarSolicitud(data) {
+    if (await SolicitudesService.guardarSolicitud(data)){
+      setMostrarRegistrarSolictud(false)
+      buscarSolicitudes()
+    }
+  }
+
+  async function incorporarSolicitud(id) {
+    if (await SolicitudesService.incorporarSolicitud(id)){
+      buscarSolicitudes()
+    }
+  }
+
   function handleElegirSolicitud(solici){
     setSolicitudElegida(solici)
     setMostrarSolicitud(true)
@@ -42,12 +55,12 @@ export default function Solicitudes({}) {
   }
 
 
-  if(mostrarRegistrarSolicitud) {return (<RegistrarSolicitud handleVolver={handleVerSolicitudes} nombreUsuario={nombreUsuario}></RegistrarSolicitud>)}
+  if(mostrarRegistrarSolicitud) {return (<RegistrarSolicitud handleVolver={handleVerSolicitudes} nombreUsuario={nombreUsuario} guardarSolicitud={guardarSolicitud}></RegistrarSolicitud>)}
   else if (mostrarSolicitud) {return (<ConsultarSolicitud solicitud={solicitudElegida} handleVolver={handleVerSolicitudes}></ConsultarSolicitud>)}
   else {
     return (<>
     <BuscadorSolicitudes handleMostrarRegistro={handleMostrarRegistro} buscarSolicitudes={buscarSolicitudes}></BuscadorSolicitudes>
-    <ListadoSolicitudes solicitudes={solicitudes} handleElegirSolicitud={handleElegirSolicitud} />
+    <ListadoSolicitudes solicitudes={solicitudes} handleElegirSolicitud={handleElegirSolicitud} incorporarSolicitud={incorporarSolicitud}/>
   </>)
   }
 
