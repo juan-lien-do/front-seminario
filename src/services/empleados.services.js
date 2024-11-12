@@ -91,11 +91,11 @@ async function save(empleado) {
 async function remove(id) {
   const url = `${baseUrl}desactivar/${id}`;
 
-  const respuesta = await sonnerQuestion.pregunta("¿Desea desactivar el empleado")
+  const respuesta = await sonnerQuestion.pregunta("¿Desea dar de baja el empleado")
   if(respuesta){
     try {
       await instance.patch(url);
-      toast.success("Se desactivó un empleado existente.")
+      toast.success("El Empleado ha sido dado de baja correctamente")
 
     } catch (error) {
       console.error(error);
@@ -108,11 +108,11 @@ async function remove(id) {
 async function activar(id) {
   const url = `${baseUrl}activar/${id}`;
 
-  const respuesta = await sonnerQuestion.pregunta("¿Desea activar el empleado?")
+  const respuesta = await sonnerQuestion.pregunta("¿Desea dar de alta el empleado?")
   if(respuesta){
     try {
       await instance.patch(url);
-      toast.success("Se activó un empleado existente.")
+      toast.success("Se dio de alta correctamente")
 
     } catch (error) {
       console.error(error);

@@ -1,42 +1,36 @@
-import React, { useState } from "react";
-import { Modal, Button } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { useState } from "react";
+import { Button } from "react-bootstrap";
+import ModalDetallesEnvio from "../envios/ModalDetallesEnvio";
 
-function ListadoDevoluciones({ devoluciones, abrirModalDevolucion }) {
+function ListadoDevoluciones({ devoluciones, abrirModalDevolucion, estadoSeleccionado }) {
   const [showDescripcion, setShowDescripcion] = useState(false);
-  const [textoDescripcion, setTextoDescripcion] = useState("");
+  const [envioSeleccionado, setEnvioSeleccionado] = useState(null); // Para guardar el envio seleccionado
 
   const handleDescripcionClose = () => setShowDescripcion(false);
-  const handleDescripcionShow = () => setShowDescripcion(true);
+  const handleDescripcionShow = (devolucion) => {
+    setEnvioSeleccionado(devolucion);
+    setShowDescripcion(true); // Mostrar el modal con los detalles
+  };
 
-  function verDescripcion(devolucion) {
-    const descripcion = devolucion.detallesEnvioRecurso?.map((detalle) => {
-      const recursoNombre = detalle.existenciaDTO?.nombreRecurso || "Recurso desconocido";
-      const cantidad = detalle.cantidad || "Cantidad no especificada";
-      const modelo = detalle.existenciaDTO?.modelo || "Modelo no especificado";
-      const otroDetalle = detalle.existenciaDTO?.otroDetalle || "Sin detalles adicionales";
+  const devolucionesFiltradas = devoluciones.filter((devolucion) => {
+    const estadoActual = devolucion.listaCambiosEstado?.filter((x) => !x.fechaFin).at(0)?.idEstadoEnvio;
 
-      return `Nombre del recurso: ${recursoNombre}, Cantidad: ${cantidad}, Modelo: ${modelo}, Otros detalles: ${otroDetalle}`;
-    }).join(", ") || "No hay detalles disponibles";
-
-    setTextoDescripcion(descripcion);
-    handleDescripcionShow();
-  }
+    if (estadoSeleccionado === "Pendientes") {
+      return estadoActual === 4 || estadoActual === 5;
+    } else if (estadoSeleccionado === "Completas") {
+      return estadoActual === 6; 
+    }
+    return true; 
+  });
 
   return (
     <div className="container-fluid">
-      {/* Modal para la descripción */}
-      <Modal show={showDescripcion} onHide={handleDescripcionClose} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Descripción del Detalle</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{textoDescripcion}</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleDescripcionClose}>
-            Cerrar
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      {/* Modal para los detalles del envío */}
+      <ModalDetallesEnvio
+        show={showDescripcion}
+        handleClose={handleDescripcionClose}
+        envio={envioSeleccionado}
+      />
 
       <div className="card" id="TableSorterCard">
         <div className="table-responsive">
@@ -45,39 +39,39 @@ function ListadoDevoluciones({ devoluciones, abrirModalDevolucion }) {
               <tr>
                 <th className="text-center">Empleado</th>
                 <th className="text-center">Usuario</th>
-                <th className="text-center">Fecha de Entrega</th>
                 <th className="text-center">Detalles</th>
-                <th className="text-center">Acciones</th>
+                <th className="text-center">Devolucion</th>
               </tr>
             </thead>
             <tbody>
-              {devoluciones && devoluciones.map((devolucion) => (
-                <tr key={devolucion.idEnvio}>
-                  <td className="text-center">{devolucion.nombreEmpleado}</td>
-                  <td className="text-center">{devolucion.nombreUsuario}</td>
-                  <td className="text-center">{devolucion.fechaEntrega || "Fecha no disponible"}</td>
-                  <td className="text-center">
-                    {devolucion.detallesEnvioRecurso && devolucion.detallesEnvioRecurso.length > 0 ? (
+              {devolucionesFiltradas && devolucionesFiltradas.length > 0 ? (
+                devolucionesFiltradas.map((devolucion) => (
+                  <tr key={devolucion.idEnvio}>
+                    <td className="text-center">{devolucion.nombreEmpleado}</td>
+                    <td className="text-center">{devolucion.nombreUsuario}</td>
+                    <td className="text-center">
                       <button
                         className="btn btn-info btn-sm"
-                        onClick={() => verDescripcion(devolucion)}
+                        onClick={() => handleDescripcionShow(devolucion)}
                       >
                         Ver detalles
                       </button>
-                    ) : (
-                      <span>Sin detalles</span>
-                    )}
-                  </td>
-                  <td className="text-center">
-                    <button
-                      className="btn btn-primary btn-sm"
-                      onClick={() => abrirModalDevolucion(devolucion)}
-                    >
-                      Confirmar Devolución
-                    </button>
-                  </td>
+                    </td>
+                    <td className="text-center">
+                      <button
+                        className="btn btn-primary btn-sm"
+                        onClick={() => abrirModalDevolucion(devolucion)}
+                      >
+                        Confirmar Devolución
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5" className="text-center">No hay devoluciones</td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
@@ -85,5 +79,4 @@ function ListadoDevoluciones({ devoluciones, abrirModalDevolucion }) {
     </div>
   );
 }
-
 export default ListadoDevoluciones;

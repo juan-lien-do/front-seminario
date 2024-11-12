@@ -1,11 +1,11 @@
-// ModalDevoluciones.jsx
 import { useState } from "react";
-import React from "react";
 import { Button, Modal } from "react-bootstrap";
 
-
 function ModalDevoluciones({ show, handleClose, envio, onConfirmDevolucion }) {
-  const [productosSeleccionados, setProductosSeleccionados] = useState({ recursos: {}, computadoras: {} });
+  const [productosSeleccionados, setProductosSeleccionados] = useState({
+    recursos: {},
+    computadoras: {},
+  });
 
   const handleCheckboxChange = (tipo, id, devuelto) => {
     if (devuelto) return; // No permitir seleccionar si ya está devuelto
@@ -20,9 +20,15 @@ function ModalDevoluciones({ show, handleClose, envio, onConfirmDevolucion }) {
 
   const confirmarDevolucion = () => {
     const productosADevolver = {
-      recursos: envio.detallesEnvioRecurso.filter((det) => productosSeleccionados.recursos[det.idDetalleRecurso]),
-      computadoras: envio.detallesEnvioComputadora.filter((det) => productosSeleccionados.computadoras[det.idDetalleComputadora]),
+      recursos: envio.detallesEnvioRecurso.filter(
+        (det) => productosSeleccionados.recursos[det.idDetalleRecurso]
+      ),
+      computadoras: envio.detallesEnvioComputadora.filter(
+        (det) => productosSeleccionados.computadoras[det.idDetalleComputadora]
+      ),
     };
+
+    console.log("Productos a devolver:", productosADevolver); // Verifica la estructura aquí
 
     onConfirmDevolucion(productosADevolver);
     handleClose();
@@ -30,7 +36,6 @@ function ModalDevoluciones({ show, handleClose, envio, onConfirmDevolucion }) {
 
   return (
     <Modal show={show} onHide={handleClose} size="lg" centered>
-      {/* Modal content */}
       <Modal.Body>
         <h3>Recursos</h3>
         <table className="table table-striped">
@@ -49,7 +54,9 @@ function ModalDevoluciones({ show, handleClose, envio, onConfirmDevolucion }) {
                   <input
                     type="checkbox"
                     checked={productosSeleccionados.recursos[det.idDetalleRecurso] || false}
-                    onChange={() => handleCheckboxChange("recursos", det.idDetalleRecurso, det.devuelto)}
+                    onChange={() =>
+                      handleCheckboxChange("recursos", det.idDetalleRecurso, det.devuelto)
+                    }
                     disabled={det.devuelto} // Deshabilitar si ya fue devuelto
                   />
                 </td>
@@ -61,7 +68,42 @@ function ModalDevoluciones({ show, handleClose, envio, onConfirmDevolucion }) {
           </tbody>
         </table>
 
-        {/* Similar table structure for Computadoras */}
+        <h3>Computadoras</h3>
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th>Seleccionar</th>
+              <th>Número de serie</th>
+              <th>Masterizado</th>
+              <th>Número de WS</th>
+            </tr>
+          </thead>
+          <tbody>
+            {envio?.detallesEnvioComputadora?.map((det) => (
+              <tr key={det.idDetalleComputadora}>
+                <td>
+                  <input
+                    type="checkbox"
+                    checked={productosSeleccionados.computadoras[det.idDetalleComputadora] || false}
+                    onChange={() =>
+                      handleCheckboxChange("computadoras", det.idDetalleComputadora, det.devuelto)
+                    }
+                    disabled={det.devuelto} // Deshabilitar si ya fue devuelto
+                  />
+                </td>
+                <td>{det.computadoraDTO.nroSerie}</td>
+                <td>
+                  {det.computadoraDTO.esMasterizado ? (
+                    <i className="fa-solid fa-check"></i>
+                  ) : (
+                    <i className="fa-solid fa-xmark"></i>
+                  )}
+                </td>
+                <td>{det.computadoraDTO.nroWs}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>

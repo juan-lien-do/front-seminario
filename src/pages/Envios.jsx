@@ -17,9 +17,10 @@ function Envios() {
   const [usuarios, setUsuarios] = useState([]);
   const [recursos, setRecursos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [estadoSeleccionado, setEstadoSeleccionado] = useState("")
+  const [estadoSeleccionado, setEstadoSeleccionado] = useState("");
+  const [completadosActivo, setCompletadosActivo] = useState(false);
+  const [nombreBuscar, setNombreBuscar] = useState("");
 
-  // Cargar los datos al abrir el formulario de registro de envío
   async function cargarDatosParaEnvio() {
     try {
       const dataUsuarios = await usuariosService.buscarUsuarios();
@@ -91,49 +92,91 @@ function Envios() {
     }
   }
 
-  const handleEstadoChange = (nuevoEstado) => {
-    setEstadoSeleccionado(nuevoEstado);
-  };
 
-  const enviosFiltrados = estadoSeleccionado
-  ? envios.filter((envio) => {
+  
+    useEffect(() => {
+      cargarEnvios(); // Carga los envíos al inicio
+    }, []);
+  
+    const cargarEnvios = async () => {
+      setLoading(true);
+      try {
+        const data = await envioServices.buscar();
+        setEnvios(data);
+      } catch (error) {
+        console.error("Error al cargar envíos:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    const handleEstadoChange = (nuevoEstado) => {
+      setEstadoSeleccionado(nuevoEstado);
+    };
+  
+    const toggleCompletados = () => {
+      setCompletadosActivo((prev) => !prev);
+    };
+
+    const handleNombreChange = (nombre) => {
+      setNombreBuscar(nombre.toLowerCase()); // Convertir a minúsculas para una búsqueda insensible a mayúsculas
+    };
+  
+    const nombreBuscarLower = nombreBuscar.toLowerCase();
+
+    console.log("Envíos disponibles:", envios);
+    console.log("Nombre a buscar:", nombreBuscar);
+    
+    const enviosFiltrados = envios.filter((envio) => {
       const estadoActual = envio.listaCambiosEstado?.filter((x) => !x.fechaFin).at(0)?.idEstadoEnvio;
-      return estadoActual === parseInt(estadoSeleccionado);
-    })
-  : envios;
-
-  useEffect(()=>{buscarEnvios()},[])
-
-  return (
-    <>
-      {!registrarEnvio ? (
+    
+      // Verifica si el estado y completados están activos
+      const filtroEstado = estadoSeleccionado ? estadoActual === parseInt(estadoSeleccionado) : true;
+      const filtroCompletados = completadosActivo ? [4, 5, 6].includes(estadoActual) : true;
+    
+      // Aplicar filtro de nombre asegurando que `envio.nombre` exista
+      const filtroNombre = nombreBuscar
+        ? envio.nombreEmpleado && envio.nombreEmpleado.toLowerCase().includes(nombreBuscar.toLowerCase())
+        : true;
+    
+      return filtroEstado && filtroCompletados && filtroNombre;
+    });
+    
+      return (
         <>
-          <BuscadorEnvios
-            handleRegistrarEnvio={handleRegistrarEnvio}
-            buscarEnvios={buscarEnvios}
-            onEstadoChange={handleEstadoChange}
-          />
-          {loading ? (
-            <div className="text-center">
-              <p>Cargando envíos...</p>
-            </div>
+          {!registrarEnvio ? (
+            <>
+              <BuscadorEnvios
+                handleRegistrarEnvio={handleRegistrarEnvio}
+                onEstadoChange={handleEstadoChange}
+                toggleCompletados={toggleCompletados}
+                completadosActivo={completadosActivo}
+                buscarEnvios={cargarEnvios}
+                onNombreChange={handleNombreChange}
+              />
+              {loading ? (
+                <div className="text-center">
+                  <p>Cargando envíos...</p>
+                </div>
+              ) : (
+                <ListadoEnvios envios={enviosFiltrados} />
+              )}
+            </>
           ) : (
-            <ListadoEnvios envios={enviosFiltrados} />
+            <RegistrarEnvio
+              envio={envio}
+              setEnvio={setEnvio}
+              handleVolverAtras={handleVolverAtras}
+              empleados={empleados}
+              usuarios={usuarios}
+              recursos={recursos}
+              computadoras={computadoras}
+              guardarEnvio={guardarEnvio}
+            />
           )}
         </>
-      ) : (
-        <RegistrarEnvio
-          envio={envio}
-          setEnvio={setEnvio}
-          handleVolverAtras={handleVolverAtras}
-          empleados={empleados}
-          usuarios={usuarios}
-          recursos={recursos}
-          computadoras={computadoras}
-          guardarEnvio={guardarEnvio}
-        />
-      )}
-    </>
+      
+      
   );
 }
 

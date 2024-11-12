@@ -6,105 +6,109 @@ import { Nav } from "react-bootstrap";
 
 function Devoluciones() {
   const [devolucionesPendientes, setDevolucionesPendientes] = useState([]);
-  const [devolucionesParciales, setDevolucionesParciales] = useState([]);
   const [devolucionesCompletas, setDevolucionesCompletas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showDevolucionModal, setShowDevolucionModal] = useState(false);
   const [envioSeleccionado, setEnvioSeleccionado] = useState(null);
   const [tabSeleccionada, setTabSeleccionada] = useState("pendientes");
 
+  // Función para abrir el modal de devolución
   const handleAbrirModalDevolucion = (envio) => {
     setEnvioSeleccionado(envio);
     setShowDevolucionModal(true);
   };
 
-  const handleConfirmDevolucion = (productos) => {
+  // Función para confirmar la devolución y cambiar el estado
+  const handleConfirmDevolucion = async (productos = { recursos: [], computadoras: [] }) => {
     if (!envioSeleccionado) return;
-  
-    const updatedEnvios = devolucionesPendientes.map((envio) => {
-      if (envio.idEnvio === envioSeleccionado.idEnvio) {
-        const nuevosDetallesRecurso = envio.detallesEnvioRecurso.map((detalle) => {
-          if (productos.recursos.some((p) => p.idDetalleRecurso === detalle.idDetalleRecurso)) {
-            return { ...detalle, devuelto: true };
-          }
-          return detalle;
-        });
-  
-        const nuevosDetallesComputadora = envio.detallesEnvioComputadora.map((detalle) => {
-          if (productos.computadoras.some((p) => p.idDetalleComputadora === detalle.idDetalleComputadora)) {
-            return { ...detalle, devuelto: true };
-          }
-          return detalle;
-        });
-  
-        return {
-          ...envio,
-          detallesEnvioRecurso: nuevosDetallesRecurso,
-          detallesEnvioComputadora: nuevosDetallesComputadora,
-          listaCambiosEstado: [
-            ...envio.listaCambiosEstado,
-            { idEstadoEnvio: 5, fechaFin: new Date().toISOString() } // Nuevo estado parcial
-          ]
-        };
-      }
-      return envio;
-    });
 
-    setDevolucionesPendientes(updatedEnvios);
-    setShowDevolucionModal(false);
-    
-    // Recalculamos las devoluciones parciales y completas
-    actualizarListas(updatedEnvios);
-  };
-
-  const actualizarListas = (actualizados) => {
-    const parciales = actualizados.filter((envio) => {
-      const devueltoCompleto = envio.detallesEnvioRecurso.every((det) => det.devuelto) &&
-                              envio.detallesEnvioComputadora.every((det) => det.devuelto);
-      return !devueltoCompleto;
-    });
-  
-    const completas = actualizados.filter((envio) =>
-      envio.detallesEnvioRecurso.every((det) => det.devuelto) &&
-      envio.detallesEnvioComputadora.every((det) => det.devuelto)
-    );
-  
-    setDevolucionesParciales(parciales);
-    setDevolucionesCompletas(completas);
-  };
-
-  async function cargarDevoluciones() {
-    setLoading(true);
     try {
-      const data = await devolucionesServices.buscarEntregados();
+      const productosDevueltosRecursos = productos.recursos.filter(p => p.devuelto);
+      const productosDevueltosComputadoras = productos.computadoras.filter(p => p.devuelto);
 
-      const pendientes = data.filter((envio) =>
-        envio.listaCambiosEstado.some((estado) => estado.idEstadoEnvio === 4 && !estado.fechaFin)
-      );
+      const nuevoEstado = 
+        productosDevueltosRecursos.length === productos.recursos.length &&
+        productosDevueltosComputadoras.length === productos.computadoras.length
+          ? 6  // Estado "completo" -> 6
+          : 5;  // Estado "parcial" -> 5
 
-      const parciales = data.filter((envio) => {
-        const estados = envio.listaCambiosEstado;
-        return estados.some((estado) => estado.idEstadoEnvio === 4 && estado.fechaFin) &&
-               estados.some((estado) => estado.idEstadoEnvio !== 4); // Hay elementos no devueltos
+      await devolucionesServices.confirmarDevolucion(envioSeleccionado.idEnvio, nuevoEstado);
+
+      const updatedEnvios = devolucionesPendientes.map(envio => {
+        if (envio.idEnvio === envioSeleccionado.idEnvio) {
+          return {
+            ...envio,
+            listaCambiosEstado: [
+              ...envio.listaCambiosEstado,
+              { idEstadoEnvio: nuevoEstado, fechaFin: new Date() }
+            ],
+            detallesEnvioRecurso: envio.detallesEnvioRecurso.map(detalle =>
+              productosDevueltosRecursos.some(p => p.idDetalle === detalle.idDetalleRecurso)
+                ? { ...detalle, devuelto: true }
+                : detalle
+            ),
+            detallesEnvioComputadora: envio.detallesEnvioComputadora.map(detalle =>
+              productosDevueltosComputadoras.some(p => p.idDetalle === detalle.idDetalleComputadora)
+                ? { ...detalle, devuelto: true }
+                : detalle
+            )
+          };
+        }
+        return envio;
       });
 
-      const completas = data.filter((envio) =>
-        envio.listaCambiosEstado.every((estado) => estado.idEstadoEnvio === 4)
-      );
+      actualizarListas(updatedEnvios);
+      setShowDevolucionModal(false);
 
-      setDevolucionesPendientes(pendientes);
-      setDevolucionesParciales(parciales);
-      setDevolucionesCompletas(completas);
     } catch (error) {
-      console.error("Error al cargar devoluciones:", error);
-    } finally {
-      setLoading(false);
+      console.error("Error al confirmar la devolución:", error);
     }
-  }
+  };
+
+  // Función para actualizar las listas de devoluciones pendientes y completas
+  const actualizarListas = (devoluciones) => {
+    console.log("Actualizando listas con los envíos:", devoluciones);
+
+    // Filtrar las devoluciones para los estados 4 y 5 como pendientes
+    const pendientes = devoluciones.filter((envio) => {
+      const estadoPendiente = envio.listaCambiosEstado.some((estado) => {
+        return estado.idEstadoEnvio === 4 || estado.idEstadoEnvio === 5;
+      });
+      return estadoPendiente;
+    });
+
+    // Filtrar las devoluciones completas para el estado 6
+    const completas = devoluciones.filter((envio) => {
+      const estadoCompleto = envio.listaCambiosEstado.some((estado) => {
+        return estado.idEstadoEnvio === 6;
+      });
+      return estadoCompleto;
+    });
+
+    console.log("Pendientes:", pendientes);
+    console.log("Completas:", completas);
+
+    setDevolucionesPendientes(pendientes);
+    setDevolucionesCompletas(completas);
+  };
 
   useEffect(() => {
     cargarDevoluciones();
   }, []);
+  
+  const cargarDevoluciones = async () => {
+    setLoading(true);
+    try {
+      const envios = await devolucionesServices.buscarEntregados();
+      console.log("Envios cargados:", envios);  // Verifica aquí los datos cargados
+      actualizarListas(envios);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.error("Error al cargar las devoluciones:", error);
+    }
+  };
+  
 
   return (
     <div>
@@ -112,28 +116,10 @@ function Devoluciones() {
 
       <Nav variant="tabs" defaultActiveKey="pendientes" className="mb-3">
         <Nav.Item>
-          <Nav.Link
-            eventKey="pendientes"
-            onClick={() => setTabSeleccionada("pendientes")}
-          >
-            Pendientes
-          </Nav.Link>
+          <Nav.Link eventKey="pendientes" onClick={() => setTabSeleccionada("pendientes")}>Pendientes</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link
-            eventKey="parciales"
-            onClick={() => setTabSeleccionada("parciales")}
-          >
-            Parciales
-          </Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link
-            eventKey="completas"
-            onClick={() => setTabSeleccionada("completas")}
-          >
-            Completas
-          </Nav.Link>
+          <Nav.Link eventKey="completas" onClick={() => setTabSeleccionada("completas")}>Completas</Nav.Link>
         </Nav.Item>
       </Nav>
 
@@ -147,38 +133,24 @@ function Devoluciones() {
               <ListadoDevoluciones
                 devoluciones={devolucionesPendientes}
                 abrirModalDevolucion={handleAbrirModalDevolucion}
+                estadoSeleccionado={tabSeleccionada === "pendientes" ? 4 : tabSeleccionada === "completas" ? 6 : null}
               />
             </>
           )}
-
-          {tabSeleccionada === "parciales" && (
-            <>
-              <h2>Devoluciones Parciales</h2>
-              <ListadoDevoluciones
-                devoluciones={devolucionesParciales}
-                abrirModalDevolucion={handleAbrirModalDevolucion}
-              />
-            </>
-          )}
-
           {tabSeleccionada === "completas" && (
             <>
               <h2>Devoluciones Completas</h2>
               <ListadoDevoluciones
                 devoluciones={devolucionesCompletas}
                 abrirModalDevolucion={handleAbrirModalDevolucion}
+                estadoSeleccionado={6} // Filtramos directamente para el estado 6 (completas)
               />
             </>
           )}
         </>
       )}
 
-      <ModalDevoluciones
-        show={showDevolucionModal}
-        handleClose={() => setShowDevolucionModal(false)}
-        envio={envioSeleccionado}
-        onConfirmDevolucion={handleConfirmDevolucion}
-      />
+      <ModalDevoluciones show={showDevolucionModal} handleClose={() => setShowDevolucionModal(false)} envio={envioSeleccionado} onConfirmDevolucion={handleConfirmDevolucion} />
     </div>
   );
 }
