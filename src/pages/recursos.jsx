@@ -43,6 +43,7 @@ export default function Recursos() {
       id: 0,
       nombre: "",
       cantidad: 0,
+      cantidadCritica: 0,
       categoria: "",
       descripcion: "",
       existencias: [],
@@ -124,6 +125,7 @@ export default function Recursos() {
         activar={activarRecurso}
         desactivar={desactivarRecurso}
         categoriaSeleccionada={categoriaSeleccionada}
+        Buscar={Buscar}
       />
 
       {/* Componente BuscadorRecursos */}
