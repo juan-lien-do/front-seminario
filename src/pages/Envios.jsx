@@ -7,6 +7,7 @@ import envioServices from "../services/envios.services.js";
 import BuscadorEnvios from "../components/envios/BuscadorEnvios.jsx";
 import ListadoEnvios from "../components/envios/ListadoEnvios.jsx";
 import { computadorasService } from "../services/computadoras.services.js";
+import LoaderPacman from "../components/LoaderPacman.jsx";
 
 function Envios() {
   const [registrarEnvio, setRegistrarEnvio] = useState(false);
@@ -114,9 +115,7 @@ function Envios() {
             onEstadoChange={handleEstadoChange}
           />
           {loading ? (
-            <div className="text-center">
-              <p>Cargando envíos...</p>
-            </div>
+            <LoaderPacman texto={"Cargando envíos..."}></LoaderPacman>
           ) : (
             <ListadoEnvios envios={enviosFiltrados} />
           )}

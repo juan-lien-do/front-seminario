@@ -33,22 +33,21 @@ export default function RegistroRecurso({ volver, recurso, guardar }) {
             </div>
             </div>
 
-            {/* campo cantidad 
+            {/* campo cantidadCritica */}
             <div className="row">
             <div className="col-sm-4 col-md-3 offset-md-1">
-                <label className="col-form-label" htmlFor="cantidad">
-                Cantidad<span className="text-danger">*</span>:
+                <label className="col-form-label" htmlFor="cantidadCritica">
+                Cantidad Crítica<span className="text-danger">*</span>:
                 </label>
             </div>
             <div className="col-sm-8 col-md-6">
                 <input
                 type="number"
-                {...register("cantidad", { required: true})}
-                autoFocus
+                {...register("cantidadCritica", { required: true})}
                 className="form-control "
                 />
             </div>
-            </div>*/}
+            </div>
 
 
           {/* campo categoria */}

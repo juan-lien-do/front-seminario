@@ -1,4 +1,5 @@
 import moment from 'moment'
+import '../../App.css'
 
 export default function ListadoEmpleados({ empleados, modificar, desactivar, activar, buscaActivos }) {
   return (
@@ -25,11 +26,11 @@ export default function ListadoEmpleados({ empleados, modificar, desactivar, act
         <tbody>
           {
             empleados?.map(empleado => (
-              <tr  key={empleado.id_empleado}>
-                <td className={`text-center ${!empleado.activo ? " bg-danger text-white fw-bold" : " text-dark" }`}>{empleado.nombre}</td>
-                <td className={`text-center ${!empleado.activo ? " bg-danger text-white fw-bold" : " text-dark" }`}>{empleado.mail}</td>
-                <td className={`text-center ${!empleado.activo ? " bg-danger text-white fw-bold" : " text-dark" }`}>{empleado.telefono}</td>
-                <td className={`text-center ${!empleado.activo ? " bg-danger text-white fw-bold" : " text-dark" }`}>{empleado.cuil}</td>
+              <tr className={!empleado.activo && "efecto-desactivado"} key={empleado.id_empleado}>
+                <td className={`text-center text-dark" }`}>{empleado.nombre}</td>
+                <td className={`text-center text-dark" }`}>{empleado.mail}</td>
+                <td className={`text-center text-dark" }`}>{empleado.telefono}</td>
+                <td className={`text-center text-dark" }`}>{empleado.cuil}</td>
 
                 {/*<td className="text-center">
                 {empleado.activo ? (
@@ -38,15 +39,15 @@ export default function ListadoEmpleados({ empleados, modificar, desactivar, act
                   <span className="badge bg-dark">NO</span>
                 )}
               </td>*/}
-                <td className={`text-center ${!empleado.activo ? " bg-danger text-white fw-bold" : " text-dark" }`}>{empleado.ws}</td>
+                <td className={`text-center text-dark" }`}>{empleado.ws}</td>
                 { buscaActivos ?
                   <></>
                   :
-                  <td className="text-center bg-danger text-white fw-bold">
+                  <td className="text-center">
                     {empleado?.deleteDate}
                   </td>
                 }
-                <td className={`text-center text-nowrap ${!empleado.activo ? " bg-danger text-white fw-bold" : " text-dark" }`}>
+                <td className={`text-center text-nowrap text-dark" }`}>
                   {/* <button
                     className="btn btn-sm btn-outline-primary" // esto no se como hacerlo funcionar
                     title="Consultar"
