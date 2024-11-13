@@ -38,7 +38,7 @@ export default function BuscadorEmpleados({
                 onChange={(e) => setActivo(e.target.checked)} // Cambia el estado basado en si está marcado o no
               />
               <label className="form-check-label" htmlFor="activo">
-                Activo
+                Dado Baja
               </label>
 
               <button

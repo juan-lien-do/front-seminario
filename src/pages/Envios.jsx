@@ -158,6 +158,11 @@ function Envios() {
               {loading ? (
             <LoaderPacman texto={"Cargando envíos..."}></LoaderPacman>
           ) : (
+        <ListadoEnvios envios={enviosFiltrados}/>  
+            
+          )}</>) :
+          
+          (
             <RegistrarEnvio
               envio={envio}
               setEnvio={setEnvio}
@@ -168,11 +173,10 @@ function Envios() {
               computadoras={computadoras}
               guardarEnvio={guardarEnvio}
             />
-          )}
-        </>
-      
-      
-  );
-}
+          )
+        }</>  
+  )}
+  ;
+
 
 export default Envios;

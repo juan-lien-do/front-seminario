@@ -104,7 +104,7 @@ export default function BuscadorComputadoras({
                                     <div className="input-group">
                                         <input
                                             type="text"
-                                            placeholder="Buscar por nro de serie"
+                                            placeholder="Buscar por descripción"
                                             onChange={(e) => setSearchTerm(e.target.value)}
                                             className="form-control rounded-start"
                                             style={{ maxWidth: "100%" }}

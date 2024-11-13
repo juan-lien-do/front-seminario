@@ -29,6 +29,7 @@ export default function ListadoEnvios({ envios }) {
   // Función para actualizar el estado del envío
   async function actualizarEstado(envioId, nuevoEstado) {
     try {
+      console.log(nuevoEstado)
       const fechaActual = new Date().toISOString(); // Fecha actual en formato ISO
       await envioServices.actualizarEstado(envioId, nuevoEstado); // Enviamos solo la URL con idEnvio y nuevoEstado
       // Aquí podrías recargar los envíos o modificar el estado localmente
