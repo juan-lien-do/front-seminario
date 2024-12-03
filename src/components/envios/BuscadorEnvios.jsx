@@ -36,7 +36,7 @@ export default function BuscadorEnvios({ handleRegistrarEnvio, onEstadoChange, t
             checked={completadosActivo}
           />
           <label className="form-check-label" htmlFor="completadosToggle">
-            Completados
+            Entregados
           </label>
         </div>
         <input

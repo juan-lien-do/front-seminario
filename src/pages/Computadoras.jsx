@@ -93,8 +93,11 @@ function Computadoras() {
     }
 
     const handleSearch = () => {
+        if (searchTerm === "") {
+            Buscar()
+        } else {
         const filteredComputadoras = computadoras.filter(computadora => {
-            const matchesSearchTerm = computadora.nroSerie.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesSearchTerm = computadora.descripcion.toLowerCase().includes(searchTerm.toLowerCase());
             
             // Ajustar la lógica de filtrado para esMasterizado
             const matchesMasterizado =
@@ -106,6 +109,7 @@ function Computadoras() {
         });
     
         setComputadoras(filteredComputadoras);
+    }
     };
 
     if (mostrarRegistroComputadora) {
