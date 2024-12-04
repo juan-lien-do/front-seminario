@@ -232,6 +232,7 @@ export default function RegistrarEnvio({
                 onChange={handleEmpleadoChange}
                 placeholder="Buscar empleado"
                 isClearable
+                autoFocus
               />
               {hayEmpleadoSeleccionado && (
                 <span className="text-danger">El campo es obligatorio</span>
