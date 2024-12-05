@@ -1,12 +1,14 @@
 import { useState } from "react";
 import ModalDetallesEnvio from "./ModalDetallesEnvio";
-import envioServices from "../../services/envios.services.js"; // Asegúrate de importar el servicio correcto
+import ModalEstadosEnvio from "./ModalEstadosEnvio.jsx"
+import envioServices from "../../services/envios.services.js";
 
 export default function ListadoEnvios({ envios }) {
   const [show, setShow] = useState(false);
+  const [showEstados, setShowEstados] = useState(false);
   const [envio, setEnvio] = useState(null);
 
-  // Estados posibles (puedes ajustar según tu lógica)
+  // Estados posibles
   const estadosEnvio = [
     { id: 1, nombre: "Pendiente" },
     { id: 2, nombre: "En preparación" },
@@ -19,11 +21,18 @@ export default function ListadoEnvios({ envios }) {
 
   function handleClose() {
     setShow(false);
+    setShowEstados(false)
+    setEnvio(null)
   }
 
   function handleShow(envio) {
     setShow(true);
     setEnvio(envio);
+  }
+
+  function handleShowEstados(envio){
+    setShowEstados(true)
+    setEnvio(envio)
   }
 
   // Función para actualizar el estado del envío
@@ -42,6 +51,7 @@ export default function ListadoEnvios({ envios }) {
   return (
     <div className="mt-3 table-responsive">
       <ModalDetallesEnvio show={show} handleClose={handleClose} envio={envio} />
+      <ModalEstadosEnvio show={showEstados} handleClose={handleClose} envio={envio} />
       <table className="table table-hover table-sm table-bordered table-striped">
         <thead className="table-light">
           <tr>
@@ -50,7 +60,6 @@ export default function ListadoEnvios({ envios }) {
             <th className="text-center">Último Estado</th>
             <th className="text-center">Fecha</th>
             <th className="text-center">Detalles</th>
-            <th className="text-center text-nowrap">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -91,19 +100,17 @@ export default function ListadoEnvios({ envios }) {
                 </td>
                 <td className="text-center">
                   <button
-                    className="btn btn-info"
+                    className="btn btn-info me-1"
                     onClick={() => handleShow(envio)}
                   >
-                    Ver detalles
+                    Detalles
                   </button>
-                </td>
-                <td className="text-center">
                   <button
-                    className="btn btn-sm btn-warning me-2"
+                    className="btn btn-warning me-2"
                     title="Modificar"
-                    onClick={() => modificar(envio)}
+                    onClick={() => handleShowEstados(envio)}
                   >
-                    <i className="fa-solid fa-box-open"></i>{" "}
+                    Estados anteriores
                   </button>
                 </td>
               </tr>

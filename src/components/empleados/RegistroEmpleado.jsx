@@ -45,7 +45,6 @@ export default function RegistroEmpleado({ volver, empleado, guardar }) {
               <input
                 type="number"
                 {...register("cuil", { required: true})}
-                autoFocus
                 className="form-control "
               />
             </div>

@@ -14,54 +14,68 @@ export default function BuscadorEnvios({ handleRegistrarEnvio, onEstadoChange, t
   return (
     <div className="mx-auto mt-3">
       <h1 className="ms-3">Envíos</h1>
-      <div className="ms-3 d-flex align-items-center">
-        <select
-          className="form-select me-2"
-          onChange={(e) => onEstadoChange(e.target.value)}
-          style={{ width: "200px" }}
-        >
-          <option value="">Todos los estados</option>
-          {estadosEnvio.map((estado) => (
-            <option key={estado.id} value={estado.id}>
-              {estado.nombre}
-            </option>
-          ))}
-        </select>
-        <div className="form-check form-switch me-2">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            id="completadosToggle"
-            onChange={toggleCompletados}
-            checked={completadosActivo}
-          />
-          <label className="form-check-label" htmlFor="completadosToggle">
-            Entregados
-          </label>
+      <div className="container card py-3">
+        <div className="row justify-content-center gx-3 gy-2"> {/* Agrega espaciado horizontal y vertical */}
+          
+          <div className="col-12 col-sm-6 col-md-4 col-lg-3">
+            <select
+              className="form-select"
+              onChange={(e) => onEstadoChange(e.target.value)}
+            >
+              <option value="">Todos los estados</option>
+              {estadosEnvio.map((estado) => (
+                <option key={estado.id} value={estado.id}>
+                  {estado.nombre}
+                </option>
+              ))}
+            </select>
+          </div>
+  
+          <div className="col-6 col-sm-3 col-md-3 col-lg-2 d-flex">
+            <div className="form-check form-switch my-auto">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="completadosToggle"
+                onChange={toggleCompletados}
+                checked={completadosActivo}
+              />
+              <label className="form-check-label ms-2" htmlFor="completadosToggle">
+                Entregados
+              </label>
+            </div>
+          </div>
+  
+          <div className="col-12 col-sm-6 col-md-4 col-lg-3">
+            <input
+              type="text"
+              placeholder="Buscar por nombre"
+              className="form-control"
+              onChange={(e) => onNombreChange(e.target.value)}
+            />
+          </div>
+  
+          <div className="col-6 col-sm-3 col-md-2 col-lg-2">
+            <button
+              type="button"
+              className="btn btn-primary w-100"
+              onClick={buscarEnvios}
+            >
+              <i className="fa fa-search"></i> Buscar
+            </button>
+          </div>
+  
+          <div className="col-6 col-sm-3 col-md-2 col-lg-2">
+            <button
+              className="btn btn-warning w-100"
+              onClick={handleRegistrarEnvio}
+            >
+              <i className="fa fa-plus"></i> Registrar envío
+            </button>
+          </div>
+  
         </div>
-        <input
-          type="text"
-          placeholder="Buscar por nombre"
-          className="form-control me-2"
-          style={{ width: "200px" }}
-          onChange={(e) => onNombreChange(e.target.value)}
-        />
-        <button
-          type="button"
-          className="btn btn-primary me-2"
-          onClick={buscarEnvios}
-          style={{ whiteSpace: "nowrap" }}
-        >
-          <i className="fa fa-search"></i> Buscar
-        </button>
-        <button
-          className="btn btn-warning"
-          onClick={handleRegistrarEnvio}
-          style={{ whiteSpace: "nowrap" }}
-        >
-          <i className="fa fa-plus"></i> Registrar envío
-        </button>
       </div>
     </div>
   );
-}
+}  
