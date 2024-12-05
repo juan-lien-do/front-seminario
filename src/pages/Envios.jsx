@@ -8,6 +8,7 @@ import BuscadorEnvios from "../components/envios/BuscadorEnvios.jsx";
 import ListadoEnvios from "../components/envios/ListadoEnvios.jsx";
 import { computadorasService } from "../services/computadoras.services.js";
 import LoaderPacman from "../components/LoaderPacman.jsx";
+import LoaderBloque from "../components/LoaderBloque.jsx";
 
 function Envios() {
   const [registrarEnvio, setRegistrarEnvio] = useState(false);
@@ -42,7 +43,7 @@ function Envios() {
         detallesEnvioRecurso: [],
         detallesEnvioComputadora: [],
       };
-      console.log(usuario)
+      //console.log(usuario)
       setEnvio(nuevoEnvio);
     } catch (error) {
       console.error("Error al cargar los datos", error);
@@ -74,11 +75,11 @@ function Envios() {
 
     payload.detallesEnvioComputadora = detallesEnvioComputadora;
 
-    console.log(payload)
+    //console.log(payload)
 
     await envioServices.guardar(payload);
     setRegistrarEnvio(false);
-    console.log("Envio guardado:", data);
+    //console.log("Envio guardado:", data);
   }
 
   async function buscarEnvios() {
@@ -104,6 +105,7 @@ function Envios() {
       try {
         const data = await envioServices.buscar();
         setEnvios(data);
+        console.log(data)
       } catch (error) {
         console.error("Error al cargar envíos:", error);
       } finally {
@@ -125,8 +127,8 @@ function Envios() {
   
     const nombreBuscarLower = nombreBuscar.toLowerCase();
 
-    console.log("Envíos disponibles:", envios);
-    console.log("Nombre a buscar:", nombreBuscar);
+    //console.log("Envíos disponibles:", envios);
+    //console.log("Nombre a buscar:", nombreBuscar);
     
     const enviosFiltrados = envios.filter((envio) => {
       const estadoActual = envio.listaCambiosEstado?.filter((x) => !x.fechaFin).at(0)?.idEstadoEnvio;
@@ -156,7 +158,7 @@ function Envios() {
                 onNombreChange={handleNombreChange}
               />
               {loading ? (
-            <LoaderPacman texto={"Cargando envíos..."}></LoaderPacman>
+            <LoaderBloque texto={"Cargando envíos"}></LoaderBloque>
           ) : (
         <ListadoEnvios envios={enviosFiltrados}/>  
             

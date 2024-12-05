@@ -34,8 +34,8 @@ export default function BuscadorEmpleados({
                 className="form-check-input mt-2"
                 type="checkbox"
                 id="activo"
-                checked={activo} // Para reflejar el estado del checkbox
-                onChange={(e) => setActivo(e.target.checked)} // Cambia el estado basado en si está marcado o no
+                checked={!activo} // Acá hay un negado y en el de abajo tambien porque era mas facil cambiarlo aca que
+                onChange={(e) => setActivo(!e.target.checked)} // cambiarlo en el resto de la estructura.
               />
               <label className="form-check-label" htmlFor="activo">
                 Dado Baja

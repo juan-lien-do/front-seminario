@@ -17,7 +17,7 @@ export default function Empleados() {
   const [mostrarRegistroEmpleado, setMostrarRegistroEmpleado] = useState(false)
 
   useEffect(()=>{
-    setBuscaActivos(empleados?.at(0).activo)
+    setBuscaActivos(empleados?.at(0)?.activo ?? true)
   },[empleados])
 
   async function buscarEmpleados() {
