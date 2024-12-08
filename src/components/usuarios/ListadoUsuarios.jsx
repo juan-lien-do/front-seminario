@@ -1,11 +1,19 @@
-import React from "react";
+const ListadoUsuarios = ({ usuarios, abrirFormulario }) => {
+  if (!Array.isArray(usuarios)) {
+    return <div>Hubo un error con los datos de usuarios.</div>; 
+  }
 
-const ListadoUsuarios = ({ usuarios, abrirModal }) => {
   return (
     <div className="container mt-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h3 className="text-uppercase">Usuarios</h3>
-        <button className="btn btn-outline-primary" onClick={() => abrirModal(null)}>
+        <button
+          className="btn btn-outline-primary"
+          onClick={() => {
+            console.log("Agregar Usuario presionado");
+            abrirFormulario(null);
+          }}
+        >
           Agregar Usuario
         </button>
       </div>
@@ -36,7 +44,10 @@ const ListadoUsuarios = ({ usuarios, abrirModal }) => {
                 <div className="d-flex gap-2 justify-content-center">
                   <button
                     className="btn btn-warning btn-sm"
-                    onClick={() => abrirModal(usuario)}
+                    onClick={() => {
+                      console.log("Modificar Usuario presionado:", usuario);
+                      abrirFormulario(usuario);
+                    }}
                   >
                     ✏️ Modificar
                   </button>

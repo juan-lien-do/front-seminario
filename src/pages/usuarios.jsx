@@ -1,40 +1,62 @@
 import React, { useState, useEffect } from "react";
 import ListadoUsuarios from "../components/usuarios/ListadoUsuarios";
 import BuscadorUsuarios from "../components/usuarios/BuscadorUsuarios";
-import ModalUsuarios from "../components/usuarios/ModalUsuarios";
+import RegistroUsuarios from "../components/usuarios/RegistroUsuarios";
 import { usuariosService } from "../services/usuarios.services";
 
 const Usuarios = () => {
-  const [usuarios, setUsuarios] = useState([]);
+  const [usuarios, setUsuario] = useState([]);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
-  const [modalAbierto, setModalAbierto] = useState(false);
+  const [esActivo, setActivo] = useState(true);
+  const [mostrarRegistroUsuario, setMostrarRegistroUsuario] = useState(false);
 
   useEffect(() => {
-    usuariosService.buscarUsuarios().then((data) => setUsuarios(data));
+    usuariosService.buscarUsuarios().then((data) => setUsuario(data));
   }, []);
 
-  const abrirModal = (usuario = null) => {
-    setUsuarioSeleccionado(usuario);
-    setModalAbierto(true);
-  };
+  function agregarUsuario() {
+    const nuevoUsuario = {
+        idUsuario: 0,
+        nombre: "",
+        nombre_usuario: "",
+        apellido_usuario: "",
+        mail: "",
+        password: "",
+        es_activo: true,
+        telefono: 0,
+    };
+    setUsuario(nuevoUsuario);
+    setMostrarRegistroUsuario(true);
+}
 
-  const cerrarModal = () => {
+function modificarUsuario(usuario) {
+  if (!usuario.esActivo) {
+      toast.error("No puede modificarse un registro inactivo")
+      return;
+  }
+  setUsuario(usuario);
+  setMostrarRegistroUsuario(true);
+}
+  const cerrarFormulario = () => {
     setUsuarioSeleccionado(null);
-    setModalAbierto(false);
   };
 
   return (
     <div>
       <h2>Gestión de Usuarios</h2>
-      <BuscadorUsuarios usuarios={usuarios} setUsuarios={setUsuarios} />
-      <ListadoUsuarios usuarios={usuarios} abrirModal={abrirModal} />
-      {modalAbierto && (
-        <ModalUsuarios
+      <BuscadorUsuarios usuarios={usuarios} setUsuarios={setUsuario} />
+      {usuarioSeleccionado !== null ? (
+
+        <RegistroUsuarios
+          setUsuarios={setUsuario}
           usuario={usuarioSeleccionado}
-          cerrarModal={cerrarModal}
-          setUsuarios={setUsuarios}
+          cerrarFormulario={cerrarFormulario}
         />
-      )}
+      ) : null}
+      <ListadoUsuarios
+        usuarios={usuarios}
+        abrirFormulario={agregarUsuario} 
+      />
     </div>
   );
 };
