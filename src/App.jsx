@@ -17,6 +17,7 @@ import Envios from './pages/Envios';
 import UnderConstruction from './pages/UnderConstruction';
 import Devoluciones from './pages/devoluciones';
 import Solicitudes from './pages/Solicitudes';
+import Usuarios from './pages/usuarios';
 
 
 
@@ -105,6 +106,13 @@ function App() {
             <ProtectedRoute isAllowed={!!usuario}>
                 <NavBar desloguearse={handleLogout}/>
                 <Solicitudes/>
+            </ProtectedRoute>
+          } />
+          
+          <Route path='/usuarios' element={
+            <ProtectedRoute isAllowed={!!usuario}>
+                <NavBar desloguearse={handleLogout}/>
+                <Usuarios/>
             </ProtectedRoute>
           } />
           

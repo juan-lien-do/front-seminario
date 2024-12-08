@@ -74,7 +74,12 @@ export default function NavBar({ desloguearse }) {
               <i class="fa-solid fa-parachute-box"></i>{" "}
                 Devoluciones
               </NavLink>
-
+            </li>
+            <li className="nav-item">
+              <NavLink className="nav-link" to="/usuarios">
+              <i class="fa-solid fa-parachute-box"></i>{" "}
+                Usuarios
+              </NavLink>
             </li>
           </ul>
           {/* Botón "Cerrar Sesión" */}
