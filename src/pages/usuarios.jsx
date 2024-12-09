@@ -1,62 +1,88 @@
 import React, { useState, useEffect } from "react";
 import ListadoUsuarios from "../components/usuarios/ListadoUsuarios";
 import BuscadorUsuarios from "../components/usuarios/BuscadorUsuarios";
-import RegistroUsuarios from "../components/usuarios/RegistroUsuarios";
+import RegistroUsuario from "../components/usuarios/RegistroUsuarios";
 import { usuariosService } from "../services/usuarios.services";
 
 const Usuarios = () => {
-  const [usuarios, setUsuario] = useState([]);
+  const [nombre, setNombre] = useState('')
+  const [activo, setActivo] = useState(true)
+  const [usuario, setUsuario] = useState([]);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
-  const [esActivo, setActivo] = useState(true);
   const [mostrarRegistroUsuario, setMostrarRegistroUsuario] = useState(false);
 
   useEffect(() => {
     usuariosService.buscarUsuarios().then((data) => setUsuario(data));
   }, []);
-
+  async function buscarUsuarios() {
+    const data = await usuariosService.buscarUsuarios({ nombre, activo })
+    setUsuarios(data)
+  }
+  console.log(usuario)
   function agregarUsuario() {
     const nuevoUsuario = {
-        idUsuario: 0,
+        id_usuario: 0,
         nombre: "",
-        nombre_usuario: "",
-        apellido_usuario: "",
-        mail: "",
+        nombre_usr: "",
+        apellido_usr: "",
+        email: "",
         password: "",
-        es_activo: true,
+        isAdmin: false,
+        esDriver: false,
         telefono: 0,
+        esActivo: true,
+        primer_login: 0,
     };
     setUsuario(nuevoUsuario);
     setMostrarRegistroUsuario(true);
 }
 
-function modificarUsuario(usuario) {
-  if (!usuario.esActivo) {
-      toast.error("No puede modificarse un registro inactivo")
-      return;
-  }
-  setUsuario(usuario);
-  setMostrarRegistroUsuario(true);
-}
+
   const cerrarFormulario = () => {
     setUsuarioSeleccionado(null);
   };
 
+  function modificarUsuario(usuario) {
+    if (!usuario.esActivo) {
+        toast.error("No puede modificarse un registro inactivo")
+        return;
+    }
+    setUsuario(usuario);
+    setMostrarRegistroUsuario(true);
+  }
+
+  async function guardarUsuario(data) {
+    if (await usuariosService.save(data)){
+      setMostrarRegistroUsuario(false)
+      buscarUsuarios()
+    }
+    
+  }
+  
+  if (mostrarRegistroUsuario) {
+    return (
+      <RegistroUsuario
+        guardar={guardarUsuario}
+        volver={() => setMostrarRegistroUsuario(false)}
+        usuario={usuario} />
+    )
+  }
+
   return (
     <div>
       <h2>Gestión de Usuarios</h2>
-      <BuscadorUsuarios usuarios={usuarios} setUsuarios={setUsuario} />
-      {usuarioSeleccionado !== null ? (
-
-        <RegistroUsuarios
-          setUsuarios={setUsuario}
-          usuario={usuarioSeleccionado}
-          cerrarFormulario={cerrarFormulario}
+      <BuscadorUsuarios usuarios={usuario} setUsuarios={setUsuario} 
+        nombre={nombre}
+        setNombre={setNombre}
+        activo={activo}
+        setActivo={setActivo}
+        buscarUsuarios={buscarUsuarios}
         />
-      ) : null}
       <ListadoUsuarios
-        usuarios={usuarios}
+        usuarios={usuario}
         abrirFormulario={agregarUsuario} 
-      />
+        modificar={modificarUsuario}
+        />
     </div>
   );
 };

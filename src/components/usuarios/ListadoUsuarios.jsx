@@ -1,7 +1,4 @@
-const ListadoUsuarios = ({ usuarios, abrirFormulario }) => {
-  if (!Array.isArray(usuarios)) {
-    return <div>Hubo un error con los datos de usuarios.</div>; 
-  }
+const ListadoUsuarios = ({ usuarios, abrirFormulario, modificar }) => {
 
   return (
     <div className="container mt-4">
@@ -21,7 +18,9 @@ const ListadoUsuarios = ({ usuarios, abrirFormulario }) => {
         <thead className="table-dark">
           <tr>
             <th>Usuario</th>
-            <th>Nombre y Apellido</th>
+            <th>Nombre </th>
+            <th>Apellido</th>
+            <th>Mail</th>
             <th>Habilitado</th>
             <th>Rol</th>
             <th>Fecha Alta</th>
@@ -33,10 +32,15 @@ const ListadoUsuarios = ({ usuarios, abrirFormulario }) => {
         <tbody>
           {usuarios.map((usuario) => (
             <tr key={usuario.id}>
-              <td className="text-uppercase">{usuario.usuario}</td>
-              <td>{usuario.nombre}</td>
-              <td className="text-center">{usuario.habilitado ? "✔️" : "❌"}</td>
-              <td className="text-uppercase">{usuario.rol}</td>
+              <td className="text-uppercase">{usuario.nombre}</td>
+              <td>{usuario.nombre_usr}</td>
+              <td>{usuario.apellido_usr}</td>
+              <td>{usuario.email}</td>
+              <td className="text-center">{usuario.esActivo ? "✔️" : "❌"}</td>
+              <td className="text-uppercase">
+              {usuario.isAdmin ? "Administrador" : usuario.esDriver ? "Empleado" : "Driver"}
+              </td>
+
               <td>{usuario.fechaAlta}</td>
               <td>{usuario.fechaBaja || "-"}</td>
               <td>{usuario.ultimaActualizacion}</td>
@@ -44,9 +48,7 @@ const ListadoUsuarios = ({ usuarios, abrirFormulario }) => {
                 <div className="d-flex gap-2 justify-content-center">
                   <button
                     className="btn btn-warning btn-sm"
-                    onClick={() => {
-                      console.log("Modificar Usuario presionado:", usuario);
-                      abrirFormulario(usuario);
+                    onClick={() => {modificar(usuario);
                     }}
                   >
                     ✏️ Modificar

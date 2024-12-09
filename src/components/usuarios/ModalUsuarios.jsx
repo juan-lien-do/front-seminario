@@ -12,16 +12,18 @@ const ModalUsuarios = ({ usuario, cerrarModal, setUsuarios }) => {
     if (usuario) {
 
       setFormData({
-        usuario: usuario.usuario || "",
-        nombre: usuario.nombre || "",
+        usuario: usuario.nombre || "",
+        nombre: usuario.nombre_usr || "",
+        apellido: usuario.apellido.usr || "",
         rol: usuario.rol || "",
-        habilitado: usuario.habilitado || false,
+        habilitado: usuario.esActivo || false,
       });
     } else {
 
       setFormData({
         usuario: "",
         nombre: "",
+        apellido: "",
         rol: "",
         habilitado: true,
       });
