@@ -123,22 +123,6 @@ export default function RegistroUsuario({ volver, usuario, guardar }) {
               <div className="invalid-feedback">{errors?.activo?.message}</div>
             </div>
           </div>
-          
-            {/* campo contraseña */}
-            <div className="row">
-            <div className="col-sm-4 col-md-3 offset-md-1">
-              <label className="col-form-label" htmlFor="password">
-                Constraseña
-              </label>
-            </div>
-            <div className="col-sm-8 col-md-6">
-              <input
-                type="password"
-                {...register("password", { required: false})}
-                className="form-control"
-              />
-            </div>
-          </div>
 
           {/* campo Admin */}
           <div className="row">

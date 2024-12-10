@@ -41,7 +41,7 @@ const ListadoUsuarios = ({ usuarios, abrirFormulario, modificar }) => {
               {usuario.isAdmin ? "Administrador" : usuario.esDriver ? "Empleado" : "Driver"}
               </td>
 
-              <td>{usuario.fechaAlta}</td>
+              <td>{usuario.fechaCreacion}</td>
               <td>{usuario.fechaBaja || "-"}</td>
               <td>{usuario.ultimaActualizacion}</td>
               <td>
@@ -51,12 +51,12 @@ const ListadoUsuarios = ({ usuarios, abrirFormulario, modificar }) => {
                     onClick={() => {modificar(usuario);
                     }}
                   >
-                    ✏️ Modificar
+                    ✏️ 
                   </button>
                   <button className="btn btn-secondary btn-sm">
-                    🔑 Modificar Clave
+                    🔑 Reiniciar Clave
                   </button>
-                  <button className="btn btn-danger btn-sm">🗑️ Dar Baja</button>
+                  <button className="btn btn-danger btn-sm">🗑️</button>
                 </div>
               </td>
             </tr>

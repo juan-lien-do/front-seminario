@@ -18,6 +18,8 @@ import UnderConstruction from './pages/UnderConstruction';
 import Devoluciones from './pages/devoluciones';
 import Solicitudes from './pages/Solicitudes';
 import Usuarios from './pages/usuarios';
+import RegistroContraseña from './components/usuarios/RegistroContraseña';
+
 
 
 
@@ -56,16 +58,18 @@ function App() {
             path="/empleados"
             element={
               <ProtectedRoute isAllowed={!!usuario}>
-                <NavBar desloguearse={handleLogout}/>
-                <Empleados/>
+                <NavBar desloguearse={handleLogout} usuario={usuario} />
+                <Empleados />
               </ProtectedRoute>
             }
           />
+
+
           <Route
             path="/envios"
             element={
               <ProtectedRoute isAllowed={!!usuario}>
-                <NavBar desloguearse={handleLogout}/>
+                <NavBar desloguearse={handleLogout} usuario={usuario}/>
                 <Envios/>
               </ProtectedRoute>
             }
@@ -74,7 +78,7 @@ function App() {
             path="/home"
             element={
               <ProtectedRoute isAllowed={!!usuario}>
-                <NavBar desloguearse={handleLogout}/>
+                <NavBar desloguearse={handleLogout} usuario={usuario}/>
                 <Home usuario={usuario}/>
               </ProtectedRoute>
             }
@@ -82,36 +86,36 @@ function App() {
 
 
           <Route path='/inventario' element={
-            <ProtectedRoute isAllowed={!!usuario}>
-                <NavBar desloguearse={handleLogout}/>
+            <ProtectedRoute isAllowed={!!usuario} >
+                <NavBar desloguearse={handleLogout} usuario={usuario}/>
                 <Inventario/> 
             </ProtectedRoute>
           } />
 
           <Route path='/devoluciones' element={
             <ProtectedRoute isAllowed={!!usuario}>
-                <NavBar desloguearse={handleLogout}/>
+                <NavBar desloguearse={handleLogout} usuario={usuario}/>
                 <Devoluciones/> 
             </ProtectedRoute>
           } />
 
           <Route path='/underconstruction' element={
             <ProtectedRoute isAllowed={!!usuario}>
-                <NavBar desloguearse={handleLogout}/>
+                <NavBar desloguearse={handleLogout} usuario={usuario}/>
                 <UnderConstruction/> 
             </ProtectedRoute>
           } />
 
           <Route path='/solicitudes' element={
             <ProtectedRoute isAllowed={!!usuario}>
-                <NavBar desloguearse={handleLogout}/>
+                <NavBar desloguearse={handleLogout} usuario={usuario}/>
                 <Solicitudes/>
             </ProtectedRoute>
           } />
           
           <Route path='/usuarios' element={
             <ProtectedRoute isAllowed={!!usuario}>
-                <NavBar desloguearse={handleLogout}/>
+                <NavBar desloguearse={handleLogout} usuario={usuario}/>
                 <Usuarios/>
             </ProtectedRoute>
           } />

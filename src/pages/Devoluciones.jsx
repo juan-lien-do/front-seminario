@@ -70,29 +70,28 @@ function Devoluciones() {
   // Función para actualizar las listas de devoluciones pendientes y completas
   const actualizarListas = (devoluciones) => {
     console.log("Actualizando listas con los envíos:", devoluciones);
-
-    // Filtrar las devoluciones para los estados 4 y 5 como pendientes
-    const pendientes = devoluciones.filter((envio) => {
-      const estadoPendiente = envio.listaCambiosEstado.some((estado) => {
-        return estado.idEstadoEnvio === 4 || estado.idEstadoEnvio === 5;
-      });
-      return estadoPendiente;
-    });
-
-    // Filtrar las devoluciones completas para el estado 6
-    const completas = devoluciones.filter((envio) => {
-      const estadoCompleto = envio.listaCambiosEstado.some((estado) => {
-        return estado.idEstadoEnvio === 6;
-      });
-      return estadoCompleto;
-    });
-
+  
+    // Pendientes: idEstadoEnvio 4 o 5 (sin fechaFin)
+    const pendientes = devoluciones.filter((envio) =>
+      envio.listaCambiosEstado.some(
+        (estado) => !estado.fechaFin && (estado.idEstadoEnvio === 4 || estado.idEstadoEnvio === 5)
+      )
+    );
+  
+    // Completas: idEstadoEnvio 6 (sin fechaFin)
+    const completas = devoluciones.filter((envio) =>
+      envio.listaCambiosEstado.some(
+        (estado) => !estado.fechaFin && estado.idEstadoEnvio === 6
+      )
+    );
+  
     console.log("Pendientes:", pendientes);
     console.log("Completas:", completas);
-
+  
     setDevolucionesPendientes(pendientes);
     setDevolucionesCompletas(completas);
   };
+  
 
   useEffect(() => {
     cargarDevoluciones();
