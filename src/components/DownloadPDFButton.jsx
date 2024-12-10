@@ -1,7 +1,7 @@
 import React from "react";
 import html2pdf from "html2pdf.js";
 
-const DownloadPDFButton = ({setMostrarLista}) => {
+const DownloadPDFButton = ({setMostrarLista, textoBoton}) => {
   const replaceTextareasWithDivs = () => {
     const textareas = document.querySelectorAll("#tabla-descargar textarea");
     textareas.forEach((textarea) => {
@@ -63,7 +63,7 @@ const DownloadPDFButton = ({setMostrarLista}) => {
 
   return (
       <button onClick={downloadPDF} className="btn btn-primary mx-2">
-        Descargar solicitud de reposición
+        {textoBoton ?? "Descargar solicitud de reposición"}
       </button>
   );
 };
