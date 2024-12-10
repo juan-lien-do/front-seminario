@@ -25,7 +25,7 @@ export default function ConsultarSolicitud({handleVolver, solicitud}) {
                     <tr>
                       <th scope="col">Cantidad</th>
                       <th scope="col">Nombre</th>
-                      <th scope="col">Descripcion</th>
+                      <th scope="col">Descripción</th>
                     </tr>
                   </thead>
                   <tbody className="">

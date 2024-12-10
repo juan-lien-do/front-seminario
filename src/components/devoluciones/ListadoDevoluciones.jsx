@@ -40,7 +40,7 @@ function ListadoDevoluciones({ devoluciones, abrirModalDevolucion, estadoSelecci
                 <th className="text-center">Empleado</th>
                 <th className="text-center">Usuario</th>
                 <th className="text-center">Detalles</th>
-                <th className="text-center">Devolucion</th>
+                <th className="text-center">Devolución</th>
               </tr>
             </thead>
             <tbody>

@@ -391,7 +391,7 @@ export default function RegistrarEnvio({
                 0
             }
           >
-            Agregar Envio
+            Agregar envío
           </button>
         </form>
 
