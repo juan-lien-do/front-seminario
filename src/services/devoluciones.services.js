@@ -22,5 +22,31 @@ async function confirmarDevolucion(idEnvio, nuevoEstado) {
     }
 }
 
-const devolucionesServices = { buscarEntregados, confirmarDevolucion };
+async function devolverComputadora(idDetalleComputadora) {
+    try {
+        const res = await instance.put(`${urlResource}/devolver-Computadora/${idDetalleComputadora}`);
+        return res.data;
+    } catch (error) {
+        console.error("Error al devolver la computadora:", error);
+        throw error;
+    }
+}
+
+async function devolverRecurso(idDetalleRecurso) {
+    try {
+        const res = await instance.put(`${urlResource}/devolver-recurso/${idDetalleRecurso}`);
+        return res.data;
+    } catch (error) {
+        console.error("Error al devolver el recurso:", error);
+        throw error;
+    }
+}
+
+const devolucionesServices = { 
+    buscarEntregados, 
+    confirmarDevolucion, 
+    devolverComputadora, 
+    devolverRecurso 
+};
 export default devolucionesServices;
+

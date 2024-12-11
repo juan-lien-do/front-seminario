@@ -1,18 +1,9 @@
-const ListadoUsuarios = ({ usuarios, abrirFormulario, modificar }) => {
+const ListadoUsuarios = ({ usuarios, agregarUsuario, modificar, desactivar, activar }) => {
 
-  return (
+return (
     <div className="container mt-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h3 className="text-uppercase">Usuarios</h3>
-        <button
-          className="btn btn-outline-primary"
-          onClick={() => {
-            console.log("Agregar Usuario presionado");
-            abrirFormulario(null);
-          }}
-        >
-          Agregar Usuario
-        </button>
       </div>
       <table className="table table-striped table-bordered table-hover">
         <thead className="table-dark">
@@ -56,7 +47,13 @@ const ListadoUsuarios = ({ usuarios, abrirFormulario, modificar }) => {
                   <button className="btn btn-secondary btn-sm">
                     🔑 Reiniciar Clave
                   </button>
-                  <button className="btn btn-danger btn-sm">🗑️</button>
+                  <button
+                    className={`btn btn-sm  ${!!usuario.esActivo ? "btn-danger" : "btn-primary" }`}
+                    title={!!usuario.esActivo ? "Borrar" : "Reactivar"}
+                    onClick={!!usuario.esActivo ?  () => {desactivar(usuario.id)} : () => {activar(usuario.id)}}
+                  >
+                    <i className={!!usuario.activo ? "fas fa-trash" : "fas fa-trash-restore"}></i>
+                  </button>
                 </div>
               </td>
             </tr>

@@ -20,52 +20,42 @@ function Devoluciones() {
     setShowDevolucionModal(true);
   };
 
-  // Función para confirmar la devolución y cambiar el estado
   const handleConfirmDevolucion = async (productos = { recursos: [], computadoras: [] }) => {
     if (!envioSeleccionado) return;
 
     try {
-      const productosDevueltosRecursos = productos.recursos.filter(p => p.devuelto);
-      const productosDevueltosComputadoras = productos.computadoras.filter(p => p.devuelto);
-
-      const nuevoEstado = 
-        productosDevueltosRecursos.length === productos.recursos.length &&
-        productosDevueltosComputadoras.length === productos.computadoras.length
-          ? 6  // Estado "completo" -> 6
-          : 5;  // Estado "parcial" -> 5
-
-      await devolucionesServices.confirmarDevolucion(envioSeleccionado.idEnvio, nuevoEstado);
-
-      const updatedEnvios = devolucionesPendientes.map(envio => {
-        if (envio.idEnvio === envioSeleccionado.idEnvio) {
-          return {
-            ...envio,
-            listaCambiosEstado: [
-              ...envio.listaCambiosEstado,
-              { idEstadoEnvio: nuevoEstado, fechaFin: new Date() }
-            ],
-            detallesEnvioRecurso: envio.detallesEnvioRecurso.map(detalle =>
-              productosDevueltosRecursos.some(p => p.idDetalle === detalle.idDetalleRecurso)
-                ? { ...detalle, devuelto: true }
-                : detalle
-            ),
-            detallesEnvioComputadora: envio.detallesEnvioComputadora.map(detalle =>
-              productosDevueltosComputadoras.some(p => p.idDetalle === detalle.idDetalleComputadora)
-                ? { ...detalle, devuelto: true }
-                : detalle
-            )
-          };
+        // Procesar recursos
+        for (const recurso of productos.recursos) {
+            await devolucionesServices.devolverRecurso(recurso.idDetalleRecurso);
         }
-        return envio;
-      });
 
-      actualizarListas(updatedEnvios);
-      setShowDevolucionModal(false);
+        // Procesar computadoras
+        for (const computadora of productos.computadoras) {
+            await devolucionesServices.devolverComputadora(computadora.idDetalleComputadora);
+        }
 
+        // Determinar nuevo estado
+        const totalRecursos = envioSeleccionado.detallesEnvioRecurso.length;
+        const totalComputadoras = envioSeleccionado.detallesEnvioComputadora.length;
+
+        const devueltosRecursos = productos.recursos.length;
+        const devueltosComputadoras = productos.computadoras.length;
+
+        const nuevoEstado =
+            devueltosRecursos === totalRecursos && devueltosComputadoras === totalComputadoras
+                ? 6 // Devuelto completamente
+                : 5; // Devuelto parcialmente
+
+        await devolucionesServices.confirmarDevolucion(envioSeleccionado.idEnvio, nuevoEstado);
+
+        // Actualizar listas y cerrar modal
+        cargarDevoluciones();
+        setShowDevolucionModal(false);
     } catch (error) {
-      console.error("Error al confirmar la devolución:", error);
+        console.error("Error al confirmar la devolución:", error);
     }
-  };
+};
+
 
   // Función para actualizar las listas de devoluciones pendientes y completas
   const actualizarListas = (devoluciones) => {
