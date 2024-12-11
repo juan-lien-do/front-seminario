@@ -20,7 +20,6 @@ export default function RegistroUsuario({ volver, usuario, guardar }) {
     mode: "onChange", // Validación en tiempo real
   });
 
-  // Para depurar el estado del formulario
   useEffect(() => {
     console.log("Errores:", errors);
     console.log("Validación:", isValid);
@@ -35,7 +34,6 @@ export default function RegistroUsuario({ volver, usuario, guardar }) {
       <h1 className="ms-3">Usuario</h1>
       <div className="container-fluid">
         <fieldset>
-          {/* Campo Nombre */}
           <div className="row">
             <div className="col-sm-4 col-md-3 offset-md-1">
               <label className="col-form-label" htmlFor="nombre_usr">
@@ -59,7 +57,6 @@ export default function RegistroUsuario({ volver, usuario, guardar }) {
             </div>
           </div>
 
-          {/* Campo Apellido */}
           <div className="row">
             <div className="col-sm-4 col-md-3 offset-md-1">
               <label className="col-form-label" htmlFor="apellido_usr">
@@ -82,57 +79,67 @@ export default function RegistroUsuario({ volver, usuario, guardar }) {
               )}
             </div>
           </div>
-          {/* campo observaciones */}
+
           <div className="row">
             <div className="col-sm-4 col-md-3 offset-md-1">
               <label className="col-form-label" htmlFor="observaciones">
-                observaciones<span className="text-danger">*</span>:
+                Observaciones<span className="text-danger">*</span>:
               </label>
             </div>
             <div className="col-sm-8 col-md-6">
               <input
                 type="text"
-                {...register("observaciones", { required: true})}
-                className="form-control "
-              />
-            </div>
-          </div>
-
-
-
-          {/* campo telefono */}
-          <div className="row">
-            <div className="col-sm-4 col-md-3 offset-md-1">
-              <label className="col-form-label" htmlFor="telefono">
-                Telefono<span className="text-danger">*</span>:
-              </label>
-            </div>
-            <div className="col-sm-8 col-md-6">
-              <input
-                type="tel"
-                {...register("telefono", { required: true})}
+                {...register("observaciones", { required: true })}
                 className="form-control"
               />
             </div>
           </div>
 
-          {/* campo mail */}
           <div className="row">
             <div className="col-sm-4 col-md-3 offset-md-1">
-              <label className="col-form-label" htmlFor="mail">
+              <label className="col-form-label" htmlFor="telefono">
+                Teléfono<span className="text-danger">*</span>:
+              </label>
+            </div>
+            <div className="col-sm-8 col-md-6">
+              <input
+                type="tel"
+                {...register("telefono", { required: true })}
+                className="form-control"
+              />
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-sm-4 col-md-3 offset-md-1">
+              <label className="col-form-label" htmlFor="email">
                 Mail<span className="text-danger">*</span>:
               </label>
             </div>
             <div className="col-sm-8 col-md-6">
               <input
                 type="email"
-                {...register("mail", { required: true})}
+                {...register("email", { required: true })}
                 className="form-control"
               />
             </div>
           </div>
 
-          {/* Botones */}
+          <div className="row">
+            <div className="col-sm-4 col-md-3 offset-md-1">
+              <label className="col-form-label" htmlFor="cuil">
+                Cuil<span className="text-danger">*</span>:
+              </label>
+            </div>
+            <div className="col-sm-8 col-md-6">
+              <input
+                type="text"
+                {...register("cuil", { required: true })}
+                className="form-control"
+              />
+            </div>
+          </div>
+
           <hr />
           <div className="row justify-content-center">
             <div className="col text-center botones">
