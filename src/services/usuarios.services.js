@@ -3,21 +3,20 @@ import instance from "../../axios.config";
 import { toast } from "sonner";
 import sonnerQuestion from '../utils/sonnerQuestion';
 
-async function buscarUsuarios() {
+async function buscarUsuarios({ nombre, activo }) {
   try {
     const response = await instance.get(baseUrl, {
-      params: {},
+      params: { nombre, activo }
     });
     return response.data;
   } catch (error) {
-    //if()
     console.error(error);
     if (error.response.status === 401) {
       toast.error("Inicie sesión nuevamente");
     }
-    console.log(error);
   }
 }
+
 async function save(usuario) {
   if (usuario.id_usuario === 0 || usuario.id_usuario === null) { // Verificar id_usuario
     const respuesta = await sonnerQuestion.pregunta("¿Desea registrar el usuario?");

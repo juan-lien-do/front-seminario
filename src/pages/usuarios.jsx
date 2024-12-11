@@ -7,39 +7,30 @@ import { toast } from 'sonner';
 
 const Usuarios = () => {
   const [nombre, setNombre] = useState('');
-  const [activo, setActivo] = useState(true);
+  const [activo, setActivo] = useState(true); // true por defecto, asumiendo que se filtra por usuarios activos
   const [usuario, setUsuario] = useState([]);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
   const [mostrarRegistroUsuario, setMostrarRegistroUsuario] = useState(false);
 
+  // Buscar usuarios al inicializar y cuando cambian los criterios
   useEffect(() => {
-    usuariosService.buscarUsuarios().then((data) => {
-      if (Array.isArray(data)) {
-        setUsuario(data);
-      } else {
-        console.error("Error: Los datos no son un array", data);
-        setUsuario([]); // Si no es un array, se establece un array vacío.
-      }
-    });
-  }, []);
+    buscarUsuarios();
+  }, [nombre, activo]); // Dependencias: nombre y activo
 
   async function buscarUsuarios() {
     const data = await usuariosService.buscarUsuarios({ nombre, activo });
     setUsuario(data);
   }
 
-  useEffect(() => {
-    buscarUsuarios();
-  }, []);
-
   function agregarUsuario() {
     const nuevoUsuario = {
-      id_usuario: 0, // Asegúrate de que id_usuario sea 0 para que se detecte como nuevo
-      nombre_usr: null,
-      apellido_usr: null,
-      mail: null,
-      observaciones: null,
-      telefono: null,
+      id_usuario: 0,
+      nombre_usr: "",
+      apellido_usr: "",
+      mail: "",
+      observaciones: "",
+      cuil: "",
+      telefono: 0,
     };
     setUsuarioSeleccionado(nuevoUsuario);
     setMostrarRegistroUsuario(true);
@@ -50,7 +41,7 @@ const Usuarios = () => {
       toast.error("No puede modificarse un registro inactivo");
       return;
     }
-    setUsuarioSeleccionado(usuario); // Solo se selecciona el usuario, no se reemplaza el estado 'usuario'.
+    setUsuarioSeleccionado(usuario);
     setMostrarRegistroUsuario(true);
   }
 
@@ -85,8 +76,6 @@ const Usuarios = () => {
     <div>
       <h2>Gestión de Usuarios</h2>
       <BuscadorUsuarios
-        usuarios={usuario}
-        setUsuarios={setUsuario}
         nombre={nombre}
         setNombre={setNombre}
         activo={activo}
@@ -96,7 +85,7 @@ const Usuarios = () => {
       />
       <ListadoUsuarios
         usuarios={usuario}
-        abrirFormulario={agregarUsuario}
+        agregarUsuario={agregarUsuario}
         modificar={modificarUsuario}
         desactivar={desactivarUsuario}
         activar={activarUsuario}

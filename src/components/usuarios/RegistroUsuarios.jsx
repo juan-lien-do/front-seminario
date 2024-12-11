@@ -112,14 +112,29 @@ export default function RegistroUsuario({ volver, usuario, guardar }) {
 
           <div className="row">
             <div className="col-sm-4 col-md-3 offset-md-1">
-              <label className="col-form-label" htmlFor="mail">
+              <label className="col-form-label" htmlFor="email">
                 Mail<span className="text-danger">*</span>:
               </label>
             </div>
             <div className="col-sm-8 col-md-6">
               <input
                 type="email"
-                {...register("mail", { required: true })}
+                {...register("email", { required: true })}
+                className="form-control"
+              />
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-sm-4 col-md-3 offset-md-1">
+              <label className="col-form-label" htmlFor="cuil">
+                Cuil<span className="text-danger">*</span>:
+              </label>
+            </div>
+            <div className="col-sm-8 col-md-6">
+              <input
+                type="text"
+                {...register("cuil", { required: true })}
                 className="form-control"
               />
             </div>
