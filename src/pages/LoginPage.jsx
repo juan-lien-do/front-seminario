@@ -1,14 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import logear from "../services/LoginService";
 import FotoUsuario from "../components/FotoUsuario";
 import { useNavigate } from "react-router-dom";
+import RegistroContraseña from "../components/usuarios/RegistroContraseña"; // Importamos el componente de RegistroContraseña
 import { Navigate } from "react-router-dom";
 
 export default function LoginPage({ usuario, onLogin }) {
   const [error, setError] = useState(null);
-  const [intentos, setIntentos] = useState(0)
-  const navigate = useNavigate(); 
+  const [intentos, setIntentos] = useState(0);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);  // Para controlar el flujo de la página
+  const [userData, setUserData] = useState(null);  // Para almacenar los datos del usuario
+  const navigate = useNavigate();
 
   const {
     register,
@@ -16,19 +19,51 @@ export default function LoginPage({ usuario, onLogin }) {
     formState: { errors, isValid },
   } = useForm();
 
+  // Función que maneja el login
   const onSubmit = async (data) => {
-    setIntentos(intentos + 1)
-    if(intentos > 2) {alert("Contacte a un administrador antes de seguir intentando y recargue la página.")}
+    setIntentos(intentos + 1);
+    if (intentos > 2) {
+      alert("Contacte a un administrador antes de seguir intentando y recargue la página.");
+    }
     try {
-      const response = await logear(data);     
-      onLogin(response.data); // response.data debería contener el token y la info del usuario
-      navigate("/home");
+      const response = await logear(data);
+      console.log("Usuario logueado:", response.data); // Agregar esto para depurar
+      onLogin(response.data); // Almacena la información del usuario en el estado global
+      setUserData(response.data); // Guardar los datos del usuario
+      setIsLoggedIn(true);  // Cambiar el estado de login
+
     } catch (err) {
       setError(err.message);
     }
   };
 
-  if (!!usuario) return (<Navigate to="/home" replace />)
+  // Controlar el flujo de navegación basado en primerLogin
+  useEffect(() => {
+    if (isLoggedIn && userData) {
+      if (userData.primerLogin === true) {
+        //cambiar isAdmin por primerLogin
+        // Si primerLogin es true, mostramos RegistroContraseña
+        console.log("primerLogin es true, mostrando RegistroContraseña");
+        // Aquí deberías rendereizar el componente RegistroContraseña
+      } else {
+        // Si primerLogin es false, redirigimos al home
+        console.log("primerLogin es false, redirigiendo a /home");
+        navigate("/home");
+      }
+    }
+  }, [isLoggedIn, userData, navigate]);
+
+  // Solo mostrar el componente de RegistroContraseña si primerLogin es true
+  if (isLoggedIn && userData && userData.primerLoginn === true) {
+            //cambiar isAdmin por primerLogin
+    return <RegistroContraseña usuario={userData} onComplete={() => navigate("/home")} />;
+  }
+
+  // Si ya está logueado y tiene primerLogin false, redirige a /home
+  if (isLoggedIn && userData && userData.primerLogin === false) {
+    return <Navigate to="/home" replace />;
+  }
+
   return (
     <section className="position-relative py-4 py-xl-5 homeimage">
       <div className="container">
@@ -71,11 +106,11 @@ export default function LoginPage({ usuario, onLogin }) {
                         Ingresar
                       </button>
                     </div>
-                    {
-                      (intentos > 2) ?
+                    {intentos > 2 ? (
                       <p>Contacte a un administrador</p>
-                      : <div></div>
-                    }
+                    ) : (
+                      <div></div>
+                    )}
                   </fieldset>
                   {error && <p className="text-danger">{error}</p>}
                 </form>

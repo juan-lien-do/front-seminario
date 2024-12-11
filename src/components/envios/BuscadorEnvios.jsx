@@ -9,6 +9,8 @@ export default function BuscadorEnvios({ handleRegistrarEnvio, onEstadoChange, t
     { id: 5, nombre: "Devuelto Parcialmente" },
     { id: 6, nombre: "Devuelto Completo" },
     { id: 7, nombre: "Cancelado" },
+    { id: 8, nombre: "Para Retiro"},
+    { id: 9, nombre: "En Reparacion"},
   ];
 
   return (

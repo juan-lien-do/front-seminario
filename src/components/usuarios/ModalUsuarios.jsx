@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 const ModalUsuarios = ({ usuario, cerrarModal, setUsuarios }) => {
-  const [datosUsuario, setDatosUsuario] = useState({
+  const [formData, setFormData] = useState({
     usuario: "",
     nombre: "",
     rol: "",
@@ -10,32 +10,47 @@ const ModalUsuarios = ({ usuario, cerrarModal, setUsuarios }) => {
 
   useEffect(() => {
     if (usuario) {
-      setDatosUsuario(usuario);
+
+      setFormData({
+        usuario: usuario.nombre || "",
+        nombre: usuario.nombre_usr || "",
+        apellido: usuario.apellido.usr || "",
+        rol: usuario.rol || "",
+        habilitado: usuario.esActivo || false,
+      });
     } else {
-      setDatosUsuario({ usuario: "", nombre: "", rol: "", habilitado: true });
+
+      setFormData({
+        usuario: "",
+        nombre: "",
+        apellido: "",
+        rol: "",
+        habilitado: true,
+      });
     }
   }, [usuario]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setDatosUsuario((prevState) => ({ ...prevState, [name]: value }));
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleCheckboxChange = (e) => {
+    setFormData({ ...formData, habilitado: e.target.checked });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (usuario) {
-      // Actualizar usuario existente
+
       setUsuarios((prevUsuarios) =>
         prevUsuarios.map((u) =>
-          u.id === usuario.id ? { ...u, ...datosUsuario } : u
+          u.id === usuario.id ? { ...u, ...formData } : u
         )
       );
     } else {
-      // Registrar nuevo usuario
-      setUsuarios((prevUsuarios) => [
-        ...prevUsuarios,
-        { id: Date.now(), ...datosUsuario },
-      ]);
+
+      setUsuarios((prevUsuarios) => [...prevUsuarios, { id: Date.now(), ...formData }]);
     }
     cerrarModal();
   };
@@ -43,68 +58,53 @@ const ModalUsuarios = ({ usuario, cerrarModal, setUsuarios }) => {
   return (
     <div className="modal">
       <div className="modal-content">
-        <h3>{usuario ? "Editar Usuario" : "Registrar Usuario"}</h3>
+        <h3>{usuario ? "Editar Usuario" : "Agregar Usuario"}</h3>
         <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label className="form-label">Usuario</label>
+          <div>
+            <label>Usuario</label>
             <input
               type="text"
-              className="form-control"
               name="usuario"
-              value={datosUsuario.usuario}
+              value={formData.usuario}
               onChange={handleInputChange}
               required
             />
           </div>
-          <div className="mb-3">
-            <label className="form-label">Nombre</label>
+          <div>
+            <label>Nombre</label>
             <input
               type="text"
-              className="form-control"
               name="nombre"
-              value={datosUsuario.nombre}
+              value={formData.nombre}
               onChange={handleInputChange}
               required
             />
           </div>
-          <div className="mb-3">
-            <label className="form-label">Rol</label>
+          <div>
+            <label>Rol</label>
             <input
               type="text"
-              className="form-control"
               name="rol"
-              value={datosUsuario.rol}
+              value={formData.rol}
               onChange={handleInputChange}
               required
             />
           </div>
-          <div className="form-check mb-3">
-            <input
-              type="checkbox"
-              className="form-check-input"
-              name="habilitado"
-              checked={datosUsuario.habilitado}
-              onChange={(e) =>
-                setDatosUsuario((prevState) => ({
-                  ...prevState,
-                  habilitado: e.target.checked,
-                }))
-              }
-            />
-            <label className="form-check-label">Habilitado</label>
+          <div>
+            <label>
+              Habilitado
+              <input
+                type="checkbox"
+                name="habilitado"
+                checked={formData.habilitado}
+                onChange={handleCheckboxChange}
+              />
+            </label>
           </div>
-          <div className="d-flex justify-content-end gap-2">
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={cerrarModal}
-            >
-              Cancelar
-            </button>
-            <button type="submit" className="btn btn-primary">
-              {usuario ? "Guardar Cambios" : "Registrar"}
-            </button>
-          </div>
+          <button type="submit">{usuario ? "Guardar Cambios" : "Registrar"}</button>
+          <button type="button" onClick={cerrarModal}>
+            Cancelar
+          </button>
         </form>
       </div>
     </div>

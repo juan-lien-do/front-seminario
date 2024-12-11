@@ -123,6 +123,7 @@ async function activar(id) {
   }
 }
 
+
 export const empleadosService = {
   search,
   //getById,

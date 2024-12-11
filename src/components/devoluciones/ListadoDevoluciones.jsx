@@ -13,15 +13,16 @@ function ListadoDevoluciones({ devoluciones, abrirModalDevolucion, estadoSelecci
   };
 
   const devolucionesFiltradas = devoluciones.filter((devolucion) => {
-    const estadoActual = devolucion.listaCambiosEstado?.filter((x) => !x.fechaFin).at(0)?.idEstadoEnvio;
-
-    if (estadoSeleccionado === "Pendientes") {
+    const estadoActual = devolucion.listaCambiosEstado?.find((x) => !x.fechaFin)?.idEstadoEnvio;
+  
+    if (estadoSeleccionado === 4 || estadoSeleccionado === 5) {
       return estadoActual === 4 || estadoActual === 5;
-    } else if (estadoSeleccionado === "Completas") {
-      return estadoActual === 6; 
+    } else if (estadoSeleccionado === 6) {
+      return estadoActual === 6;
     }
-    return true; 
+    return true; // Mostrar todos si no se especifica filtro
   });
+  
 
   return (
     <div className="container-fluid">

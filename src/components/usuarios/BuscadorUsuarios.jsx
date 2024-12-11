@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const BuscadorUsuarios = ({ usuarios, setUsuarios }) => {
+const BuscadorUsuarios = ({ usuarios, setUsuarios, agregarUsuario }) => {
   const [busqueda, setBusqueda] = useState('');
   const [estado, setEstado] = useState('todos'); // 'todos', 'activo', 'inactivo'
 
@@ -64,7 +64,15 @@ const BuscadorUsuarios = ({ usuarios, setUsuarios }) => {
             Buscar
           </button>
         </div>
+        
       </div>
+      <button
+          type="button"
+          className="btn btn-outline-primary"
+          onClick={agregarUsuario}
+        >
+          Agregar Usuario
+        </button>
     </div>
   );
 };
