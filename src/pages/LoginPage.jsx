@@ -39,7 +39,7 @@ export default function LoginPage({ usuario, onLogin }) {
 
   // Controlar el flujo de navegación basado en primerLogin
   useEffect(() => {
-    if (isLoggedIn && userData) {
+    if (!!usuario && userData) {
       if (userData.primerLogin === true) {
         //cambiar isAdmin por primerLogin
         // Si primerLogin es true, mostramos RegistroContraseña
@@ -51,16 +51,16 @@ export default function LoginPage({ usuario, onLogin }) {
         navigate("/home");
       }
     }
-  }, [isLoggedIn, userData, navigate]);
+  }, [!!usuario, userData, navigate]);
 
   // Solo mostrar el componente de RegistroContraseña si primerLogin es true
-  if (isLoggedIn && userData && userData.primerLoginn === true) {
+  if (!!usuario && userData && userData.primerLoginn === true) {
             //cambiar isAdmin por primerLogin
     return <RegistroContraseña usuario={userData} onComplete={() => navigate("/home")} />;
   }
 
   // Si ya está logueado y tiene primerLogin false, redirige a /home
-  if (isLoggedIn && userData && userData.primerLogin === false) {
+  if (!!usuario) {
     return <Navigate to="/home" replace />;
   }
 
