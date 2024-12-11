@@ -1,6 +1,7 @@
 import instance from "../../axios.config";
+import URL_BACKEND from "../constants/constants";
 
-const urlResource = "http://localhost:8080/envios";
+const urlResource = URL_BACKEND + "/envios";
 
 // Función para buscar los envíos entregados
 async function buscarEntregados() {

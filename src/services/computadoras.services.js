@@ -2,7 +2,9 @@ import instance from '../../axios.config'
 import { toast } from 'sonner';
 import sonnerQuestion from '../utils/sonnerQuestion';
 
-const urlResource = "http://localhost:8080/computadoras/";
+import URL_BACKEND from '../constants/constants';
+
+const urlResource = URL_BACKEND + "/computadoras/";
 
 async function Buscar({ esActivo }) {
     try {
