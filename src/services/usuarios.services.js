@@ -19,7 +19,7 @@ async function buscarUsuarios() {
   }
 }
 async function save(usuario) {
-  if (usuario.id === 0) { // Verificar id_usuario
+  if (usuario.id_usuario === 0 || usuario.id_usuario === null) { // Verificar id_usuario
     const respuesta = await sonnerQuestion.pregunta("¿Desea registrar el usuario?");
     if (respuesta) {
       try {
