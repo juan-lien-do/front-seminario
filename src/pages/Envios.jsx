@@ -16,7 +16,6 @@ function Envios() {
   const [envios, setEnvios] = useState([]);
   const [computadoras, setComputadoras] = useState([])
   const [empleados, setEmpleados] = useState([]);
-  const [usuarios, setUsuarios] = useState([]);
   const [recursos, setRecursos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [estadoSeleccionado, setEstadoSeleccionado] = useState("");
@@ -25,12 +24,10 @@ function Envios() {
 
   async function cargarDatosParaEnvio() {
     try {
-      const dataUsuarios = await usuariosService.buscarUsuarios();
       const dataRecursos = await recursosService.Buscar({ activo: true });
       const dataEmpleados = await empleadosService.search({ nombre: "", activo: true });
       const dataComputadoras = await computadorasService.Buscar({esActivo:true});
 
-      setUsuarios(dataUsuarios);
       setRecursos(dataRecursos);
       setEmpleados(dataEmpleados);
       setComputadoras(dataComputadoras);
@@ -170,7 +167,6 @@ function Envios() {
               setEnvio={setEnvio}
               handleVolverAtras={handleVolverAtras}
               empleados={empleados}
-              usuarios={usuarios}
               recursos={recursos}
               computadoras={computadoras}
               guardarEnvio={guardarEnvio}
