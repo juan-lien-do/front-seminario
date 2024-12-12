@@ -18,6 +18,10 @@ function estadoFromNumber(num){
             return "Devolución completa"
         case 7:
             return "Cancelado"
+        case 8:
+            return "Para retiro"
+        case 9:
+            return "En reparación"
         default:
             return "Desconocido";
     }

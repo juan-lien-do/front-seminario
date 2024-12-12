@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import * as echarts from "echarts";
 
-const ReporteTasaCumplimiento = () => {
+const ReporteTasaCumplimiento = ({reporte}) => {
   const chartRef = useRef(null); // Referencia al contenedor del gráfico
 
-  useEffect(() => {
+  function dibujar(){
     const chartDom = chartRef.current;
     const myChart = echarts.init(chartDom);
 
@@ -29,8 +29,8 @@ const ReporteTasaCumplimiento = () => {
           type: "pie",
           radius: "50%",
           data: [
-            { value: 224, name: "Completados" },
-            { value: 90, name: "Pendientes" },
+            { value: reporte?.pedidosCompletados ?? 224, name: "Completados" },
+            { value: reporte?.pedidosEnProceso ?? 22, name: "En proceso" },
           ],
           emphasis: {
             itemStyle: {
@@ -57,10 +57,14 @@ const ReporteTasaCumplimiento = () => {
       myChart.dispose();
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }
+
+  useEffect(() => {
+    dibujar();
+  }, [reporte]);
 
   return (
-    <div className="card mx-1 my-4">
+    <div className="card mx-1 my-4" style={!!reporte ? {} : {visibility:"hidden"}}>
       <div
         ref={chartRef}
         style={{
