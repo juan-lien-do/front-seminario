@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import * as echarts from "echarts";
 
-const ReporteElementosMasConsumidos = () => {
+const ReporteElementosMasConsumidos = ({reporte}) => {
   const chartRef = useRef(null);
 
-  useEffect(() => {
+  function dibujar(){
     const chartDom = chartRef.current;
     const myChart = echarts.init(chartDom);
 
@@ -17,14 +17,14 @@ const ReporteElementosMasConsumidos = () => {
       },
       xAxis: {
         type: "category",
-        data: ["Componente", "Periférico", "Notebook", "PC", "All in one"],
+        data: reporte?.elementos ?? ["Componente", "Periférico", "Notebook", "PC", "All in one"],
       },
       yAxis: {
         type: "value",
       },
       series: [
         {
-          data: [70, 60, 30, 20, 10],
+          data: reporte?.cantidades ?? [0, 0, 0, 0, 0],
           type: "bar",
           barWidth: "40%", // Ancho de las barras
         },
@@ -49,10 +49,20 @@ const ReporteElementosMasConsumidos = () => {
       myChart.dispose();
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }
 
-  return (
-    <div className="card mx-1 my-4">
+  useEffect(() => {
+    dibujar();
+  }, [reporte]);
+
+  /*useEffect(() => {
+    dibujar();
+  }, []);*/
+
+
+  //if (!reporte) return (<div></div>);
+   return (
+    <div className="card mx-1 my-4" style={!!reporte ? {} : {visibility:"hidden"}}>
         <div
         ref={chartRef}
         style={{

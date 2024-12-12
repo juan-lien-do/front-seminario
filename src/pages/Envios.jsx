@@ -77,6 +77,8 @@ function Envios() {
     await envioServices.guardar(payload);
     setRegistrarEnvio(false);
     //console.log("Envio guardado:", data);
+    buscarEnvios();
+
   }
 
   async function buscarEnvios() {

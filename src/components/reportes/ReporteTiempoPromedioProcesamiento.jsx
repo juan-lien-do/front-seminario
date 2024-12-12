@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import * as echarts from "echarts";
 
-const ReporteTiempoPromedioProcesamiento = () => {
+const ReporteTiempoPromedioProcesamiento = ({reporte}) => {
   const chartRef = useRef(null); // Referencia al contenedor del gráfico
 
   useEffect(() => {
@@ -16,15 +16,16 @@ const ReporteTiempoPromedioProcesamiento = () => {
         },
       xAxis: {
         type: "category",
-        data: ["Sept", "Oct", "Nov", "Div"], // los meses
+        data: reporte?.meses ?? ["Sept", "Oct", "Nov", "Div"], // los meses
       },
       yAxis: {
         type: "value",
-        min: 20, // esto es para que 
+        min: Math.min(reporte?.tiemposPromedioProcesamiento ?? [30, 24, 27, 22]) -1, 
+        max: Math.max(reporte?.tiemposPromedioProcesamiento ?? [30, 24, 27, 22]) +1, 
       },
       series: [
         {
-          data: [30, 24, 27, 22], // Datos para la línea
+          data: reporte?.tiemposPromedioProcesamiento ?? [30, 24, 27, 22], // Datos para la línea
           type: "line",
           smooth: true, 
           lineStyle: {
@@ -56,10 +57,10 @@ const ReporteTiempoPromedioProcesamiento = () => {
       myChart.dispose();
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [reporte]);
 
   return (
-    <div className="card mx-1 my-4">
+    <div className="card mx-1 my-4" style={!!reporte ? {} : {visibility:"hidden"}}>
         <div
         ref={chartRef}
         style={{
