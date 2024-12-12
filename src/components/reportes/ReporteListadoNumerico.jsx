@@ -14,7 +14,7 @@ export default function ReporteListadoNumerico() {
                     <div className="card text-center border-primary">
                         <div className="card-body">
                             <i className="fa-solid fa-clipboard-list fa-2x text-primary mb-3"></i>
-                            <h5 className="card-title">Pedidos Atendidos</h5>
+                            <h5 className="card-title">Pedidos atendidos</h5>
                             <p className="card-text fs-4 fw-bold">{pedidosAtendidos}</p>
                         </div>
                     </div>
@@ -24,7 +24,7 @@ export default function ReporteListadoNumerico() {
                     <div className="card text-center border-success">
                         <div className="card-body">
                             <i className="fa-solid fa-truck-fast fa-2x text-success mb-3"></i>
-                            <h5 className="card-title">Pedidos Completados</h5>
+                            <h5 className="card-title">Pedidos entregados</h5>
                             <p className="card-text fs-4 fw-bold">{pedidosCompletados}</p>
                         </div>
                     </div>
@@ -34,7 +34,7 @@ export default function ReporteListadoNumerico() {
                     <div className="card text-center border-warning">
                         <div className="card-body">
                             <i className="fa-solid fa-gears fa-2x text-warning mb-3"></i>
-                            <h5 className="card-title">Pedidos En Proceso</h5>
+                            <h5 className="card-title">Pedidos en proceso</h5>
                             <p className="card-text fs-4 fw-bold">{pedidosEnProceso}</p>
                         </div>
                     </div>
