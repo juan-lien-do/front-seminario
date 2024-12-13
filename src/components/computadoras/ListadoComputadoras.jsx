@@ -93,10 +93,9 @@ export default function ListadoComputadoras({
             <tbody>
               {filteredItems &&
                 filteredItems.map((Item) => (
-                  <tr key={Item.idComputadora}>
+                  <tr className={!Item.esActivo && "efecto-desactivado"} key={Item.idComputadora}>
                     <td
-                      className={`text-center ${
-                        !Item.esActivo ? " bg-danger text-white fw-bold" : " text-dark"
+                      className={`text-center text-dark"
                       }`}
                     >
                       {Item.nroSerie}
@@ -120,15 +119,15 @@ export default function ListadoComputadoras({
                     </td>
                     <td className="text-end">{Item.nroWs}</td>
                     <td className="text-center">
-                      {/* Muestra el nombre del depósito */}
-                      {Item.idDeposito === 1
-                        ? "Depósito 1"
-                        : Item.idDeposito === 2
-                        ? "Depósito 2"
-                        : Item.idDeposito === 3
-                        ? "Depósito 3"
-                        : "Ubicación desconocida"}
-                      {/* Botón "Ver más" para mostrar la ubicación completa */}
+
+                      { /* aca decido si muestro la info del deposito o que esta en uso */
+                        Item.enUso ?
+                        "Se encuentra en uso"
+                        :
+                      
+
+
+                      /* Botón "Ver más" para mostrar la ubicación completa */
                       <Button
                         className="btn btn-info ms-2"
                         onClick={() =>
@@ -143,8 +142,16 @@ export default function ListadoComputadoras({
                           )
                         }
                       >
-                        Ver más
+                        {/* Muestra el nombre del depósito */}
+                      {Item.idDeposito === 1
+                        ? "Depósito 1"
+                        : Item.idDeposito === 2
+                        ? "Depósito 2"
+                        : Item.idDeposito === 3
+                        ? "Depósito 3"
+                        : "Ubicación desconocida"}
                       </Button>
+                    }
                     </td>
                     <td className="text-center text-nowrap">
                       <button
@@ -164,6 +171,7 @@ export default function ListadoComputadoras({
                             ? () => desactivar(Item.idComputadora)
                             : () => activar(Item.idComputadora)
                         }
+                        disabled={Item.enUso}
                       >
                         <i
                           className={!!Item.esActivo ? "fas fa-trash" : "fas fa-trash-restore"}

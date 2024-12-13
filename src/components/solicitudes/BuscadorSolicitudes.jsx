@@ -9,6 +9,7 @@ export default function BuscadorSolicitudes({buscarSolicitudes, handleMostrarReg
       name="FormBusqueda"
       onSubmit={(e) => e.preventDefault()}
     >
+      <h1 className="text-center">Solicitudes</h1>
       <div className="container-fluid">
         <div className="row">
           <div className="col-12 col-md-6 mx-auto">

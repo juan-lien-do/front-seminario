@@ -30,7 +30,12 @@ async function BuscarPorId(id_recurso) {
 async function desactivar(id) {
   const respuesta = await sonnerQuestion.pregunta("¿Desea desactivar el recurso?")
   if(respuesta){
-    await instance.patch(urlResource + "desactivar/" + id);
+    try{
+      await instance.patch(urlResource + "desactivar/" + id);
+    } catch (err) {
+      console.log(err);
+      toast.error(err.response.data)
+    }
     return true
   } return false
 }

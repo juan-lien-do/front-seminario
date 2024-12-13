@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ModalExistencias from "../recursos//ModalExistencias";
-import { Modal, Button } from "react-bootstrap"; // Importamos Modal y Button de react-bootstrap
+import { Modal, Button } from "react-bootstrap"; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function ListadoRecursos({
@@ -71,12 +71,9 @@ export default function ListadoRecursos({
               {Items &&
                 Items.map((Item) =>
                   Item.categoria !== categoriaSeleccionada ? (
-                    <tr key={Item.id}>
+                    <tr className={!Item.activo && "efecto-desactivado"} key={Item.id}>
                       <td
-                        className={`text-center ${
-                          !Item.activo
-                            ? "bg-danger text-white fw-bold"
-                            : "text-dark"
+                        className={`text-center text-dark"
                         }`}
                       >
                         {Item.nombre}

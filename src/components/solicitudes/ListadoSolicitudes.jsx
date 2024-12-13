@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 export default function ListadoSolicitudes({ solicitudes, handleElegirSolicitud, incorporarSolicitud }) {
   return (
     <div className="table-responsive mx-2">
-      <h1>Listado de solicitudes</h1>
       <table className="table table-hover table-sm table-bordered table-striped">
         <thead className="table-light ">
           <tr>
@@ -20,7 +19,11 @@ export default function ListadoSolicitudes({ solicitudes, handleElegirSolicitud,
               <td className="text-center text-dark">{soli.fechaIncorporacion ? soli.fechaIncorporacion : "❌" }</td>
               <td className="text-center text-dark text-nowrap">
                 <button className="btn btn-info" onClick={()=>{handleElegirSolicitud(soli)}}>Ver</button>
-                <button className="btn btn-warning mx-1" onClick={()=>{incorporarSolicitud(soli.idSolicitud)}}>Incorporar</button>
+                <button className="btn btn-warning mx-1" 
+                disabled={!!soli.fechaIncorporacion}
+                onClick={()=>{incorporarSolicitud(soli.idSolicitud)}}>
+                  
+                  Incorporar</button>
               </td>
             </tr>
           )}

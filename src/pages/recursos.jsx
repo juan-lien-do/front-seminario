@@ -4,6 +4,7 @@ import { recursosService } from "../services/recursos.services.js";
 import BuscadorRecursos from "../components/recursos/BuscadorRecursos.jsx";
 import RegistroRecurso from "../components/recursos//RegistroRecurso.jsx";
 import { toast } from "sonner";
+import LoaderBloque from "../components/LoaderBloque.jsx";
 
 export default function Recursos() {
   const [activo, setActivo] = useState(true);
@@ -12,6 +13,7 @@ export default function Recursos() {
   const [recurso, setRecurso] = useState(null);
   const [mostrarRegistroRecurso, setMostrarRegistroRecurso] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [estaCargando, setEstaCargado] = useState(true);
 
   function handleTodos(){
     setCategoriaSeleccionada(0)
@@ -29,8 +31,10 @@ export default function Recursos() {
 
   // Función para buscar recursos
   async function Buscar() {
+    setEstaCargado(true)
     const data = await recursosService.Buscar({ activo });
     setRecursos(data);
+    setEstaCargado(false)
   }
 
   useEffect(() => {
@@ -119,7 +123,12 @@ export default function Recursos() {
         handlePerifericos={handlePerifericos}
         setSearchTerm={setSearchTerm}
       />
-      <ListadoRecursos
+      {
+        estaCargando ?
+        <LoaderBloque texto={"Cargando recursos..."}/>
+        :
+
+        <ListadoRecursos
         Items={Recursos}
         modificar={modificarRecurso}
         activar={activarRecurso}
@@ -127,8 +136,9 @@ export default function Recursos() {
         categoriaSeleccionada={categoriaSeleccionada}
         Buscar={Buscar}
       />
+      }
+      
 
-      {/* Componente BuscadorRecursos */}
     </>
   );
 }
