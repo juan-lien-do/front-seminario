@@ -94,6 +94,17 @@ export default function ListadoEnvios({ envios, recargarEnvios }) {
       });
   }
 
+  function formatearFecha(fechaISO) {
+    const fecha = new Date(fechaISO);
+    const dia = String(fecha.getDate()).padStart(2, '0');
+    const mes = String(fecha.getMonth() + 1).padStart(2, '0'); // Los meses van de 0 a 11
+    const año = fecha.getFullYear();
+    const horas = String(fecha.getHours()).padStart(2, '0');
+    const minutos = String(fecha.getMinutes()).padStart(2, '0');
+    const segundos = String(fecha.getSeconds()).padStart(2, '0');
+    return `${dia}/${mes}/${año} ${horas}:${minutos}:${segundos}`;
+  }
+
   return (
     <div className="mt-3 table-responsive">
       <ModalDetallesEnvio show={show} handleClose={handleClose} envio={envio} />
@@ -140,10 +151,8 @@ export default function ListadoEnvios({ envios, recargarEnvios }) {
                   </select>
                 </td>
                 <td className="text-center">
-                  {
-                    envio?.listaCambiosEstado?.filter((x) => !x.fechaFin).at(0)
-                      ?.fechaInicio || "N/A"
-                  }
+                  {envio?.listaCambiosEstado?.filter((x) => !x.fechaFin).at(0)
+                    ?.fechaInicio ? formatearFecha(envio.listaCambiosEstado.filter((x) => !x.fechaFin).at(0).fechaInicio) : "N/A"}
                 </td>
                 <td className="text-center">
                   <button
