@@ -54,7 +54,7 @@ export default function RegistroRecurso({ volver, recurso, guardar }) {
             <div className="row">
             <div className="col-sm-4 col-md-3 offset-md-1">
                 <label className="col-form-label" htmlFor="categoria">
-                Categoria<span className="text-danger">*</span>:
+                Categoría<span className="text-danger">*</span>:
                 </label>
             </div>
             <div className="col-sm-8 col-md-6">

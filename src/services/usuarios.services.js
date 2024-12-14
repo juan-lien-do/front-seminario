@@ -57,7 +57,7 @@ async function save(usuario) {
 async function remove(id) {
   const url = `${baseUrl}/desactivar/${id}`;
 
-  const respuesta = await sonnerQuestion.pregunta("¿Desea dar de baja el usuario")
+  const respuesta = await sonnerQuestion.pregunta("¿Desea dar de baja el usuario?")
   if(respuesta){
     try {
       await instance.patch(url);
@@ -75,7 +75,7 @@ async function blanquearContrasena(id) {
   // Codificar la URL para manejar caracteres especiales como "ñ"
   const url = `${baseUrl}/${("blanquear_password")}/${id}`;
   const respuesta = await sonnerQuestion.pregunta(
-    "¿Está seguro de que desea reiniciar la contraseña?"
+    "¿Está seguro de que desea restablecer la contraseña?"
   );
 
   if (respuesta) {

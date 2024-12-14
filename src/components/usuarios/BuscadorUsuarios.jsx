@@ -1,20 +1,14 @@
-export default function BuscadorUsuarios({
-  nombre,
-  setNombre,
-  activo,
-  setActivo,
-  agregarUsuario,
-}) {
+import React from "react";
+
+const BuscadorUsuarios = ({ nombre, setNombre, activo, setActivo, agregarUsuario }) => {
   return (
-    <div className="container my-4">
-      <h3 className="text-uppercase mb-3">Buscar Usuarios</h3>
-      <div className="row gy-3">
-        {/* Input de Búsqueda */}
+    <div className="container-fluid mt-4">
+      <div className="row g-3">
         <div className="col-md-6">
-          <label htmlFor="buscador" className="form-label">Buscar usuario:</label>
+          <label htmlFor="nombre" className="form-label">Buscar por nombre o usuario:</label>
           <input
-            id="buscador"
             type="text"
+            id="nombre"
             className="form-control"
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
@@ -22,7 +16,6 @@ export default function BuscadorUsuarios({
           />
         </div>
 
-        {/* Selector de Estado */}
         <div className="col-md-4">
           <label htmlFor="activo" className="form-label">Filtrar por estado:</label>
           <select
@@ -37,11 +30,10 @@ export default function BuscadorUsuarios({
           </select>
         </div>
 
-        {/* Botón para agregar */}
         <div className="col-md-2 d-flex align-items-end">
           <button
             type="button"
-            className="btn btn-outline-primary"
+            className="btn btn-outline-primary w-100"
             onClick={agregarUsuario}
           >
             Agregar Usuario
@@ -50,4 +42,6 @@ export default function BuscadorUsuarios({
       </div>
     </div>
   );
-}
+};
+
+export default BuscadorUsuarios;

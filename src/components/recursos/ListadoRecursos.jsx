@@ -96,7 +96,7 @@ export default function ListadoRecursos({
                 <th className="text-center">Nombre</th>
                 <th className="text-end">Cantidad</th>
                 <th className="text-end">Cantidad crítica</th>
-                <th className="text-center">Categoria</th>
+                <th className="text-center">Categoría</th>
                 <th className="text-center">Descripción</th>
                 <th className="text-center">Existencias</th>
                 <th className="text-center">Acciones</th>
