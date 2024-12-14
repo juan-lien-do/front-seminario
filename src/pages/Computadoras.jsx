@@ -42,11 +42,15 @@ function Computadoras() {
         return data; // Retornar todos si la opción es "todos"
     };
 
+    function filtrarPorDescripcion(data){
+        return data.filter(x => x.descripcion.toUpperCase().includes(searchTerm.toUpperCase()));
+    }
+
     async function Buscar() {
         setEstaCargando(true)
         const data = await computadorasService.Buscar({ esActivo });
         console.log("Datos obtenidos:", data);
-        const computadorasFiltradas = filtrarPorMasterizado(data);
+        const computadorasFiltradas = filtrarPorDescripcion(filtrarPorMasterizado(data));
         setComputadoras(computadorasFiltradas);
         setEstaCargando(false)
     }

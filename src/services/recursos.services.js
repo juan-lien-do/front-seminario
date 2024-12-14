@@ -6,12 +6,23 @@ const urlResource = "http://localhost:8080/recursos/";
 
 async function Buscar({ activo }) {
     try {
-      //console.log(activo)
       const response = await instance.get(urlResource, {
         params: { activo: activo },
       });
-      console.log(response.data)
-      return response.data;
+
+      const datosOrdenados = response.data.sort((a, b) => {
+        const nameA = a.nombre.toUpperCase();
+        const nameB = b.nombre.toUpperCase();
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+        return 0;
+      });
+
+      return datosOrdenados;
     } catch (error) {
       //if()
       //console.error(error);
@@ -28,7 +39,7 @@ async function BuscarPorId(id_recurso) {
 }*/
 
 async function desactivar(id) {
-  const respuesta = await sonnerQuestion.pregunta("¿Desea desactivar el recurso?")
+  const respuesta = await sonnerQuestion.pregunta("¿Desea dar de baja el recurso?")
   if(respuesta){
     try{
       await instance.patch(urlResource + "desactivar/" + id);
@@ -41,7 +52,7 @@ async function desactivar(id) {
 }
 
 async function activar(id) {
-  const respuesta = await sonnerQuestion.pregunta("¿Desea activar el recurso?")
+  const respuesta = await sonnerQuestion.pregunta("¿Desea dar de alta el recurso?")
   if(respuesta){
     await instance.patch(urlResource + "activar/" + id);
   }
@@ -57,7 +68,7 @@ async function save(item) {
     } else {
       console.log(item)
 
-      const respuesta = await sonnerQuestion.pregunta("¿Desea actualizar el recurso?")
+      const respuesta = await sonnerQuestion.pregunta("¿Desea actualizar los datos del recurso?")
       if(respuesta){
         await instance.put(urlResource + item.id, {...item, existencias:[]});
       }

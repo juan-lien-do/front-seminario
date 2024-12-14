@@ -1,13 +1,9 @@
-//import axios from "axios";
-//import axios from 'axios';
 import sonnerQuestion from '../utils/sonnerQuestion';
 import instance from '../../axios.config'
 import { Toaster, toast } from "sonner";
-import sonidoExito from '../assets/mixkit-gaming-lock-2848.mp3'
-import sonidoError from '../assets/mixkit-tech-break-fail-2947.mp3'
 
-const audioExito = new Audio(sonidoExito);
-const audioError = new Audio(sonidoError);
+
+
 
 const baseUrl = "http://localhost:8080/empleados/";
 
@@ -17,13 +13,22 @@ async function search({ nombre, activo }) {
     const response = await instance.get(baseUrl, {
       params: { nombre: nombre, activo: activo },
     });
-    //audioExito.play()
+    const datosOrdenados = response.data.sort((a, b) => {
+      const nameA = a.nombre.toUpperCase();
+      const nameB = b.nombre.toUpperCase();
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+      return 0;
+    });
 
-    return response.data;
+    return datosOrdenados;
   } catch (error) {
     if(error.response.status === 401) {toast.error("Inicie sesión nuevamente")}
     console.error(error);
-    audioError.play();
   }
 }
 
@@ -77,12 +82,12 @@ async function save(empleado) {
     const url = `${baseUrl}`;
     await instance.put(url, empleado);
     toast.success("Se actualizaron los datos del empleado")
-    audioExito.play()
+    //audioExito.play()
 
   } catch (err) {
     console.error(err);
     toast.error("Surgió un error")
-    audioError.play();
+    //audioError.play();
 
     
   }
@@ -97,10 +102,9 @@ async function remove(id) {
       await instance.patch(url);
       toast.success("El Empleado ha sido dado de baja correctamente")
 
-    } catch (error) {
-      console.error(error);
-      toast.error("Surgió un error")
-
+    } catch (err) {
+      console.log(err);
+      toast.error(err.response.data)
     }
   }
 }

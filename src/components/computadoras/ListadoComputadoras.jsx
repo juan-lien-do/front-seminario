@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Modal, Button } from 'react-bootstrap';
+import React, { useState, useEffect } from "react";
+import { Modal, Button, Pagination } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function ListadoComputadoras({
@@ -9,7 +9,7 @@ export default function ListadoComputadoras({
   modificar,
   categoriaSeleccionada
 }) {
-  console.log("Items recibidos:", Items);
+  //console.log("Items recibidos:", Items);
 
   // Estado para manejar la descripción del modal
   const [showDescripcion, setShowDescripcion] = useState(false);
@@ -43,6 +43,31 @@ export default function ListadoComputadoras({
     if (categoriaSeleccionada === 0) return true; // Mostrar todos
     return Item.idTipo === categoriaSeleccionada;
   });
+
+
+  // paginacion
+  const [paginaActual, setPaginaActual] = useState(1)
+  const itemsPorPagina = 6;
+
+  // paginación
+  const indexOfLastItem = paginaActual * itemsPorPagina;
+  const indexOfFirstItem = indexOfLastItem - itemsPorPagina;
+  const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
+  const handlePageChange = (pageNumber) => setPaginaActual(pageNumber);
+
+  const cantidadPaginas = Math.ceil(filteredItems.length / itemsPorPagina);
+  const paginationItems = []; // este es un array de objetos de DOM
+  for (let i = 1; i <= cantidadPaginas; i++) {
+    paginationItems.push(
+      <Pagination.Item 
+        key={i} 
+        active={i === paginaActual} 
+        onClick={() => handlePageChange(i)}
+      >
+        {i}
+      </Pagination.Item>
+    );
+  }
 
   return (
     <div className="container-fluid">
@@ -91,8 +116,8 @@ export default function ListadoComputadoras({
               </tr>
             </thead>
             <tbody>
-              {filteredItems &&
-                filteredItems.map((Item) => (
+              {currentItems &&
+                currentItems.map((Item) => (
                   <tr className={!Item.esActivo && "efecto-desactivado"} key={Item.idComputadora}>
                     <td
                       className={`text-center text-dark"
@@ -182,6 +207,9 @@ export default function ListadoComputadoras({
                 ))}
             </tbody>
           </table>
+          <Pagination className="justify-content-center mt-3">
+            {paginationItems}
+          </Pagination>
         </div>
       </div>
     </div>

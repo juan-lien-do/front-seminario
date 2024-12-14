@@ -6,15 +6,26 @@ const urlResource = "http://localhost:8080/computadoras/";
 
 async function Buscar({ esActivo }) {
     try {
-        //console.log(esActivo)
         const response = await instance.get(urlResource, {
             params: { esActivo: esActivo },
         });
-        //console.log("Respuesta de la API:", response);
-        return response.data;
+
+        // aca los ordeno
+        const datosOrdenados = response.data.sort((a, b) => {
+            const nameA = a.nroSerie.toUpperCase();
+            const nameB = b.nroSerie.toUpperCase();
+            if (nameA < nameB) {
+              return -1;
+            }
+            if (nameA > nameB) {
+              return 1;
+            }
+            return 0;
+          });
+
+
+        return datosOrdenados;
     } catch (error) {
-      //if()
-      //console.error(error);
         if(error.response.status === 401) {toast.error("Inicie sesión nuevamente")}
         console.log(error)
     }
@@ -28,14 +39,14 @@ async function BuscarPorId(id_computadora) {
 }*/
 
 async function desactivar(idComputadora) {
-    const respuesta = await sonnerQuestion.pregunta("¿Desea desactivar la computadora?")
+    const respuesta = await sonnerQuestion.pregunta("¿Desea dar de baja la computadora?")
     if(respuesta){
         await instance.patch(urlResource + "desactivar/" + idComputadora);
     }
 }
 
 async function activar(idComputadora) {
-    const respuesta = await sonnerQuestion.pregunta("¿Desea activar la computadora?")
+    const respuesta = await sonnerQuestion.pregunta("¿Desea dar de alta la computadora?")
     if(respuesta){
         await instance.patch(urlResource + "activar/" + idComputadora);
     }
@@ -57,7 +68,7 @@ async function save(Item) {
         }
     } else {
         //console.log(Item)
-        const respuesta = await sonnerQuestion.pregunta("¿Desea actualizar la computadora?")
+        const respuesta = await sonnerQuestion.pregunta("¿Desea actualizar los datos de la computadora?")
         if(respuesta){
             await instance.put(urlResource + Item.idComputadora, {...Item, masterizado: false});
         }

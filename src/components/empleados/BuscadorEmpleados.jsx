@@ -12,9 +12,10 @@ export default function BuscadorEmpleados({
       name="FormBusqueda"
       onSubmit={(e) => e.preventDefault()}
     >
+      <h3 className='text-center'>Empleados</h3>
       <div className="container-fluid">
-        <div className="row ">
-          <div className="col-sm-4 col-md-1 mt-2">
+        <div className="row justify-content-center">
+          <div className="col-sm-4 col-md-1 mt-2 text-center">
             <label className="col-form-label ">Nombre:</label>
           </div>
           <div className="col-sm-8 col-md-4 mt-2">
@@ -27,7 +28,7 @@ export default function BuscadorEmpleados({
               autoFocus
             />
           </div>
-
+          {/*<!-- Force next columns to break to new line -->*/}
           <div className="col-sm-8 col-md-4 my-2">
             <div className="form-check ">
               <input

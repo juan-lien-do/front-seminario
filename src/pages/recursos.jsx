@@ -116,7 +116,7 @@ export default function Recursos() {
       <BuscadorRecursos
         activo={activo}
         setActivo={setActivo}
-        buscarRecursos={handleSearch} // Cambiar a handleSearch
+        buscarRecursos={handleSearch}
         agregarRecurso={agregarRecurso}
         handleComponentes={handleComponentes}
         handleTodos={handleTodos}

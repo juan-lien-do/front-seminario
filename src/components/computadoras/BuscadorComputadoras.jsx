@@ -57,7 +57,7 @@ export default function BuscadorComputadoras({
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-12 col-sm-10 col-md-8 col-lg-6 my-2 mx-auto">
-                        <div className="form-check">
+                        <div className="form-check text-center">
                             <ButtonGroup aria-label="Basic example">
                                 <Button variant="primary" onClick={handleTodos}>
                                     Todos

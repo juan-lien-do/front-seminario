@@ -22,6 +22,10 @@ export default function Empleados() {
     setBuscaActivos(empleados?.at(0)?.activo ?? true)
   },[empleados])
 
+  useEffect(()=>{
+    buscarEmpleados()
+  }, [nombre])
+
   async function buscarEmpleados() {
     setEstaCargando(true)
     const data = await empleadosService.search({ nombre, activo })
