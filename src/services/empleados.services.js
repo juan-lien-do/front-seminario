@@ -96,7 +96,7 @@ async function save(empleado) {
 async function remove(id) {
   const url = `${baseUrl}desactivar/${id}`;
 
-  const respuesta = await sonnerQuestion.pregunta("¿Desea dar de baja el empleado")
+  const respuesta = await sonnerQuestion.pregunta("¿Desea dar de baja el empleado?")
   if(respuesta){
     try {
       await instance.patch(url);

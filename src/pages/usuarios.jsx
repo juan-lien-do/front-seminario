@@ -12,6 +12,7 @@ const Usuarios = () => {
   const [usuariosFiltrados, setUsuariosFiltrados] = useState([]);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
   const [mostrarRegistroUsuario, setMostrarRegistroUsuario] = useState(false);
+  const [modificandoUsuario, setModificandoUsuario] = useState(false);
 
   useEffect(() => {
     cargarUsuarios();
@@ -53,6 +54,7 @@ const Usuarios = () => {
     };
     setUsuarioSeleccionado(nuevoUsuario);
     setMostrarRegistroUsuario(true);
+    setModificandoUsuario(false);
   }
 
   function modificarUsuario(usuario) {
@@ -62,6 +64,7 @@ const Usuarios = () => {
     }
     setUsuarioSeleccionado(usuario);
     setMostrarRegistroUsuario(true);
+    setModificandoUsuario(true);
   }
 
   async function guardarUsuario(data) {
@@ -87,13 +90,14 @@ const Usuarios = () => {
         guardar={guardarUsuario}
         volver={() => setMostrarRegistroUsuario(false)}
         usuario={usuarioSeleccionado}
+        modificando={modificandoUsuario}
       />
     );
   }
 
   return (
-    <div>
-      <h2>Gestión de Usuarios</h2>
+    <div className="container-fluid mt-4">
+      <h2 className="text-center">Gestión de Usuarios</h2>
       <BuscadorUsuarios
         nombre={nombre}
         setNombre={setNombre}

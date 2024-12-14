@@ -168,7 +168,7 @@ export default function ModalExistencias({ show, handleClose, existencias, idRec
                 <thead className="thead-dark">
                   <tr>
                     <th className="text-center"> Cantidad </th>
-                    <th className="text-center"> Deposito </th>
+                    <th className="text-center"> Depósito </th>
                     <th className="text-center"> Ubicación </th>
                   </tr>
                 </thead>
