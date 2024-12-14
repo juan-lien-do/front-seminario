@@ -10,10 +10,16 @@ async function Buscar({ esActivo }) {
             params: { esActivo: esActivo },
         });
 
-        // aca los ordeno
+        // aca los ordeno jejej q le den al backend
         const datosOrdenados = response.data.sort((a, b) => {
             const nameA = a.nroSerie.toUpperCase();
             const nameB = b.nroSerie.toUpperCase();
+            if(a.enUso && !b.enUso){
+                return 1;
+            }
+            if(b.enUso && !a.enUso){
+                return -1;
+            }
             if (nameA < nameB) {
               return -1;
             }

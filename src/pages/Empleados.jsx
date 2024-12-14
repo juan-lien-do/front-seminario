@@ -18,7 +18,7 @@ export default function Empleados() {
   const [mostrarRegistroEmpleado, setMostrarRegistroEmpleado] = useState(false)
   const [estaCargando, setEstaCargando] = useState(true)
 
-  useEffect(()=>{
+  useEffect(()=>{ // no toquen esto o se bugea la busqueda
     setBuscaActivos(empleados?.at(0)?.activo ?? true)
   },[empleados])
 
@@ -119,12 +119,6 @@ export default function Empleados() {
         activar={activarEmpleado}
         buscaActivos={buscaActivos}
       /> : ""
-      /*<img
-        className="mx-auto"
-        src={imagen}
-        alt="imagen de ejemplo"
-        style={{ width: "20em" }}
-      /> */
       )
       
       }

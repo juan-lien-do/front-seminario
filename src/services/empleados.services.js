@@ -123,8 +123,15 @@ async function activar(id) {
       toast.error("Surgió un error")
 
     }
-
   }
+}
+
+async function tieneComputadora(idCompu) {
+  const url = `${baseUrl}tiene-computadora/${idCompu}`;
+
+  const respuesta = await instance.get(url);
+
+  return respuesta.data;
 }
 
 
@@ -134,4 +141,5 @@ export const empleadosService = {
   save,
   remove,
   activar,
+  tieneComputadora,
 }
