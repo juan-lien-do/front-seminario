@@ -8,7 +8,9 @@ export default function RegistroContraseña({ usuario, onComplete }) {
     minLength: false,
     hasNumber: false,
     hasUpperCase: false,
+    hasSpecialChar: false, // Asegúrate de incluir esto en el estado de validaciones
   });
+  const specialCharacters = "!@#$%^&*()-_+=<>?";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,7 +20,7 @@ export default function RegistroContraseña({ usuario, onComplete }) {
       return;
     }
 
-    if (!passwordValidations.minLength || !passwordValidations.hasNumber || !passwordValidations.hasUpperCase) {
+    if (!passwordValidations.minLength || !passwordValidations.hasNumber || !passwordValidations.hasUpperCase || !passwordValidations.hasSpecialChar) {
       alert("La contraseña no cumple con todos los requisitos.");
       return;
     }
@@ -42,11 +44,11 @@ export default function RegistroContraseña({ usuario, onComplete }) {
       minLength: newPassword.length >= 6,
       hasNumber: /[0-9]/.test(newPassword),
       hasUpperCase: /[A-Z]/.test(newPassword),
-      hasSpecialChar: /!@#$%^&*()-_+=<>?/.test(newPassword),
+      hasSpecialChar: /[!@#$%^&*()\-_=+<>?]/.test(newPassword), // Escapando caracteres especiales en la expresión regular
     });
   };
 
-  const isPasswordValid = passwordValidations.minLength && passwordValidations.hasNumber && passwordValidations.hasUpperCase;
+  const isPasswordValid = passwordValidations.minLength && passwordValidations.hasNumber && passwordValidations.hasUpperCase && passwordValidations.hasSpecialChar;
 
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
@@ -76,9 +78,8 @@ export default function RegistroContraseña({ usuario, onComplete }) {
                       {passwordValidations.hasUpperCase ? "✔️ Debe contener al menos 1 mayúscula" : "❌ Debe contener al menos 1 mayúscula"}
                     </li>
                     <li className={passwordValidations.hasSpecialChar ? "text-success" : "text-danger"}>
-                      {passwordValidations.hasSpecialChar ? "✔️ Debe contener al menos 1 carácter especial" : "❌ Debe contener al menos 1 carácter especial"}
+                      {passwordValidations.hasSpecialChar ? "✔️ Al menos un carácter especial (!@#$%^&*()-_+=<>?)" : "❌ Al menos un carácter especial (!@#$%^&*()-_+=<>?)"}
                     </li>
-
                   </ul>
                 </div>
               </div>

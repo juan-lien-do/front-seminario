@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ModalDetallesEnvio from "./ModalDetallesEnvio";
 import ModalEstadosEnvio from "./ModalEstadosEnvio.jsx";
+import ModalGaleriaFotos from "./ModalGaleriaFotos.jsx";
 import envioServices from "../../services/envios.services.js";
 
 export default function ListadoEnvios({ envios, recargarEnvios }) {
@@ -92,78 +93,23 @@ export default function ListadoEnvios({ envios, recargarEnvios }) {
         console.error("Error al obtener fotos:", error);
       });
   }
-  
 
-  async function subirFotos() {
-    if (nuevasFotos.length === 0) return;
-  
-    const formData = new FormData();
-    nuevasFotos.forEach((foto) => {
-      formData.append("file", foto);
-    });
-  
-    try {
-      await envioServices.subirFotos(envio.idEnvio, formData);
-      console.log("Fotos subidas con éxito");
-      setFotos([...fotos, ...nuevasFotos.map((file) => ({ url: URL.createObjectURL(file) }))]);
-      setNuevasFotos([]);
-    } catch (error) {
-      console.error("Error al subir las fotos:", error);
-    }
+  function formatearFecha(fechaISO) {
+    const fecha = new Date(fechaISO);
+    const dia = String(fecha.getDate()).padStart(2, '0');
+    const mes = String(fecha.getMonth() + 1).padStart(2, '0'); // Los meses van de 0 a 11
+    const año = fecha.getFullYear();
+    const horas = String(fecha.getHours()).padStart(2, '0');
+    const minutos = String(fecha.getMinutes()).padStart(2, '0');
+    const segundos = String(fecha.getSeconds()).padStart(2, '0');
+    return `${dia}/${mes}/${año} ${horas}:${minutos}:${segundos}`;
   }
-  
+
   return (
     <div className="mt-3 table-responsive">
       <ModalDetallesEnvio show={show} handleClose={handleClose} envio={envio} />
       <ModalEstadosEnvio show={showEstados} handleClose={handleClose} envio={envio} />
-      {showFotos && (
-        <div className="modal fade show d-block" tabIndex="-1">
-          <div className="modal-dialog modal-lg">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Fotos del Envío</h5>
-                <button type="button" className="btn-close" onClick={handleClose}></button>
-              </div>
-              <div className="modal-body">
-              <div className="row">
-                {fotos.length > 0 ? (
-                  fotos.map((foto, index) => {
-                    console.log("Renderizando foto:", foto); // Verifica el contenido de cada foto
-                    return (
-                      <div key={index} className="col-md-4 mb-3">
-                        <img
-                          src={foto.url}
-                          alt={`Foto ${index + 1}`}
-                          className="img-fluid img-thumbnail"
-                        />
-                      </div>
-                    );
-                  })
-                ) : (
-                  <p>No hay fotos disponibles para este envío.</p>
-                )}
-              </div>
-
-                <div className="mt-3">
-                  <input
-                    type="file"
-                    multiple
-                    onChange={(e) => setNuevasFotos(Array.from(e.target.files))}
-                    className="form-control mb-2"
-                  />
-                  <button
-                    className="btn btn-success"
-                    onClick={subirFotos}
-                    disabled={nuevasFotos.length === 0}
-                  >
-                    Subir Fotos
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <ModalGaleriaFotos show={showFotos} handleClose={handleClose} envio={envio} />
       <table className="table table-hover table-sm table-bordered table-striped">
         <thead className="table-light">
           <tr>
@@ -205,10 +151,8 @@ export default function ListadoEnvios({ envios, recargarEnvios }) {
                   </select>
                 </td>
                 <td className="text-center">
-                  {
-                    envio?.listaCambiosEstado?.filter((x) => !x.fechaFin).at(0)
-                      ?.fechaInicio || "N/A"
-                  }
+                  {envio?.listaCambiosEstado?.filter((x) => !x.fechaFin).at(0)
+                    ?.fechaInicio ? formatearFecha(envio.listaCambiosEstado.filter((x) => !x.fechaFin).at(0).fechaInicio) : "N/A"}
                 </td>
                 <td className="text-center">
                   <button

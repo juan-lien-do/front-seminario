@@ -57,7 +57,7 @@ const Usuarios = () => {
 
   function modificarUsuario(usuario) {
     if (!usuario.esActivo) {
-      toast.error("No puede modificarse un registro inactivo");
+      toast.error("No puede modificarse un usuario inactivo");
       return;
     }
     setUsuarioSeleccionado(usuario);

@@ -1,6 +1,7 @@
 import instance from "../../axios.config";
 import sonnerQuestion from '../utils/sonnerQuestion';
 import axios from "axios";
+import { Toaster, toast } from "sonner";
 
 const urlResource = "http://localhost:8080/envios";
 
@@ -47,21 +48,30 @@ async function subirFotos(envioId, formData) {
 
 async function obtenerFotos(envioId) {
     const url = `http://localhost:8080/archivos/fotos/${envioId}`;
-    console.log("URL de solicitud:", url);
-    
-    try {
-        const response = await instance.get(url);
-        return response.data;
-    } catch (error) {
-        console.error("Error al mostrar fotos:", error);
-        throw error;
-    }
+
+        try {
+            const response = await instance.get(url);
+            return response.data;
+        } catch (error) {
+            console.error("Error al mostrar fotos:", error);
+            throw error;
+        }
 }
 
 // Eliminar foto
 async function eliminarFoto(envioId, nombreFoto) {
     const url = `http://localhost:8080/archivos/fotos/eliminar/${envioId}/${nombreFoto}`;
-    await instance.delete(url);
+    const respuesta = await sonnerQuestion.pregunta("¿Desea borrar la imagen?")
+    if(respuesta){
+        try{
+            await instance.delete(url);
+            toast.success("La foto se borro correctamente")
+        }
+        catch{
+            toast.error("Surgió un error")
+            return false;
+        }
+    }
 }
 
 const envioServices = { buscar, guardar, actualizarEstado, subirFotos, obtenerFotos, eliminarFoto };

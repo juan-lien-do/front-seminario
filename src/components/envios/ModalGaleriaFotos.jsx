@@ -1,62 +1,53 @@
 import { useState, useEffect } from "react";
 import envioServices from "../../services/envios.services.js";
-import '@fortawesome/fontawesome-free/css/all.min.css';
 import './ModalGaleriaFotos.css';
 
 export default function ModalGaleriaFotos({ show, handleClose, envio }) {
   const [fotos, setFotos] = useState([]);
-  const [archivos, setArchivos] = useState([]);
-  const [nuevasFotos, setNuevasFotos] = useState([]);
+  const [nuevaFoto, setNuevaFoto] = useState(null);
+  const [fotoSeleccionada, setFotoSeleccionada] = useState(null);
 
   useEffect(() => {
-    console.log("Mostrar modal:", show);  // Verifica que `show` sea verdadero
-    console.log("Datos de envio:", envio);  // Verifica que `envio` esté definido
-  
-    if (envio) {
+    if (show && envio) {
       cargarFotos(envio.idEnvio);
+    } else {
+      setFotos([]); // Limpiar las fotos cuando el modal se cierra
     }
   }, [envio, show]);
 
   async function cargarFotos(envioId) {
     try {
-      console.log("Cargando fotos para el envio:", envioId);  // Verifica que el envioId es correcto
       const data = await envioServices.obtenerFotos(envioId);
-      console.log("Datos recibidos del servidor:", data);  // Verifica qué datos estás recibiendo
-    
       const fotosConvertidas = data.map((foto) => ({
-        url: `data:image/png;base64,${foto.base64Decode}`,  // Asegúrate de que base64Decode esté presente
-        nombre: foto.nombreArchivo
+        url: `data:image/jpeg;base64,${foto.base64Decode}`,
+        nombreArchivo: foto.nombreArchivo
       }));
-      console.log("Fotos convertidas a base64:", fotosConvertidas);  // Verifica la conversión de fotos
+      console.log("Fotos cargadas:", fotosConvertidas); // Verifica las fotos cargadas
       setFotos(fotosConvertidas);
     } catch (error) {
       console.error("Error al cargar fotos:", error);
     }
   }
 
-  async function subirFotos() {
-    if (nuevasFotos.length === 0) return;
+  async function subirFoto() {
+    if (!nuevaFoto) return;
   
     const formData = new FormData();
-    nuevasFotos.forEach((foto) => {
-      formData.append("file", foto);
-    });
+    formData.append("file", nuevaFoto);
   
     try {
       await envioServices.subirFotos(envio.idEnvio, formData);
-      console.log("Fotos subidas con éxito");
-      setFotos([...fotos, ...nuevasFotos.map((file) => ({ url: URL.createObjectURL(file) }))]);
-      setNuevasFotos([]);
+      setFotos([...fotos, { url: URL.createObjectURL(nuevaFoto) }]);
+      setNuevaFoto(null);
     } catch (error) {
-      console.error("Error al subir las fotos:", error);
+      console.error("Error al subir la foto:", error);
     }
   }
 
   async function eliminarFoto(nombreArchivo) {
     try {
       await envioServices.eliminarFoto(envio.idEnvio, nombreArchivo);
-      console.log("Foto eliminada con éxito");
-      cargarFotos(envio.idEnvio); // Vuelve a cargar las fotos después de la eliminación
+      cargarFotos(envio.idEnvio);
     } catch (error) {
       console.error("Error al eliminar foto:", error);
     }
@@ -75,13 +66,19 @@ export default function ModalGaleriaFotos({ show, handleClose, envio }) {
               <div className="row">
                 {fotos.length > 0 ? (
                   fotos.map((foto, index) => (
-                    <div key={index} className="col-md-4 mb-3">
-                      <img src={foto.url} alt={`Foto ${index + 1}`} className="img-fluid img-thumbnail" />
+                    <div key={index} className="col-md-4 mb-3 imagen-container">
+                      <img
+                        src={foto.url}
+                        alt={`Foto ${index + 1}`}
+                        className="img-fluid img-thumbnail imagen-previsualizacion"
+                        style={{ display: "block", width: "100%", height: "auto", cursor: "pointer" }}
+                        onClick={() => setFotoSeleccionada(foto.url)}
+                      />
                       <button
-                        className="btn btn-danger mt-2 w-100"
-                        onClick={() => eliminarFoto(foto.nombre)}
+                        className="btn-eliminar-hover"
+                        onClick={() => eliminarFoto(foto.nombreArchivo)}
                       >
-                        Eliminar
+                        <i className="fas fa-trash-alt"></i>
                       </button>
                     </div>
                   ))
@@ -92,21 +89,35 @@ export default function ModalGaleriaFotos({ show, handleClose, envio }) {
               <div className="mt-3">
                 <input
                   type="file"
-                  multiple
-                  onChange={(e) => setNuevasFotos(Array.from(e.target.files))}
+                  onChange={(e) => setNuevaFoto(e.target.files[0])}
                   className="form-control mb-2"
                 />
                 <button
                   className="btn btn-success"
-                  onClick={subirFotos}
-                  disabled={nuevasFotos.length === 0}
+                  onClick={subirFoto}
+                  disabled={!nuevaFoto}
                 >
-                  Subir Fotos
+                  Subir Foto
                 </button>
               </div>
             </div>
           </div>
         </div>
+        {fotoSeleccionada && (
+          <div className="modal fade show d-block" tabIndex="-1">
+            <div className="modal-dialog modal-lg">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Vista Previa</h5>
+                  <button type="button" className="btn-close" onClick={() => setFotoSeleccionada(null)}></button>
+                </div>
+                <div className="modal-body text-center">
+                  <img src={fotoSeleccionada} alt="Vista Previa" className="img-fluid" />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     )
   );
