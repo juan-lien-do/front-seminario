@@ -1,7 +1,7 @@
 import React from "react";
 import html2pdf from "html2pdf.js";
 
-const DownloadPDFButton = ({setMostrarLista, textoBoton}) => {
+const DownloadPDFButton = ({ setMostrarLista, textoBoton }) => {
   const replaceTextareasWithDivs = () => {
     const textareas = document.querySelectorAll("#tabla-descargar textarea");
     textareas.forEach((textarea) => {
@@ -42,29 +42,50 @@ const DownloadPDFButton = ({setMostrarLista, textoBoton}) => {
       return;
     }
 
-    replaceTextareasWithDivs(); // Reemplaza los textareas antes de la conversión
+    // Solución: Aplicar estilos específicos para evitar cortes
+    element.style.pageBreakInside = "avoid";
+    element.style.boxSizing = "border-box";
+
+    // Reemplazar textareas antes de la conversión
+    replaceTextareasWithDivs();
 
     const options = {
-      margin: 0.5,
-      filename: "SolicitudDeReposicion.pdf",
+      margin: [0.5, 0.5, 0.5, 0.5],
+      filename: "documento.pdf",
       image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
+      html2canvas: {
+        scale: 2, // Mejora la calidad
+        useCORS: true, // Permite cargar imágenes externas si las hay
+        logging: true, // Depuración
+      },
       jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
     };
 
     html2pdf()
       .from(element)
       .set(options)
+      .toPdf()
+      .get("pdf")
+      .then((pdf) => {
+        // Solución: Ajustar los márgenes en cada página
+        const totalPages = pdf.internal.getNumberOfPages();
+        for (let i = 1; i <= totalPages; i++) {
+          pdf.setPage(i);
+          pdf.setFontSize(10);
+          pdf.text(`Página ${i} de ${totalPages}`, 0.5, pdf.internal.pageSize.height - 0.5);
+        }
+      })
       .save()
-      .then(restoreTextareas); // Restaura los textareas después de la conversión
-
-    setMostrarLista(false)
+      .then(() => {
+        restoreTextareas(); // Restaurar textareas después de la conversión
+        setMostrarLista(false);
+      });
   };
 
   return (
-      <button onClick={downloadPDF} className="btn btn-primary mx-2">
-        {textoBoton ?? "Descargar solicitud de reposición"}
-      </button>
+    <button onClick={downloadPDF} className="btn btn-danger mx-2">
+      <i className="fa-solid fa-file-pdf"></i> {textoBoton ?? "Descargar solicitud de reposición"}
+    </button>
   );
 };
 

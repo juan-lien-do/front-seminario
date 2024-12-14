@@ -4,6 +4,7 @@ import RegistroComputadoras from "../components/computadoras/RegistroComputadora
 import { computadorasService } from "../services/computadoras.services.js";
 import BuscadorComputadoras from "../components/computadoras/BuscadorComputadoras.jsx";
 import { toast } from "sonner";
+import LoaderBloque from "../components/LoaderBloque.jsx";
 
 function Computadoras() {
     const [esActivo, setActivo] = useState(true);
@@ -13,6 +14,7 @@ function Computadoras() {
     const [mostrarRegistroComputadora, setMostrarRegistroComputadora] = useState(false);
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(0);
     const [searchTerm, setSearchTerm] = useState("");
+    const [estaCargando, setEstaCargando] = useState(true);
 
     function handleTodos() {
         setCategoriaSeleccionada(0);
@@ -40,11 +42,17 @@ function Computadoras() {
         return data; // Retornar todos si la opción es "todos"
     };
 
+    function filtrarPorDescripcion(data){
+        return data.filter(x => x.descripcion.toUpperCase().includes(searchTerm.toUpperCase()));
+    }
+
     async function Buscar() {
+        setEstaCargando(true)
         const data = await computadorasService.Buscar({ esActivo });
         console.log("Datos obtenidos:", data);
-        const computadorasFiltradas = filtrarPorMasterizado(data);
+        const computadorasFiltradas = filtrarPorDescripcion(filtrarPorMasterizado(data));
         setComputadoras(computadorasFiltradas);
+        setEstaCargando(false)
     }
 
     useEffect(() => {
@@ -137,14 +145,19 @@ function Computadoras() {
                 handleTodos={handleTodos}
                 setSearchTerm={setSearchTerm}
             />
-            
-            <ListadoComputadoras
-                Items={computadoras}
-                activar={activarComputadora}
-                desactivar={desactivarComputadora}
-                modificar={modificarComputadora}
-                categoriaSeleccionada={categoriaSeleccionada}
-            />
+            {
+                estaCargando ? 
+                <LoaderBloque texto={"Cargando computadoras..."}/>
+                :
+
+                <ListadoComputadoras
+                    Items={computadoras}
+                    activar={activarComputadora}
+                    desactivar={desactivarComputadora}
+                    modificar={modificarComputadora}
+                    categoriaSeleccionada={categoriaSeleccionada}
+                />
+            }
         </>
     );
 }

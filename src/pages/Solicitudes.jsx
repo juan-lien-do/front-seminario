@@ -5,6 +5,7 @@ import ListadoSolicitudes from "../components/solicitudes/ListadoSolicitudes";
 import {SolicitudesService} from "../services/solicitudes.service";
 import BuscadorSolicitudes from "../components/solicitudes/BuscadorSolicitudes";
 import ConsultarSolicitud from "../components/solicitudes/ConsultarSolicitud";
+import LoaderBloque from "../components/LoaderBloque";
 
 export default function Solicitudes({}) {
   const [mostrarRegistrarSolicitud, setMostrarRegistrarSolictud] = useState(false);
@@ -12,7 +13,8 @@ export default function Solicitudes({}) {
   const [nombreUsuario, setNombreUsuario] = useState("No se detectó el nombre de usuario")
   const [solicitudes, setSolicitudes] = useState([]);
   const [solicitudElegida, setSolicitudElegida] = useState(null)
-  
+  const [estaCargando, setEstaCargando] = useState(true)
+
   useEffect(
     ()=>{
       setNombreUsuario((JSON.parse(localStorage.getItem("usuario"))).nombre);
@@ -22,9 +24,11 @@ export default function Solicitudes({}) {
   )
 
   async function buscarSolicitudes(){
+    setEstaCargando(true)
     let datos = await SolicitudesService.buscarSolicitudes();
     console.log(datos)
     setSolicitudes(datos);
+    setEstaCargando(false)
   }
 
   async function guardarSolicitud(data) {
@@ -60,7 +64,12 @@ export default function Solicitudes({}) {
   else {
     return (<>
     <BuscadorSolicitudes handleMostrarRegistro={handleMostrarRegistro} buscarSolicitudes={buscarSolicitudes}></BuscadorSolicitudes>
-    <ListadoSolicitudes solicitudes={solicitudes} handleElegirSolicitud={handleElegirSolicitud} incorporarSolicitud={incorporarSolicitud}/>
+    {
+      estaCargando ? 
+      <LoaderBloque texto={"Cargando solicitudes"}></LoaderBloque>
+      :
+      <ListadoSolicitudes solicitudes={solicitudes} handleElegirSolicitud={handleElegirSolicitud} incorporarSolicitud={incorporarSolicitud}/>
+    }
   </>)
   }
 

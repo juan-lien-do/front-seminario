@@ -170,7 +170,7 @@ function Envios() {
               handleVolverAtras={handleVolverAtras}
               empleados={empleados}
               recursos={recursos}
-              computadoras={computadoras}
+              computadoras={computadoras.filter((x) => !x.enUso)}
               guardarEnvio={guardarEnvio}
             />
           )

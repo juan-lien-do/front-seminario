@@ -1,15 +1,28 @@
-import React, { useState } from "react";
-import { Modal, Button } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState, useEffect } from "react";
+import { Modal, Button, Pagination } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import ModalEmpleadosConCompu from "./ModalEmpleadosConCompu";
+import { empleadosService } from "../../services/empleados.services.js";
 
 export default function ListadoComputadoras({
   Items,
   activar,
   desactivar,
   modificar,
-  categoriaSeleccionada
+  categoriaSeleccionada,
 }) {
-  console.log("Items recibidos:", Items);
+  const [empleadosConCompu, setEmpleadosConCompu] = useState(null);
+  const [mostrarModalConCompu, setMostrarModalConCompu] = useState(false);
+
+  async function handleBuscarPorComputadora(idCompu) {
+    const data = await empleadosService.tieneComputadora(idCompu);
+    setEmpleadosConCompu(data);
+    setMostrarModalConCompu(true);
+  }
+
+  function handleCerrarModalEmpleados() {
+    setMostrarModalConCompu(false);
+  }
 
   // Estado para manejar la descripción del modal
   const [showDescripcion, setShowDescripcion] = useState(false);
@@ -44,6 +57,30 @@ export default function ListadoComputadoras({
     return Item.idTipo === categoriaSeleccionada;
   });
 
+  // paginacion
+  const [paginaActual, setPaginaActual] = useState(1);
+  const itemsPorPagina = 6;
+
+  // paginación
+  const indexOfLastItem = paginaActual * itemsPorPagina;
+  const indexOfFirstItem = indexOfLastItem - itemsPorPagina;
+  const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
+  const handlePageChange = (pageNumber) => setPaginaActual(pageNumber);
+
+  const cantidadPaginas = Math.ceil(filteredItems.length / itemsPorPagina);
+  const paginationItems = []; // este es un array de objetos de DOM
+  for (let i = 1; i <= cantidadPaginas; i++) {
+    paginationItems.push(
+      <Pagination.Item
+        key={i}
+        active={i === paginaActual}
+        onClick={() => handlePageChange(i)}
+      >
+        {i}
+      </Pagination.Item>
+    );
+  }
+
   return (
     <div className="container-fluid">
       {/* Modal para la descripción */}
@@ -51,9 +88,7 @@ export default function ListadoComputadoras({
         <Modal.Header closeButton>
           <Modal.Title>Descripción</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          {textoDescripcion}
-        </Modal.Body>
+        <Modal.Body>{textoDescripcion}</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleDescripcionClose}>
             Cerrar
@@ -66,15 +101,19 @@ export default function ListadoComputadoras({
         <Modal.Header closeButton>
           <Modal.Title>Ubicación</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          {textoUbicacion}
-        </Modal.Body>
+        <Modal.Body>{textoUbicacion}</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleUbicacionClose}>
             Cerrar
           </Button>
         </Modal.Footer>
       </Modal>
+
+      <ModalEmpleadosConCompu
+        show={mostrarModalConCompu}
+        empleados={empleadosConCompu}
+        handleClose={handleCerrarModalEmpleados}
+      />
 
       {/* Tabla de computadoras */}
       <div className="card" id="TableSorterCard">
@@ -91,12 +130,14 @@ export default function ListadoComputadoras({
               </tr>
             </thead>
             <tbody>
-              {filteredItems &&
-                filteredItems.map((Item) => (
-                  <tr key={Item.idComputadora}>
+              {currentItems &&
+                currentItems.map((Item) => (
+                  <tr
+                    className={!Item.esActivo && "efecto-desactivado"}
+                    key={Item.idComputadora}
+                  >
                     <td
-                      className={`text-center ${
-                        !Item.esActivo ? " bg-danger text-white fw-bold" : " text-dark"
+                      className={`text-center text-dark"
                       }`}
                     >
                       {Item.nroSerie}
@@ -120,31 +161,41 @@ export default function ListadoComputadoras({
                     </td>
                     <td className="text-end">{Item.nroWs}</td>
                     <td className="text-center">
-                      {/* Muestra el nombre del depósito */}
-                      {Item.idDeposito === 1
-                        ? "Depósito 1"
-                        : Item.idDeposito === 2
-                        ? "Depósito 2"
-                        : Item.idDeposito === 3
-                        ? "Depósito 3"
-                        : "Ubicación desconocida"}
-                      {/* Botón "Ver más" para mostrar la ubicación completa */}
-                      <Button
-                        className="btn btn-info ms-2"
-                        onClick={() =>
-                          verUbicacion(
-                            Item.idDeposito === 1
-                              ? "Subsuelo, Piso -2 frente al Ascensor"
+                      {
+                        /* aca decido si muestro la info del deposito o que esta en uso */
+                        Item.enUso ? (
+                          <>
+                            <button className="btn btn-info" onClick={()=>handleBuscarPorComputadora(Item.idComputadora)}>
+                              En uso <i className="fa-solid fa-circle-info"></i>
+                            </button>
+                          </>
+                        ) : (
+                          /* Botón "Ver más" para mostrar la ubicación completa */
+                          <Button
+                            className="btn btn-info ms-2"
+                            onClick={() =>
+                              verUbicacion(
+                                Item.idDeposito === 1
+                                  ? "Subsuelo, Piso -2 frente al Ascensor"
+                                  : Item.idDeposito === 2
+                                  ? "Subsuelo, Piso -2. Exterior en la zona de estacionamiento."
+                                  : Item.idDeposito === 3
+                                  ? "Armario ubicado en la Sala de Granjas - Piso 2 Área de Tesorería y Presupuesto."
+                                  : "Ubicación desconocida"
+                              )
+                            }
+                          >
+                            {/* Muestra el nombre del depósito */}
+                            {Item.idDeposito === 1
+                              ? "Depósito 1"
                               : Item.idDeposito === 2
-                              ? "Subsuelo, Piso -2. Exterior en la zona de estacionamiento."
+                              ? "Depósito 2"
                               : Item.idDeposito === 3
-                              ? "Armario ubicado en la Sala de Granjas - Piso 2 Área de Tesorería y Presupuesto."
-                              : "Ubicación desconocida"
-                          )
-                        }
-                      >
-                        Ver más
-                      </Button>
+                              ? "Depósito 3"
+                              : "Ubicación desconocida"}
+                          </Button>
+                        )
+                      }
                     </td>
                     <td className="text-center text-nowrap">
                       <button
@@ -164,9 +215,14 @@ export default function ListadoComputadoras({
                             ? () => desactivar(Item.idComputadora)
                             : () => activar(Item.idComputadora)
                         }
+                        disabled={Item.enUso}
                       >
                         <i
-                          className={!!Item.esActivo ? "fas fa-trash" : "fas fa-trash-restore"}
+                          className={
+                            !!Item.esActivo
+                              ? "fas fa-trash"
+                              : "fas fa-trash-restore"
+                          }
                         ></i>
                       </button>
                     </td>
@@ -174,6 +230,9 @@ export default function ListadoComputadoras({
                 ))}
             </tbody>
           </table>
+          <Pagination className="justify-content-center mt-3">
+            {paginationItems}
+          </Pagination>
         </div>
       </div>
     </div>
