@@ -1,0 +1,7 @@
+.position-relative .delete-button {
+  display: none;
+}
+
+.position-relative:hover .delete-button {
+  display: block !important;
+}

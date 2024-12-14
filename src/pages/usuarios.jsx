@@ -3,23 +3,42 @@ import ListadoUsuarios from "../components/usuarios/ListadoUsuarios";
 import BuscadorUsuarios from "../components/usuarios/BuscadorUsuarios";
 import RegistroUsuario from "../components/usuarios/RegistroUsuarios";
 import { usuariosService } from "../services/usuarios.services";
-import { toast } from 'sonner';
+import { toast } from "sonner";
 
 const Usuarios = () => {
-  const [nombre, setNombre] = useState('');
-  const [activo, setActivo] = useState(true); // true por defecto, asumiendo que se filtra por usuarios activos
-  const [usuario, setUsuario] = useState([]);
+  const [nombre, setNombre] = useState("");
+  const [activo, setActivo] = useState("activo"); // 'activo' por defecto
+  const [todosLosUsuarios, setTodosLosUsuarios] = useState([]); // Almacena todos los usuarios
+  const [usuariosFiltrados, setUsuariosFiltrados] = useState([]);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
   const [mostrarRegistroUsuario, setMostrarRegistroUsuario] = useState(false);
 
-  // Buscar usuarios al inicializar y cuando cambian los criterios
   useEffect(() => {
-    buscarUsuarios();
-  }, [nombre, activo]); // Dependencias: nombre y activo
+    cargarUsuarios();
+  }, []);
 
-  async function buscarUsuarios() {
-    const data = await usuariosService.buscarUsuarios({ nombre, activo });
-    setUsuario(data);
+  useEffect(() => {
+    filtrarUsuarios(); // Filtrar usuarios cuando cambia 'nombre' o 'activo'
+  }, [nombre, activo, todosLosUsuarios]);
+
+  async function cargarUsuarios() {
+    const data = await usuariosService.buscarUsuarios({ nombre: "", activo: "" }); // Cargar todos
+    setTodosLosUsuarios(data || []); // Manejar caso de respuesta vacía
+  }
+
+  function filtrarUsuarios() {
+    const usuariosFiltrados = todosLosUsuarios.filter((usuario) => {
+      const coincideNombre =
+        nombre === "" ||
+        usuario.nombre_usr.toLowerCase().includes(nombre.toLowerCase()) ||
+        usuario.nombre.toLowerCase().includes(nombre.toLowerCase());
+      const coincideActivo =
+        activo === "todos" ||
+        (activo === "activo" && usuario.esActivo) ||
+        (activo === "inactivo" && !usuario.esActivo);
+      return coincideNombre && coincideActivo;
+    });
+    setUsuariosFiltrados(usuariosFiltrados);
   }
 
   function agregarUsuario() {
@@ -48,18 +67,18 @@ const Usuarios = () => {
   async function guardarUsuario(data) {
     if (await usuariosService.save(data)) {
       setMostrarRegistroUsuario(false);
-      buscarUsuarios();
+      cargarUsuarios();
     }
   }
 
   async function desactivarUsuario(id) {
     await usuariosService.remove(id);
-    buscarUsuarios();
+    cargarUsuarios();
   }
 
   async function activarUsuario(id) {
     await usuariosService.activar(id);
-    buscarUsuarios();
+    cargarUsuarios();
   }
 
   if (mostrarRegistroUsuario) {
@@ -80,11 +99,10 @@ const Usuarios = () => {
         setNombre={setNombre}
         activo={activo}
         setActivo={setActivo}
-        buscarUsuarios={buscarUsuarios}
         agregarUsuario={agregarUsuario}
       />
       <ListadoUsuarios
-        usuarios={usuario}
+        usuarios={usuariosFiltrados}
         agregarUsuario={agregarUsuario}
         modificar={modificarUsuario}
         desactivar={desactivarUsuario}

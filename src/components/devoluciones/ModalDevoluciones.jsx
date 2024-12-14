@@ -2,71 +2,100 @@ import { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
 
 function ModalDevoluciones({ show, handleClose, envio, onConfirmDevolucion }) {
-  // Estado para los productos seleccionados
   const [productosSeleccionados, setProductosSeleccionados] = useState({
     recursos: {},
     computadoras: {},
   });
 
   useEffect(() => {
-    // Cuando se abre el modal, inicializamos el estado de los productos seleccionados
-    const inicializarSeleccionados = () => {
+    if (show) {
       setProductosSeleccionados({
         recursos: envio?.detallesEnvioRecurso?.reduce((acc, det) => {
-          // Marcar como seleccionado si ya fue devuelto
-          if (det.es_devuelto === 1 || det.es_devuelto === true) {
+          if (det?.esDevuelto === 1 || det?.esDevuelto === true) {
             acc[det.idDetalleRecurso] = true;
           }
           return acc;
         }, {}),
         computadoras: envio?.detallesEnvioComputadora?.reduce((acc, det) => {
-          // Marcar como seleccionado si ya fue devuelto
-          if (det.esDevuelto === 1 || det.esDevuelto === true) {
+          if (det?.esDevuelto === 1 || det?.esDevuelto === true) {
             acc[det.idDetalleComputadora] = true;
           }
           return acc;
         }, {}),
       });
-    };
-
-    // Solo inicializamos si el modal está abierto
-    if (show) {
-      inicializarSeleccionados();
     }
-  }, [show, envio]); // Dependencia de `show` y `envio` para actualizar el estado cuando cambien
+  }, [show, envio]);
 
   const handleCheckboxChange = (tipo, id, devuelto) => {
-    // Si el producto ya fue devuelto, no permitir cambios
     if (devuelto === 1 || devuelto === true) return;
 
     setProductosSeleccionados((prev) => ({
       ...prev,
       [tipo]: {
         ...prev[tipo],
-        [id]: !prev[tipo][id], // Alternar selección
+        [id]: !prev[tipo][id],
       },
     }));
   };
 
-  const confirmarDevolucion = () => {
-    // Filtramos los productos seleccionados que no han sido devueltos
-    const productosADevolver = {
-      recursos: envio.detallesEnvioRecurso.filter(
-        (det) =>
-          productosSeleccionados.recursos[det.idDetalleRecurso] &&
-          (det.es_devuelto !== 1 && det.es_devuelto !== true)
-      ),
-      computadoras: envio.detallesEnvioComputadora.filter(
-        (det) =>
-          productosSeleccionados.computadoras[det.idDetalleComputadora] &&
-          (det.esDevuelto !== 1 && det.esDevuelto !== true)
-      ),
-    };
+  const confirmarDevolucion = async () => {
+    const recursosADevolver = envio.detallesEnvioRecurso.filter(
+      (det) =>
+        productosSeleccionados.recursos[det.idDetalleRecurso] &&
+        (det.esDevuelto !== 1 && det.esDevuelto !== true)
+    );
 
-    console.log("Productos a devolver:", productosADevolver); // Verificación de los productos seleccionados
+    const computadorasADevolver = envio.detallesEnvioComputadora.filter(
+      (det) =>
+        productosSeleccionados.computadoras[det.idDetalleComputadora] &&
+        (det.esDevuelto !== 1 && det.esDevuelto !== true)
+    );
 
-    onConfirmDevolucion(productosADevolver);
-    handleClose();
+    const todosRecursosDevueltos = envio.detallesEnvioRecurso.every(
+      (det) =>
+        productosSeleccionados.recursos[det.idDetalleRecurso] ||
+        det.esDevuelto === 1 ||
+        det.esDevuelto === true
+    );
+
+    const todasComputadorasDevueltas = envio.detallesEnvioComputadora.every(
+      (det) =>
+        productosSeleccionados.computadoras[det.idDetalleComputadora] ||
+        det.esDevuelto === 1 ||
+        det.esDevuelto === true
+    );
+
+    const nuevoEstado =
+      todosRecursosDevueltos && todasComputadorasDevueltas ? 6 : 5;
+
+    console.log("Confirmar devolución con estado:", nuevoEstado);
+
+    try {
+      await onConfirmDevolucion(
+        {
+          recursos: recursosADevolver,
+          computadoras: computadorasADevolver,
+        },
+        nuevoEstado
+      );
+      handleClose();
+    } catch (error) {
+      console.error("Error al confirmar la devolución:", error);
+    }
+  };
+
+  const obtenerFechaDeDevolucion = (productoId, tipo) => {
+    const lista = tipo === "recursos" ? envio?.detallesEnvioRecurso : envio?.detallesEnvioComputadora;
+    const listaCambioEstado = lista?.find(
+      (det) =>
+        det.idDetalleRecurso === productoId || det.idDetalleComputadora === productoId
+    )?.listaCambioEstado;
+
+    const cambioDeEstado = listaCambioEstado?.find(
+      (cambio) => cambio.estado === "devuelto" || cambio.estado === "devuelta"
+    );
+
+    return cambioDeEstado ? new Date(cambioDeEstado.fechaCambio).toLocaleDateString() : "N/A";
   };
 
   return (
@@ -80,24 +109,30 @@ function ModalDevoluciones({ show, handleClose, envio, onConfirmDevolucion }) {
               <th>Cantidad</th>
               <th>Recurso</th>
               <th>Ubicación</th>
+              <th>Fecha de Devolución</th>
             </tr>
           </thead>
           <tbody>
             {envio?.detallesEnvioRecurso?.map((det) => (
               <tr key={det.idDetalleRecurso}>
                 <td>
-                  <input
-                    type="checkbox"
-                    checked={productosSeleccionados.recursos[det.idDetalleRecurso] || false}
-                    onChange={() =>
-                      handleCheckboxChange("recursos", det.idDetalleRecurso, det.es_devuelto)
-                    }
-                    disabled={det.es_devuelto === 1 || det.es_devuelto === true} // Deshabilitar si ya fue devuelto
-                  />
+                  {det?.esDevuelto === 1 || det?.esDevuelto === true ? (
+                    <span className="text-success">✔️ Devuelto</span>
+                  ) : (
+                    <input
+                      type="checkbox"
+                      checked={productosSeleccionados.recursos[det.idDetalleRecurso] || false}
+                      onChange={() =>
+                        handleCheckboxChange("recursos", det.idDetalleRecurso, det.esDevuelto)
+                      }
+                      disabled={det?.esDevuelto === 1 || det?.esDevuelto === true}
+                    />
+                  )}
                 </td>
                 <td>{det.cantidad}</td>
                 <td>{det.existenciaDTO.nombreRecurso}</td>
                 <td>{det.existenciaDTO.nombreDeposito}</td>
+                <td>{obtenerFechaDeDevolucion(det.idDetalleRecurso, "recursos")}</td>
               </tr>
             ))}
           </tbody>
@@ -111,20 +146,27 @@ function ModalDevoluciones({ show, handleClose, envio, onConfirmDevolucion }) {
               <th>Número de serie</th>
               <th>Masterizado</th>
               <th>Número de WS</th>
+              <th>Fecha de Devolución</th>
             </tr>
           </thead>
           <tbody>
             {envio?.detallesEnvioComputadora?.map((det) => (
               <tr key={det.idDetalleComputadora}>
                 <td>
-                  <input
-                    type="checkbox"
-                    checked={productosSeleccionados.computadoras[det.idDetalleComputadora] || false}
-                    onChange={() =>
-                      handleCheckboxChange("computadoras", det.idDetalleComputadora, det.esDevuelto)
-                    }
-                    disabled={det.esDevuelto === 1 || det.esDevuelto === true} // Deshabilitar si ya fue devuelto
-                  />
+                  {det?.esDevuelto === 1 || det?.esDevuelto === true ? (
+                    <span className="text-success">✔️ Devuelto</span>
+                  ) : (
+                    <input
+                      type="checkbox"
+                      checked={
+                        productosSeleccionados.computadoras[det.idDetalleComputadora] || false
+                      }
+                      onChange={() =>
+                        handleCheckboxChange("computadoras", det.idDetalleComputadora, det.esDevuelto)
+                      }
+                      disabled={det?.esDevuelto === 1 || det?.esDevuelto === true}
+                    />
+                  )}
                 </td>
                 <td>{det.computadoraDTO.nroSerie}</td>
                 <td>
@@ -135,6 +177,7 @@ function ModalDevoluciones({ show, handleClose, envio, onConfirmDevolucion }) {
                   )}
                 </td>
                 <td>{det.computadoraDTO.nroWs}</td>
+                <td>{obtenerFechaDeDevolucion(det.idDetalleComputadora, "computadoras")}</td>
               </tr>
             ))}
           </tbody>

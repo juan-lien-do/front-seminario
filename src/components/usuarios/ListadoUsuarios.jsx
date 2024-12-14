@@ -1,3 +1,5 @@
+import { usuariosService } from "../../services/usuarios.services";
+
 const ListadoUsuarios = ({ usuarios, modificar, desactivar, activar }) => {
   const formatFecha = (fecha) => {
     if (!fecha) return "-";
@@ -15,7 +17,7 @@ const ListadoUsuarios = ({ usuarios, modificar, desactivar, activar }) => {
         <h3 className="text-uppercase">Usuarios</h3>
       </div>
       <table className="table table-striped table-bordered table-hover">
-        <thead className="table-dark">
+        <thead className="table">
           <tr>
             <th>Usuario</th>
             <th>Nombre</th>
@@ -38,7 +40,7 @@ const ListadoUsuarios = ({ usuarios, modificar, desactivar, activar }) => {
               <td>{usuario.email}</td>
               <td className="text-center">{usuario.esActivo ? "✔️" : "❌"}</td>
               <td className="text-uppercase">
-                {usuario.isAdmin ? "Administrador" : usuario.esDriver ? "Empleado" : "Driver"}
+                {usuario.isAdmin ? "Administrador" : usuario.esDriver ? "Logistica" : "Empleado "}
               </td>
               <td>{formatFecha(usuario.fechaCreacion)}</td>
               <td>{formatFecha(usuario.fechaBaja)}</td>
@@ -46,7 +48,10 @@ const ListadoUsuarios = ({ usuarios, modificar, desactivar, activar }) => {
               <td>
                 <div className="d-flex gap-2 justify-content-center">
                   <button className="btn btn-warning btn-sm" onClick={() => modificar(usuario)}>✏️</button>
-                  <button className="btn btn-secondary btn-sm">🔑 Reiniciar Clave</button>
+                  <button className="btn btn-secondary btn-sm"
+                    onClick={() =>
+                    usuariosService.blanquearContrasena(usuario.id)}
+                    >🔑 Reiniciar Clave</button>
                   <button
                     className={`btn btn-sm ${usuario.esActivo ? "btn-danger" : "btn-primary"}`}
                     title={usuario.esActivo ? "Borrar" : "Reactivar"}
