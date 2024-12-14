@@ -8,6 +8,7 @@ import DownloadPDFButton from "../components/DownloadPDFButton";
 import { useEffect, useState } from "react";
 import ModalGenerarReporte from "../components/reportes/ModalGenerarReporte";
 import reportesService from "../services/reportes.service";
+import ExcelDownloadButton from "../components/DownloadExcelButton";
 
 const mockRecursos = [
   { nombre: "Mouse genérico", cantidad: 12, critica: 15 },
@@ -79,7 +80,7 @@ export default function Home({ usuario }) {
                   <thead className="table-light">
                     <tr>
                       <th className="text-center">Nombre</th>
-                      <th className="text-center">Cantidad</th>
+                      <th className="text-center">Cantidad existente</th>
                       <th className="text-center">Cantidad crítica</th>
                     </tr>
                   </thead>
@@ -161,11 +162,23 @@ export default function Home({ usuario }) {
               </div>
             </div>
           </div>
-          <div className="w-100 my-3" style={!!reporte ? {} : {visibility:"hidden"}}>
-            <div className="mx-auto text-center">
-              <DownloadPDFButton setMostrarLista={setXd} textoBoton={"Descargar reporte"}/>
+          <div className="w-100 my-3" style={!!reporte ? {} : { visibility: "hidden" }}>
+            <div className="container-fluid">
+              <div className="row gy-3">
+                <div className="col-12 col-md-6 d-flex justify-content-center">
+                  <DownloadPDFButton
+                    setMostrarLista={setXd}
+                    textoBoton={"Descargar reporte en PDF"}
+                  />
+                </div>
+                <div className="col-12 col-md-6 d-flex justify-content-center">
+                  <ExcelDownloadButton data={reporte} />
+                </div>
+              </div>
             </div>
           </div>
+
+            
         </>
       )}
     </div>

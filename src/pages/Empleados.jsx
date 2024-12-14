@@ -6,6 +6,7 @@ import RegistroEmpleado from '../components/empleados//RegistroEmpleado'
 import { toast } from 'sonner'
 
 import imagen from '../assets/ratita_perdida.png'
+import LoaderBloque from '../components/LoaderBloque'
 
 
 export default function Empleados() {
@@ -15,14 +16,21 @@ export default function Empleados() {
   const [empleado, setEmpleado] = useState(null)
   const [buscaActivos, setBuscaActivos] = useState(activo)
   const [mostrarRegistroEmpleado, setMostrarRegistroEmpleado] = useState(false)
+  const [estaCargando, setEstaCargando] = useState(true)
 
-  useEffect(()=>{
+  useEffect(()=>{ // no toquen esto o se bugea la busqueda
     setBuscaActivos(empleados?.at(0)?.activo ?? true)
   },[empleados])
 
+  useEffect(()=>{
+    buscarEmpleados()
+  }, [nombre])
+
   async function buscarEmpleados() {
+    setEstaCargando(true)
     const data = await empleadosService.search({ nombre, activo })
     setEmpleados(data)
+    setEstaCargando(false)
   }
 
    // Use useEffect to update empleados when the page loads
@@ -99,8 +107,11 @@ export default function Empleados() {
         
         
       />
-
-      {!!empleados ?
+      {
+        estaCargando ?
+      <LoaderBloque texto={"Cargando empleados..."} />
+        :
+      (!!empleados ?
       <ListadoEmpleados
         empleados={empleados}
         modificar={modificarEmpleado}
@@ -108,12 +119,8 @@ export default function Empleados() {
         activar={activarEmpleado}
         buscaActivos={buscaActivos}
       /> : ""
-      /*<img
-        className="mx-auto"
-        src={imagen}
-        alt="imagen de ejemplo"
-        style={{ width: "20em" }}
-      /> */
+      )
+      
       }
     </>
   );

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ModalExistencias from "../recursos//ModalExistencias";
-import { Modal, Button } from "react-bootstrap"; // Importamos Modal y Button de react-bootstrap
+import { Modal, Button, Pagination } from "react-bootstrap"; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function ListadoRecursos({
@@ -28,6 +28,41 @@ export default function ListadoRecursos({
     setTextoDescripcion(texto);
     handleDescripcionShow();
   }
+
+  // Paginación
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsActuales, setItemsActuales] = useState([]);
+  const [paginasTotales, setPaginasTotales] = useState(1);
+
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+
+
+  // filtrado y paginado
+  // chatgpt se la come
+  useEffect(
+    ()=>{
+      // filtrado
+      let _items = Items?.filter((item) => item.categoria !== categoriaSeleccionada);
+      
+      // paginado
+      const itemsPerPage = 7;
+
+      const indexOfLastItem = currentPage * itemsPerPage;
+      const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    
+    
+      const currentItems = _items?.slice(indexOfFirstItem, indexOfLastItem);
+    
+      const totalPages = Math.ceil(_items.length / itemsPerPage);
+
+      setCurrentPage(
+        totalPages < currentPage ? 1 : currentPage
+      );
+      setItemsActuales(currentItems)
+      setPaginasTotales(totalPages)
+    }
+    , [categoriaSeleccionada, Items, currentPage]
+  )
 
   return (
     <div className="container-fluid">
@@ -68,88 +103,84 @@ export default function ListadoRecursos({
               </tr>
             </thead>
             <tbody>
-              {Items &&
-                Items.map((Item) =>
-                  Item.categoria !== categoriaSeleccionada ? (
-                    <tr key={Item.id}>
-                      <td
-                        className={`text-center ${
-                          !Item.activo
-                            ? "bg-danger text-white fw-bold"
-                            : "text-dark"
+              {itemsActuales.map((Item) => (
+                  <tr className={!Item.activo && "efecto-desactivado"} key={Item.id}>
+                    <td className={`text-center text-dark`}>{Item.nombre}</td>
+                    <td className="text-end">
+                      {Item.existencias?.reduce(
+                        (accumulator, currentValue) =>
+                          accumulator + currentValue.cantidad,
+                        0
+                      )}
+                    </td>
+                    <td className={`text-end`}>{Item.cantidadCritica}</td>
+                    <td className="text-center ">
+                      {Item.categoria === 1 ? "Periférico" : "Componente"}
+                    </td>
+                    <td className="text-center">
+                      <button
+                        className="btn btn-info"
+                        onClick={() => verDescripcion(Item.descripcion)}
+                      >
+                        Ver descripción
+                      </button>
+                    </td>
+                    <td className="text-center">
+                      <button
+                        className="btn btn-info"
+                        onClick={() => {
+                          handleShow();
+                          setDatosExistencias(Item.existencias);
+                          setIdRecurso(Item.id);
+                        }}
+                      >
+                        Ver
+                      </button>
+                    </td>
+                    <td className="text-center text-nowrap">
+                      <button
+                        className="btn btn-sm btn-warning me-2"
+                        title="Modificar"
+                        onClick={() => modificar(Item)}
+                      >
+                        <i className="fa fa-pencil"></i>
+                      </button>
+                      <button
+                        className={`btn btn-sm ${
+                          !!Item.activo ? "btn-danger" : "btn-primary"
                         }`}
+                        title={!!Item.activo ? "Borrar" : "Reactivar"}
+                        onClick={
+                          !!Item.activo
+                            ? () => desactivar(Item.id)
+                            : () => activar(Item.id)
+                        }
                       >
-                        {Item.nombre}
-                      </td>
-                      <td className="text-end">
-                        {Item.existencias?.reduce(
-                          (accumulator, currentValue) =>
-                            accumulator + currentValue.cantidad,
-                          0
-                        )}
-                      </td>
-                      <td
-                        className={`text-end`}
-                      >
-                        {Item.cantidadCritica}
-                      </td>
-                      <td className="text-center ">
-                        {Item.categoria === 1 ? "Periférico" : "Componente"}
-                      </td>
-                      <td className="text-center">
-                        <button
-                          className="btn btn-info"
-                          onClick={() => verDescripcion(Item.descripcion)}
-                        >
-                          Ver descripción
-                        </button>
-                      </td>
-                      <td className="text-center">
-                        <button
-                          className="btn btn-info"
-                          onClick={() => {
-                            handleShow();
-                            setDatosExistencias(Item.existencias);
-                            setIdRecurso(Item.id);
-                          }}
-                        >
-                          Ver
-                        </button>
-                      </td>
-                      <td className="text-center text-nowrap">
-                        <button
-                          className="btn btn-sm btn-warning me-2"
-                          title="Modificar"
-                          onClick={() => modificar(Item)}
-                        >
-                          <i className="fa fa-pencil"></i>
-                        </button>
-                        <button
-                          className={`btn btn-sm ${
-                            !!Item.activo ? "btn-danger" : "btn-primary"
-                          }`}
-                          title={!!Item.activo ? "Borrar" : "Reactivar"}
-                          onClick={
+                        <i
+                          className={
                             !!Item.activo
-                              ? () => desactivar(Item.id)
-                              : () => activar(Item.id)
+                              ? "fas fa-trash"
+                              : "fas fa-trash-restore"
                           }
-                        >
-                          <i
-                            className={
-                              !!Item.activo
-                                ? "fas fa-trash"
-                                : "fas fa-trash-restore"
-                            }
-                          ></i>
-                        </button>
-                      </td>
-                    </tr>
-                  ) : null
-                )}
+                        ></i>
+                      </button>
+                    </td>
+                  </tr>
+              ))}
             </tbody>
           </table>
         </div>
+        <Pagination className="justify-content-center">
+          {[...Array(paginasTotales).keys()].map((page) => (
+            <Pagination.Item
+              key={page + 1}
+              active={page + 1 === currentPage}
+              onClick={() => handlePageChange(page + 1)}
+            >
+              {page + 1}
+            </Pagination.Item>
+          ))}
+        </Pagination>
       </div>
     </div>
   );

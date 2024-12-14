@@ -20,7 +20,7 @@ export default function ModalBuscadorComputadoras({
 
   useEffect(() => {
     const _options = computadoras?.map((computadora) => {
-      return { value: computadora.idComputadora, label: computadora.nroSerie };
+      return { value: computadora.idComputadora, label: computadora.nroSerie + "-" + computadora.descripcion };
     });
 
     setOptions(_options);
