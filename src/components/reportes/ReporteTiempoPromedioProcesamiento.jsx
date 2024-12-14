@@ -11,7 +11,7 @@ const ReporteTiempoPromedioProcesamiento = ({reporte}) => {
     const option = {
       title: {
         text: "Tiempo promedio de Procesamiento",
-        subtext: "Envíos",
+        subtext: "De envíos (en horas)",
         left: "center",
         },
       xAxis: {

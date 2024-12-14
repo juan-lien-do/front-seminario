@@ -51,7 +51,7 @@ const ListadoUsuarios = ({ usuarios, modificar, desactivar, activar }) => {
                   <button className="btn btn-secondary btn-sm"
                     onClick={() =>
                     usuariosService.blanquearContrasena(usuario.id)}
-                    >🔑 Reiniciar Clave</button>
+                    >🔑 Reestablecer Clave</button>
                   <button
                     className={`btn btn-sm ${usuario.esActivo ? "btn-danger" : "btn-primary"}`}
                     title={usuario.esActivo ? "Borrar" : "Reactivar"}
