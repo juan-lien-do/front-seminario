@@ -14,7 +14,7 @@ function Envios() {
   const [registrarEnvio, setRegistrarEnvio] = useState(false);
   const [envio, setEnvio] = useState(null);
   const [envios, setEnvios] = useState([]);
-  const [computadoras, setComputadoras] = useState([])
+  const [computadoras, setComputadoras] = useState([]);
   const [empleados, setEmpleados] = useState([]);
   const [recursos, setRecursos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,7 +26,7 @@ function Envios() {
     try {
       const dataRecursos = await recursosService.Buscar({ activo: true });
       const dataEmpleados = await empleadosService.search({ nombre: "", activo: true });
-      const dataComputadoras = await computadorasService.Buscar({esActivo:true});
+      const dataComputadoras = await computadorasService.Buscar({ esActivo: true });
 
       setRecursos(dataRecursos);
       setEmpleados(dataEmpleados);
@@ -40,7 +40,6 @@ function Envios() {
         detallesEnvioRecurso: [],
         detallesEnvioComputadora: [],
       };
-      //console.log(usuario)
       setEnvio(nuevoEnvio);
     } catch (error) {
       console.error("Error al cargar los datos", error);
@@ -60,25 +59,21 @@ function Envios() {
 
   async function guardarEnvio(data) {
     const payload = {
-      idEmpleado:data.idEmpleado,
-      nombreUsuario:data.nombreUsuario,
-      detallesEnvioRecurso:data.detallesEnvioRecurso,
-    }
+      idEmpleado: data.idEmpleado,
+      nombreUsuario: data.nombreUsuario,
+      detallesEnvioRecurso: data.detallesEnvioRecurso,
+    };
 
-    const detallesEnvioComputadora = []
-    data.detallesEnvioComputadora?.forEach(det => {
-      detallesEnvioComputadora.push({idComputadora:det.idComputadora})
+    const detallesEnvioComputadora = [];
+    data.detallesEnvioComputadora?.forEach((det) => {
+      detallesEnvioComputadora.push({ idComputadora: det.idComputadora });
     });
 
     payload.detallesEnvioComputadora = detallesEnvioComputadora;
 
-    //console.log(payload)
-
     await envioServices.guardar(payload);
     setRegistrarEnvio(false);
-    //console.log("Envio guardado:", data);
     buscarEnvios();
-
   }
 
   async function buscarEnvios() {
@@ -93,90 +88,83 @@ function Envios() {
     }
   }
 
+  useEffect(() => {
+    cargarEnvios(); // Carga los envíos al inicio
+  }, []);
 
-  
-    useEffect(() => {
-      cargarEnvios(); // Carga los envíos al inicio
-    }, []);
-  
-    const cargarEnvios = async () => {
-      setLoading(true);
-      try {
-        const data = await envioServices.buscar();
-        setEnvios(data);
-        console.log(data)
-      } catch (error) {
-        console.error("Error al cargar envíos:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-  
-    const handleEstadoChange = (nuevoEstado) => {
-      setEstadoSeleccionado(nuevoEstado);
-    };
-  
-    const toggleCompletados = () => {
-      setCompletadosActivo((prev) => !prev);
-    };
+  const cargarEnvios = async () => {
+    setLoading(true);
+    try {
+      const data = await envioServices.buscar();
+      setEnvios(data);
+      console.log(data);
+    } catch (error) {
+      console.error("Error al cargar envíos:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    const handleNombreChange = (nombre) => {
-      setNombreBuscar(nombre.toLowerCase()); // Convertir a minúsculas para una búsqueda insensible a mayúsculas
-    };
-  
-    const nombreBuscarLower = nombreBuscar.toLowerCase();
+  const handleEstadoChange = (nuevoEstado) => {
+    setEstadoSeleccionado(nuevoEstado);
+  };
 
-    //console.log("Envíos disponibles:", envios);
-    //console.log("Nombre a buscar:", nombreBuscar);
-    
-    const enviosFiltrados = envios.filter((envio) => {
-      const estadoActual = envio.listaCambiosEstado?.filter((x) => !x.fechaFin).at(0)?.idEstadoEnvio;
-    
-      // Verifica si el estado y completados están activos
-      const filtroEstado = estadoSeleccionado ? estadoActual === parseInt(estadoSeleccionado) : true;
-      const filtroCompletados = completadosActivo ? [4, 5, 6].includes(estadoActual) : true;
-    
-      // Aplicar filtro de nombre asegurando que `envio.nombre` exista
-      const filtroNombre = nombreBuscar
-        ? envio.nombreEmpleado && envio.nombreEmpleado.toLowerCase().includes(nombreBuscar.toLowerCase())
-        : true;
-    
-      return filtroEstado && filtroCompletados && filtroNombre;
-    });
-    
-      return (
+  const toggleCompletados = () => {
+    setCompletadosActivo((prev) => !prev);
+  };
+
+  const handleNombreChange = (nombre) => {
+    setNombreBuscar(nombre.toLowerCase()); // Convertir a minúsculas para una búsqueda insensible a mayúsculas
+  };
+
+  const nombreBuscarLower = nombreBuscar.toLowerCase();
+
+  const enviosFiltrados = envios.filter((envio) => {
+    const estadoActual = envio.listaCambiosEstado?.filter((x) => !x.fechaFin).at(0)?.idEstadoEnvio;
+
+    // Verifica si el estado y completados están activos
+    const filtroEstado = estadoSeleccionado ? estadoActual === parseInt(estadoSeleccionado) : true;
+    const filtroCompletados = completadosActivo ? [4, 5, 6].includes(estadoActual) : true;
+
+    // Aplicar filtro de nombre asegurando que `envio.nombre` exista
+    const filtroNombre = nombreBuscar
+      ? envio.nombreEmpleado && envio.nombreEmpleado.toLowerCase().includes(nombreBuscar.toLowerCase())
+      : true;
+
+    return filtroEstado && filtroCompletados && filtroNombre;
+  });
+
+  return (
+    <>
+      {!registrarEnvio ? (
         <>
-          {!registrarEnvio ? (
-            <>
-              <BuscadorEnvios
-                handleRegistrarEnvio={handleRegistrarEnvio}
-                onEstadoChange={handleEstadoChange}
-                toggleCompletados={toggleCompletados}
-                completadosActivo={completadosActivo}
-                buscarEnvios={cargarEnvios}
-                onNombreChange={handleNombreChange}
-              />
-              {loading ? (
+          <BuscadorEnvios
+            handleRegistrarEnvio={handleRegistrarEnvio}
+            onEstadoChange={handleEstadoChange}
+            toggleCompletados={toggleCompletados}
+            completadosActivo={completadosActivo}
+            buscarEnvios={cargarEnvios}
+            onNombreChange={handleNombreChange}
+          />
+          {loading ? (
             <LoaderBloque texto={"Cargando envíos"}></LoaderBloque>
           ) : (
-        <ListadoEnvios envios={enviosFiltrados}/>  
-            
-          )}</>) :
-          
-          (
-            <RegistrarEnvio
-              envio={envio}
-              setEnvio={setEnvio}
-              handleVolverAtras={handleVolverAtras}
-              empleados={empleados}
-              recursos={recursos}
-              computadoras={computadoras.filter((x) => !x.enUso)}
-              guardarEnvio={guardarEnvio}
-            />
-          )
-        }</>  
-  )}
-  ;
-
+            <ListadoEnvios envios={enviosFiltrados} recargarEnvios={cargarEnvios} />
+          )}
+        </>
+      ) : (
+        <RegistrarEnvio
+          envio={envio}
+          setEnvio={setEnvio}
+          handleVolverAtras={handleVolverAtras}
+          empleados={empleados}
+          recursos={recursos}
+          computadoras={computadoras.filter((x) => !x.enUso)}
+          guardarEnvio={guardarEnvio}
+        />
+      )}
+    </>
+  );
+}
 
 export default Envios;

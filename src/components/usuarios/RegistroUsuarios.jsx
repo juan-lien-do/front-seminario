@@ -112,14 +112,14 @@ export default function RegistroUsuario({ volver, usuario, guardar }) {
 
           <div className="row">
             <div className="col-sm-4 col-md-3 offset-md-1">
-              <label className="col-form-label" htmlFor="email">
+              <label className="col-form-label" htmlFor="mail">
                 Mail<span className="text-danger">*</span>:
               </label>
             </div>
             <div className="col-sm-8 col-md-6">
               <input
                 type="email"
-                {...register("email", { required: true })}
+                {...register("mail", { required: true })}
                 className="form-control"
               />
             </div>

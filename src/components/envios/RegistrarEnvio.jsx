@@ -91,7 +91,53 @@ export default function RegistrarEnvio({
     setRecursosSeleccionados(nuevosRecursos);
   }, [detallesEnvioRecurso, recursos, recursoElegido]);
 
-
+    // Estado para fotos
+    const [fotos, setFotos] = useState([]);
+    const [fotoError, setFotoError] = useState('');
+  
+    // Validar tamaño de la foto antes de añadirla
+    const handleFotoChange = (e) => {
+      const files = e.target.files;
+      const maxFileSize = 5 * 1024 * 1024; // 5MB
+      let validFiles = [];
+      let errorMessage = '';
+  
+      for (let i = 0; i < files.length; i++) {
+        if (files[i].size > maxFileSize) {
+          errorMessage = 'El tamaño de las fotos no debe exceder 5MB.';
+          break;
+        }
+        validFiles.push(files[i]);
+      }
+  
+      if (errorMessage) {
+        setFotoError(errorMessage);
+      } else {
+        setFotoError('');
+        setFotos([...fotos, ...validFiles]);
+      }
+    };
+  
+    // Enviar fotos junto con el envío
+    const handleFotoSubmit = async (envioId) => {
+      if (fotos.length > 0) {
+        const formData = new FormData();
+        fotos.forEach((foto) => {
+          formData.append('fotos', foto);
+        });
+  
+        const url = `http://localhost:8080/archivos/cargar_foto/${envioId}`;
+        try {
+          await fetch(url, {
+            method: 'POST',
+            body: formData,
+          });
+          alert('Fotos cargadas correctamente');
+        } catch (error) {
+          alert('Hubo un error al cargar las fotos');
+        }
+      }
+    };
 
   function agregarDetallesRecurso(detalle) {
     let nuevoDetalles = detallesEnvioRecurso;

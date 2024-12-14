@@ -11,6 +11,7 @@ export default function LoginPage({ usuario, onLogin }) {
   const [intentos, setIntentos] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);  // Para controlar el flujo de la página
   const [userData, setUserData] = useState(null);  // Para almacenar los datos del usuario
+  const [passwordExpired, setPasswordExpired] = useState(false);  // Para controlar si la contraseña ha expirado
   const navigate = useNavigate();
 
   const {
@@ -37,31 +38,49 @@ export default function LoginPage({ usuario, onLogin }) {
     }
   };
 
+  // Función para calcular la diferencia de tiempo entre ahora y la última actualización
+  const checkPasswordExpiration = () => {
+    if (userData && userData.ultimaActualizacion) {
+      const ultimaActualizacionDate = new Date(userData.ultimaActualizacion);
+      const currentDate = new Date();
+      const diffInMinutes = (currentDate - ultimaActualizacionDate) / (1000 * 60); // Diferencia en minutos
+
+      if (diffInMinutes > 15) {
+        setPasswordExpired(true); // Si la contraseña ha expirado
+      }
+    }
+  };
+
   // Controlar el flujo de navegación basado en primerLogin
   useEffect(() => {
     if (!!usuario && userData) {
       if (userData.primerLogin === true) {
-        //cambiar isAdmin por primerLogin
-        // Si primerLogin es true, mostramos RegistroContraseña
+        checkPasswordExpiration(); // Verificar si la contraseña ha expirado
         console.log("primerLogin es true, mostrando RegistroContraseña");
-        // Aquí deberías rendereizar el componente RegistroContraseña
       } else {
-        // Si primerLogin es false, redirigimos al home
         console.log("primerLogin es false, redirigiendo a /home");
         navigate("/home");
       }
     }
   }, [!!usuario, userData, navigate]);
 
-  // Solo mostrar el componente de RegistroContraseña si primerLogin es true
-  if (!!usuario && userData && userData.primerLoginn === true) {
-            //cambiar isAdmin por primerLogin
-    return <RegistroContraseña usuario={userData} onComplete={() => navigate("/home")} />;
+  // Si la contraseña ha expirado, mostramos el mensaje y no mostramos el componente RegistroContraseña
+  if (passwordExpired) {
+    return (
+      <div className="alert alert-danger text-center">
+        <p>Contraseña expirada. No puede iniciar sesión.</p>
+      </div>
+    );
   }
 
-  // Si ya está logueado y tiene primerLogin false, redirige a /home
-  if (!!usuario) {
+  // Si el usuario ya está logueado, redirige a /home
+  if (!!usuario && userData && userData.primerLogin === false) {
     return <Navigate to="/home" replace />;
+  }
+
+  // Si el usuario tiene primerLogin true y la contraseña no está expirada, mostramos el componente de RegistroContraseña
+  if (userData && userData.primerLogin === true && !passwordExpired) {
+    return <RegistroContraseña usuario={userData} onComplete={() => navigate("/home")} />;
   }
 
   return (
@@ -101,7 +120,7 @@ export default function LoginPage({ usuario, onLogin }) {
                       <button
                         type="submit"
                         className="btn btn-primary d-block w-100"
-                        disabled={!isValid}
+                        disabled={!isValid || passwordExpired} // Deshabilitar si la contraseña ha expirado
                       >
                         Ingresar
                       </button>

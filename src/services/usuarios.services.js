@@ -71,6 +71,39 @@ async function remove(id) {
   }
 }
 
+async function blanquearContrasena(id) {
+  // Codificar la URL para manejar caracteres especiales como "ñ"
+  const url = `${baseUrl}/${("blanquear_password")}/${id}`;
+  const respuesta = await sonnerQuestion.pregunta(
+    "¿Está seguro de que desea reiniciar la contraseña?"
+  );
+
+  if (respuesta) {
+    try {
+      await instance.patch(url);
+      toast.success("La contraseña ha sido reiniciada con éxito.");
+    } catch (error) {
+      console.error(error);
+      toast.error("Ocurrió un error al reiniciar la contraseña.");
+    }
+  }
+}
+
+async function actualizarContrasena (nombre, nuevaPassword) {
+
+    const data = { nombre, nuevaPassword };
+
+    console.log("Datos enviados:", data); // Verifica el cuerpo de la solicitud
+
+    const url = `${baseUrl}/${("actualizar_password")}`;
+    const respuesta = await sonnerQuestion.pregunta(
+      "¿Está seguro de que desea actualizar la contraseña?"
+    );
+        await instance.patch(url, data);
+
+};
+
+
 async function activar(id) {
   const url = `${baseUrl}/activar/${id}`;
 
@@ -94,5 +127,7 @@ export const usuariosService = {
     buscarUsuarios,
     save,
     remove,
-    activar
+    activar,
+    blanquearContrasena,
+    actualizarContrasena,
 };

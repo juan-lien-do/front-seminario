@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { usuariosService } from "../../services/usuarios.services";
 
 export default function RegistroContraseña({ usuario, onComplete }) {
   const [password, setPassword] = useState("");
@@ -23,14 +24,12 @@ export default function RegistroContraseña({ usuario, onComplete }) {
     }
 
     try {
-      // Aquí puedes llamar al servicio para actualizar la contraseña
-      // Ejemplo:
-      // await usuariosService.actualizarContraseña(usuario.id_usuario, password);
-
+      // Llama al servicio con los datos requeridos
+      await usuariosService.actualizarContrasena(usuario.nombre, password);
       alert("Contraseña actualizada exitosamente.");
-      onComplete();
+      onComplete(); // Notifica al componente padre, si aplica
     } catch (error) {
-      alert("Error al actualizar la contraseña.");
+      alert("Error al actualizar la contraseña. Por favor, intente de nuevo.");
     }
   };
 
@@ -43,6 +42,7 @@ export default function RegistroContraseña({ usuario, onComplete }) {
       minLength: newPassword.length >= 6,
       hasNumber: /[0-9]/.test(newPassword),
       hasUpperCase: /[A-Z]/.test(newPassword),
+      hasSpecialChar: /!@#$%^&*()-_+=<>?/.test(newPassword),
     });
   };
 
@@ -75,6 +75,10 @@ export default function RegistroContraseña({ usuario, onComplete }) {
                     <li className={passwordValidations.hasUpperCase ? "text-success" : "text-danger"}>
                       {passwordValidations.hasUpperCase ? "✔️ Debe contener al menos 1 mayúscula" : "❌ Debe contener al menos 1 mayúscula"}
                     </li>
+                    <li className={passwordValidations.hasSpecialChar ? "text-success" : "text-danger"}>
+                      {passwordValidations.hasSpecialChar ? "✔️ Debe contener al menos 1 carácter especial" : "❌ Debe contener al menos 1 carácter especial"}
+                    </li>
+
                   </ul>
                 </div>
               </div>

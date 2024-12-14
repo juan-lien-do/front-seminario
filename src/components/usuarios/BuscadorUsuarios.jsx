@@ -1,9 +1,9 @@
 export default function BuscadorUsuarios({
-  nombre, 
+  nombre,
   setNombre,
   activo,
   setActivo,
-  agregarUsuario
+  agregarUsuario,
 }) {
   return (
     <div className="container my-4">
@@ -32,25 +32,22 @@ export default function BuscadorUsuarios({
             onChange={(e) => setActivo(e.target.value)}
           >
             <option value="todos">Todos</option>
-            <option value="activo">Activo</option>
-            <option value="inactivo">Inactivo</option>
+            <option value="activo">Activos</option>
+            <option value="inactivo">Inactivos</option>
           </select>
         </div>
 
-        {/* Botón de Búsqueda */}
+        {/* Botón para agregar */}
         <div className="col-md-2 d-flex align-items-end">
-          <button className="btn btn-primary w-100" onClick={() => {}}>
-            Buscar
+          <button
+            type="button"
+            className="btn btn-outline-primary"
+            onClick={agregarUsuario}
+          >
+            Agregar Usuario
           </button>
         </div>
       </div>
-      <button
-        type="button"
-        className="btn btn-outline-primary"
-        onClick={agregarUsuario}
-      >
-        Agregar Usuario
-      </button>
     </div>
   );
 }
