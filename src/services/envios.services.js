@@ -67,9 +67,9 @@ async function eliminarFoto(envioId, nombreFoto) {
             await instance.delete(url);
             toast.success("La foto se borro correctamente")
         }
-        catch{
-            toast.error("Surgió un error")
-            return false;
+        catch(error){
+            console.error("Error al borrar la foto:", error);
+            throw error;
         }
     }
 }
