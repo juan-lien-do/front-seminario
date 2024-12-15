@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import envioServices from "../../services/envios.services.js";
 import './ModalGaleriaFotos.css';
 
@@ -6,6 +6,7 @@ export default function ModalGaleriaFotos({ show, handleClose, envio }) {
   const [fotos, setFotos] = useState([]);
   const [nuevaFoto, setNuevaFoto] = useState(null);
   const [fotoSeleccionada, setFotoSeleccionada] = useState(null);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     if (show && envio) {
@@ -31,20 +32,29 @@ export default function ModalGaleriaFotos({ show, handleClose, envio }) {
 
   async function subirFoto() {
     if (!nuevaFoto) return;
+
+    if (fotos.length >= 9) {
+      alert("No se pueden subir más de 9 fotos.");
+      return;
+    }
   
     const formData = new FormData();
     formData.append("file", nuevaFoto);
   
     try {
       await envioServices.subirFotos(envio.idEnvio, formData);
-      setFotos([...fotos, { url: URL.createObjectURL(nuevaFoto) }]);
       setNuevaFoto(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      cargarFotos(envio.idEnvio); // Actualizar las fotos después de subir una nueva
     } catch (error) {
       console.error("Error al subir la foto:", error);
     }
   }
 
   async function eliminarFoto(nombreArchivo) {
+
     try {
       await envioServices.eliminarFoto(envio.idEnvio, nombreArchivo);
       cargarFotos(envio.idEnvio);
@@ -91,11 +101,13 @@ export default function ModalGaleriaFotos({ show, handleClose, envio }) {
                   type="file"
                   onChange={(e) => setNuevaFoto(e.target.files[0])}
                   className="form-control mb-2"
+                  ref={fileInputRef}
+                  disabled={fotos.length >= 9}
                 />
                 <button
                   className="btn btn-success"
                   onClick={subirFoto}
-                  disabled={!nuevaFoto}
+                  disabled={!nuevaFoto || fotos.length >= 9}
                 >
                   Subir Foto
                 </button>
