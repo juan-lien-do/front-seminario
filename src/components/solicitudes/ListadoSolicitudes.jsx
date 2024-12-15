@@ -8,7 +8,7 @@ export default function ListadoSolicitudes({ solicitudes, handleElegirSolicitud,
   // paginación
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentSolicitudes = solicitudes.slice(indexOfFirstItem, indexOfLastItem);
+  const currentSolicitudes = solicitudes?.slice(indexOfFirstItem, indexOfLastItem);
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
   const cantidadPaginas = Math.ceil(solicitudes.length / itemsPerPage);

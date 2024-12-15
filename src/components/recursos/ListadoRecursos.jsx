@@ -103,7 +103,7 @@ export default function ListadoRecursos({
               </tr>
             </thead>
             <tbody>
-              {itemsActuales.map((Item) => (
+              {itemsActuales?.map((Item) => (
                   <tr className={!Item.activo && "efecto-desactivado"} key={Item.id}>
                     <td className={`text-center text-dark`}>{Item.nombre}</td>
                     <td className="text-end">
