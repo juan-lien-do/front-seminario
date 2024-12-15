@@ -123,10 +123,10 @@ export default function ListadoComputadoras({
               <tr>
                 <th className="text-end">Nro de Serie</th>
                 <th className="text-end">Categoria</th>
-                <th className="text-end">Descripción</th>
+                <th className="text-center">Descripción</th>
                 <th className="text-end">Numero WS</th>
-                <th className="text-end">Ubicación</th>
-                <th className="text-end">Acciones</th>
+                <th className="text-center">Ubicación</th>
+                <th className="text-center">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -137,7 +137,7 @@ export default function ListadoComputadoras({
                     key={Item.idComputadora}
                   >
                     <td
-                      className={`text-center text-dark"
+                      className={`text-end text-dark"
                       }`}
                     >
                       {Item.nroSerie}
