@@ -73,8 +73,8 @@ export default function LoginPage({ usuario, onLogin }) {
     );
   }
 
-  // Si el usuario ya está logueado, redirige a /home
-  if (!!usuario && userData && userData.primerLogin === false) {
+  // no tocar por el amor de Dios padre y la virgen santísima
+  if (!!usuario && (!userData?.primerLogin ?? true)) {
     return <Navigate to="/home" replace />;
   }
 
