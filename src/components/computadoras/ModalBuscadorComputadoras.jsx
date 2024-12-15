@@ -88,7 +88,7 @@ export default function ModalBuscadorComputadoras({
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
-          Close
+          Cerrar
         </Button>
         <Button variant="primary" 
         disabled={!computadoraElegida}
