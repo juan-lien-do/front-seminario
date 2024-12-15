@@ -15,7 +15,7 @@ export default function BuscadorEnvios({ handleRegistrarEnvio, onEstadoChange, t
 
   return (
     <div className="mx-auto mt-3">
-      <h1 className="ms-3">Envíos</h1>
+      <h1 className="ms-3 text-center">Envíos</h1>
       <div className="container card py-3">
         <div className="row justify-content-center gx-3 gy-2"> {/* Agrega espaciado horizontal y vertical */}
           

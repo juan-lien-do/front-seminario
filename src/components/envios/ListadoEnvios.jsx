@@ -26,6 +26,18 @@ export default function ListadoEnvios({ envios, recargarEnvios }) {
     { id: 9, nombre: "En Reparación" },
   ];
 
+  const transicionesPosibles = [
+    {id: 1, transiciones:[2, 9, 8, 7]},
+    {id: 2, transiciones:[9, 1, 7, 8]},
+    {id: 3, transiciones:[4, 7, ]},
+    {id: 4, transiciones:[]},
+    {id: 5, transiciones:[]},
+    {id: 6, transiciones:[]},
+    {id: 7, transiciones:[]},
+    {id: 8, transiciones:[4, 7, 9, 2]},
+    {id: 9, transiciones:[1, 2, 3, 7, 8]},
+  ]
+
   function handleClose() {
     setShow(false);
     setShowEstados(false);
@@ -115,8 +127,8 @@ export default function ListadoEnvios({ envios, recargarEnvios }) {
           <tr>
             <th className="text-center">Empleado</th>
             <th className="text-center">Usuario</th>
-            <th className="text-center">Último Estado</th>
-            <th className="text-center">Fecha</th>
+            <th className="text-center">Cambiar estado</th>
+            <th className="text-center">Último estado</th>
             <th className="text-center">Detalles</th>
             <th className="text-center">Fotos</th>
           </tr>
@@ -125,6 +137,8 @@ export default function ListadoEnvios({ envios, recargarEnvios }) {
           {enviosLocal.map((envio) => {
             const estadoActual = envio?.listaCambiosEstado?.filter((x) => !x.fechaFin).at(0)?.idEstadoEnvio;
             const esEntregado = estadoActual === 4;
+            const transicionPosible = transicionesPosibles.find(x => x.id === estadoActual).transiciones;
+
 
             return (
               <tr
@@ -136,6 +150,15 @@ export default function ListadoEnvios({ envios, recargarEnvios }) {
                 </td>
                 <td className="text-center">{envio.nombreUsuario}</td>
                 <td className="text-center">
+                  {
+                    transicionPosible.length === 0
+                    ?
+                    <select disabled className="form-select" defaultValue={estadoActual}>
+                      estadoActual
+                    </select>
+                    :
+
+
                   <select
                     value={estadoActual || ""}
                     onChange={(e) =>
@@ -143,14 +166,18 @@ export default function ListadoEnvios({ envios, recargarEnvios }) {
                     }
                     className="form-select"
                   >
-                    {estadosEnvio.map((estado) => (
+                    {estadosEnvio
+                      .filter(x => transicionPosible.includes(x.id))
+                      .map((estado) => (
                       <option key={estado.id} value={estado.id}>
                         {estado.nombre}
                       </option>
                     ))}
                   </select>
+                  }
                 </td>
                 <td className="text-center">
+                  {estadosEnvio.find(x => x.id === estadoActual).nombre} {" - "}
                   {envio?.listaCambiosEstado?.filter((x) => !x.fechaFin).at(0)
                     ?.fechaInicio ? formatearFecha(envio.listaCambiosEstado.filter((x) => !x.fechaFin).at(0).fechaInicio) : "N/A"}
                 </td>
