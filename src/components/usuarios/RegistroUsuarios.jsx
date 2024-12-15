@@ -52,14 +52,14 @@ export default function RegistroUsuario({ volver, usuario, guardar, modificando 
           {/* campo nombre */}
           <div className="row">
             <div className="col-sm-4 col-md-3 offset-md-1">
-              <label className="col-form-label" htmlFor="nombre">
+              <label className="col-form-label" htmlFor="nombre_usr">
                 Nombre<span className="text-danger">*</span>:
               </label>
             </div>
             <div className="col-sm-8 col-md-6">
               <input
                 type="text"
-                {...register("nombre", { required: true })}
+                {...register("nombre_usr", { required: true })}
                 autoFocus
                 className="form-control "
               />
