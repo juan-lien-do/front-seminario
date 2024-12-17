@@ -30,12 +30,14 @@ function ModalDevoluciones({ show, handleClose, envio, onConfirmDevolucion }) {
         }, {}),
       });
       cargarFotos();
+    } else {
+      setFotos([]);
     }
   }, [show, envio]);
 
   const cargarFotos = async () => {
     try {
-      const res = await envioServices.obtenerFotos(envio.idEnvio);
+      const res = await devolucionesServices.obtenerFotosDevolucion(envio.idEnvio);
       const fotosConvertidas = res.map((foto) => {
         const extension = foto.nombreArchivo.split('.').pop();
         const mimeType = extension === 'png' ? 'image/png' : 'image/jpeg';
@@ -236,7 +238,7 @@ function ModalDevoluciones({ show, handleClose, envio, onConfirmDevolucion }) {
 
           <h3>Fotos</h3>
           <div className="fotos-container">
-            {fotos.map((foto, index) => (
+            {fotos.length > 0 ? (fotos.map((foto, index) => (
               <img
                 key={index}
                 src={foto}
@@ -244,7 +246,10 @@ function ModalDevoluciones({ show, handleClose, envio, onConfirmDevolucion }) {
                 className="foto"
                 onClick={() => setFotoSeleccionada(foto)}
               />
-            ))}
+            ))
+          ) : (
+            <p>No hay fotos para esta devolución</p>
+            )} 
           </div>
         </Modal.Body>
         <Modal.Footer>
