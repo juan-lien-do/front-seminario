@@ -52,7 +52,7 @@ export default function ListadoComputadoras({
   }
 
   // Filtramos los items basados en la categoría seleccionada
-  const filteredItems = Items.filter((Item) => {
+  const filteredItems = Items?.filter((Item) => {
     if (categoriaSeleccionada === 0) return true; // Mostrar todos
     return Item.idTipo === categoriaSeleccionada;
   });
@@ -64,10 +64,10 @@ export default function ListadoComputadoras({
   // paginación
   const indexOfLastItem = paginaActual * itemsPorPagina;
   const indexOfFirstItem = indexOfLastItem - itemsPorPagina;
-  const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredItems?.slice(indexOfFirstItem, indexOfLastItem);
   const handlePageChange = (pageNumber) => setPaginaActual(pageNumber);
 
-  const cantidadPaginas = Math.ceil(filteredItems.length / itemsPorPagina);
+  const cantidadPaginas = Math.ceil(filteredItems?.length ?? 1 / itemsPorPagina);
   const paginationItems = []; // este es un array de objetos de DOM
   for (let i = 1; i <= cantidadPaginas; i++) {
     paginationItems.push(
