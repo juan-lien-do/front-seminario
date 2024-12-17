@@ -1,99 +1,123 @@
-import React from "react";
-import Button from "react-bootstrap/Button";
-import ButtonGroup from "react-bootstrap/ButtonGroup";
+import React, { useState, useEffect } from "react";
+import ListadoRecursos from "../components/recursos/ListadoRecursos.jsx";
+import { recursosService } from "../services/recursos.services.js";
+import BuscadorRecursos from "../components/recursos/BuscadorRecursos.jsx";
+import RegistroRecurso from "../components/recursos/RegistroRecurso.jsx";
+import { toast } from "sonner";
+import LoaderBloque from "../components/LoaderBloque.jsx";
 
-export default function BuscadorRecursos({
-  activo,
-  setActivo,
-  buscarRecursos,
-  agregarRecurso,
-  handleTodos,
-  handleComponentes,
-  handlePerifericos,
-  setSearchTerm,
-  categoriaSeleccionada,
-}) {
-  const estadoActivo = activo ? "" : "inactivos";
-  let tipoSeleccionado = "Todos recursos"; 
-  switch (categoriaSeleccionada) {
-    case 1:
-      tipoSeleccionado = "Componentes";
-      break;
-    case 2:
-      tipoSeleccionado = "Periféricos";
-      break;
-    default:
-      tipoSeleccionado = "Todos los recursos";
+export default function Recursos() {
+  const [activo, setActivo] = useState(true);
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(0);
+  const [Recursos, setRecursos] = useState([]);
+  const [recurso, setRecurso] = useState(null);
+  const [mostrarRegistroRecurso, setMostrarRegistroRecurso] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [estaCargando, setEstaCargado] = useState(true);
+
+  function handleTodos() {
+    setCategoriaSeleccionada(0);
+  }
+
+  function handlePerifericos() {
+    setCategoriaSeleccionada(2);
+  }
+
+  function handleComponentes() {
+    setCategoriaSeleccionada(1);
+  }
+
+  // Función para buscar recursos
+  async function Buscar() {
+    setEstaCargado(true);
+    const data = await recursosService.Buscar({ activo });
+    console.log("Datos obtenidos:", data);
+    const recursosFiltrados = data.filter(
+      (recurso) =>
+        (categoriaSeleccionada === 0 || recurso.categoria === categoriaSeleccionada) &&
+        recurso.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setRecursos(recursosFiltrados);
+    setEstaCargado(false);
+  }
+
+  useEffect(() => {
+    Buscar();
+  }, [activo, categoriaSeleccionada, searchTerm]);
+
+  function agregarRecurso() {
+    const nuevoRecurso = {
+      idRecurso: 0,
+      nombre: "",
+      descripcion: "",
+      categoria: 1,
+      activo: true,
+    };
+    setRecurso(nuevoRecurso);
+    setMostrarRegistroRecurso(true);
+  }
+
+  function modificarRecurso(recurso) {
+    if (!recurso.activo) {
+      toast.error("No puede modificarse un registro inactivo");
+      return;
+    }
+    setRecurso(recurso);
+    setMostrarRegistroRecurso(true);
+  }
+
+  async function guardarRecurso(data) {
+    if (!(await recursosService.save(data))) {
+      setMostrarRegistroRecurso(false);
+      Buscar();
+    }
+  }
+
+  async function desactivarRecurso(id) {
+    await recursosService.desactivar(id);
+    Buscar();
+  }
+
+  async function activarRecurso(id) {
+    await recursosService.activar(id);
+    Buscar();
+  }
+
+  if (mostrarRegistroRecurso) {
+    return (
+      <RegistroRecurso
+        guardar={guardarRecurso}
+        volver={() => setMostrarRegistroRecurso(false)}
+        recurso={recurso}
+      />
+    );
   }
 
   return (
-    <form
-      className="mt-1"
-      name="FormBusqueda"
-      onSubmit={(e) => e.preventDefault()}
-    >
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-12 col-md-6 mx-auto">
-            <div className="text-center mb-3">
-              <ButtonGroup aria-label="Basic example">
-                <Button variant="primary" onClick={handleTodos}>
-                  Todos
-                </Button>
-                <Button variant="primary" onClick={handlePerifericos}>
-                  Periféricos
-                </Button>
-                <Button variant="primary" onClick={handleComponentes}>
-                  Componentes
-                </Button>
-              </ButtonGroup>
-            </div>
-
-            <div className="d-flex align-items-center mb-3 justify-content-center">
-              <div className="form-check me-2">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  id="activo"
-                  checked={activo}
-                  onChange={(e) => setActivo(e.target.checked)}
-                />
-                <label className="form-check-label" htmlFor="activo">
-                  Activo
-                </label>
-              </div>
-
-              <input
-                type="text"
-                placeholder="Buscar por nombre"
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="form-control me-2"
-                style={{ maxWidth: "200px" }} // Tamaño del campo de búsqueda
-              />
-              <button
-                type="button"
-                className="btn btn-primary mx-1"
-                onClick={buscarRecursos}
-              >
-                <i className="fa fa-search"></i> Buscar
-              </button>
-              <button
-                type="button"
-                className="btn btn-warning mx-2"
-                onClick={agregarRecurso}
-              >
-                <i className="fa fa-plus"></i> Agregar Item
-              </button>
-            </div>
-
-            {/* Encabezado que muestra el estado, debajo de los filtros */}
-            <h5 className="text-center">
-              Se están mostrando {tipoSeleccionado} {estadoActivo}
-            </h5>
-          </div>
-        </div>
-        <hr />
-      </div>
-    </form>
+    <>
+      <BuscadorRecursos
+        activo={activo}
+        setActivo={setActivo}
+        buscarRecursos={Buscar}
+        agregarRecurso={agregarRecurso}
+        handleTodos={handleTodos}
+        handleComponentes={handleComponentes}
+        handlePerifericos={handlePerifericos}
+        setSearchTerm={setSearchTerm}
+        categoriaSeleccionada={categoriaSeleccionada}
+      />
+      {estaCargando ? (
+        <LoaderBloque texto={"Cargando recursos..."} />
+      ) : (
+        <ListadoRecursos
+          Items={Recursos}
+          activar={activarRecurso}
+          desactivar={desactivarRecurso}
+          modificar={modificarRecurso}
+          categoriaSeleccionada={categoriaSeleccionada}
+          Buscar={Buscar}
+        />
+      )}
+    </>
   );
 }

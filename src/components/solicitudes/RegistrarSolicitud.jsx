@@ -17,7 +17,7 @@ export default function RegistrarSolicitud({handleVolver, nombreUsuario, guardar
   function handleGuardar(){
     const solicitud = {
       nombreUsuario: nombreUsuario,
-      detallesSolicitud: elementos.map(elem => { return {cantidad:elem.cantidad, nombre:elem.cantidad, descripcion:elem.descripcion }})
+      detallesSolicitud: elementos.map(elem => { return {cantidad:elem.cantidad, nombre:elem.nombre, descripcion:elem.descripcion }})
     }
     guardarSolicitud(solicitud);
   }
@@ -192,7 +192,7 @@ export default function RegistrarSolicitud({handleVolver, nombreUsuario, guardar
                               )
                             }
                             value={elemento.descripcion}
-                            maxLength="100"
+                            maxLength="500"
                             rows="1"
                             style={{ resize: "none", overflow: "hidden" }}
                             onInput={(e) => {
