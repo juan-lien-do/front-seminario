@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ModalExistencias from "../recursos//ModalExistencias";
+import ModalExistencias from "../recursos/ModalExistencias";
 import { Modal, Button, Pagination } from "react-bootstrap"; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -36,33 +36,19 @@ export default function ListadoRecursos({
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
-
   // filtrado y paginado
-  // chatgpt se la come
-  useEffect(
-    ()=>{
-      // filtrado
-      let _items = Items?.filter((item) => item.categoria !== categoriaSeleccionada);
-      
-      // paginado
-      const itemsPerPage = 7;
+  useEffect(() => {
+    // paginado
+    const itemsPerPage = 7;
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = Items?.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(Items.length / itemsPerPage);
 
-      const indexOfLastItem = currentPage * itemsPerPage;
-      const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    
-    
-      const currentItems = _items?.slice(indexOfFirstItem, indexOfLastItem);
-    
-      const totalPages = Math.ceil(_items.length / itemsPerPage);
-
-      setCurrentPage(
-        totalPages < currentPage ? 1 : currentPage
-      );
-      setItemsActuales(currentItems)
-      setPaginasTotales(totalPages)
-    }
-    , [categoriaSeleccionada, Items, currentPage]
-  )
+    setCurrentPage(totalPages < currentPage ? 1 : currentPage);
+    setItemsActuales(currentItems);
+    setPaginasTotales(totalPages);
+  }, [Items, currentPage]);
 
   return (
     <div className="container-fluid">
@@ -104,68 +90,68 @@ export default function ListadoRecursos({
             </thead>
             <tbody>
               {itemsActuales?.map((Item) => (
-                  <tr className={!Item.activo && "efecto-desactivado"} key={Item.id}>
-                    <td className={`text-center text-dark`}>{Item.nombre}</td>
-                    <td className="text-end">
-                      {Item.existencias?.reduce(
-                        (accumulator, currentValue) =>
-                          accumulator + currentValue.cantidad,
-                        0
-                      )}
-                    </td>
-                    <td className={`text-end`}>{Item.cantidadCritica}</td>
-                    <td className="text-center ">
-                      {Item.categoria === 1 ? "Periférico" : "Componente"}
-                    </td>
-                    <td className="text-center">
-                      <button
-                        className="btn btn-info"
-                        onClick={() => verDescripcion(Item.descripcion)}
-                      >
-                        Ver descripción
-                      </button>
-                    </td>
-                    <td className="text-center">
-                      <button
-                        className="btn btn-info"
-                        onClick={() => {
-                          handleShow();
-                          setDatosExistencias(Item.existencias);
-                          setIdRecurso(Item.id);
-                        }}
-                      >
-                        Ver
-                      </button>
-                    </td>
-                    <td className="text-center text-nowrap">
-                      <button
-                        className="btn btn-sm btn-warning me-2"
-                        title="Modificar"
-                        onClick={() => modificar(Item)}
-                      >
-                        <i className="fa fa-pencil"></i>
-                      </button>
-                      <button
-                        className={`btn btn-sm ${
-                          !!Item.activo ? "btn-danger" : "btn-primary"
-                        }`}
-                        title={!!Item.activo ? "Borrar" : "Reactivar"}
-                        onClick={
+                <tr className={!Item.activo && "efecto-desactivado"} key={Item.id}>
+                  <td className={`text-center text-dark`}>{Item.nombre}</td>
+                  <td className="text-end">
+                    {Item.existencias?.reduce(
+                      (accumulator, currentValue) =>
+                        accumulator + currentValue.cantidad,
+                      0
+                    )}
+                  </td>
+                  <td className={`text-end`}>{Item.cantidadCritica}</td>
+                  <td className="text-center ">
+                    {Item.categoria === 1 ? "Componente" : "Periférico"}
+                  </td>
+                  <td className="text-center">
+                    <button
+                      className="btn btn-info"
+                      onClick={() => verDescripcion(Item.descripcion)}
+                    >
+                      Ver descripción
+                    </button>
+                  </td>
+                  <td className="text-center">
+                    <button
+                      className="btn btn-info"
+                      onClick={() => {
+                        handleShow();
+                        setDatosExistencias(Item.existencias);
+                        setIdRecurso(Item.id);
+                      }}
+                    >
+                      Ver
+                    </button>
+                  </td>
+                  <td className="text-center text-nowrap">
+                    <button
+                      className="btn btn-sm btn-warning me-2"
+                      title="Modificar"
+                      onClick={() => modificar(Item)}
+                    >
+                      <i className="fa fa-pencil"></i>
+                    </button>
+                    <button
+                      className={`btn btn-sm ${
+                        !!Item.activo ? "btn-danger" : "btn-primary"
+                      }`}
+                      title={!!Item.activo ? "Borrar" : "Reactivar"}
+                      onClick={
+                        !!Item.activo
+                          ? () => desactivar(Item.id)
+                          : () => activar(Item.id)
+                      }
+                    >
+                      <i
+                        className={
                           !!Item.activo
-                            ? () => desactivar(Item.id)
-                            : () => activar(Item.id)
+                            ? "fas fa-trash"
+                            : "fas fa-trash-restore"
                         }
-                      >
-                        <i
-                          className={
-                            !!Item.activo
-                              ? "fas fa-trash"
-                              : "fas fa-trash-restore"
-                          }
-                        ></i>
-                      </button>
-                    </td>
-                  </tr>
+                      ></i>
+                    </button>
+                  </td>
+                </tr>
               ))}
             </tbody>
           </table>

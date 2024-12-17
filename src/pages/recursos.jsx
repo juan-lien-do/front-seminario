@@ -1,144 +1,176 @@
-import React, { useState, useEffect } from "react";
-import ListadoRecursos from "../components/recursos//ListadoRecursos.jsx";
-import { recursosService } from "../services/recursos.services.js";
-import BuscadorRecursos from "../components/recursos/BuscadorRecursos.jsx";
-import RegistroRecurso from "../components/recursos//RegistroRecurso.jsx";
-import { toast } from "sonner";
-import LoaderBloque from "../components/LoaderBloque.jsx";
+import React, { useEffect, useState } from "react";
+import ModalExistencias from "../recursos/ModalExistencias";
+import { Modal, Button, Pagination } from "react-bootstrap"; 
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default function Recursos() {
-  const [activo, setActivo] = useState(true);
-  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(0)
-  const [Recursos, setRecursos] = useState([]);
-  const [recurso, setRecurso] = useState(null);
-  const [mostrarRegistroRecurso, setMostrarRegistroRecurso] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [estaCargando, setEstaCargado] = useState(true);
+export default function ListadoRecursos({
+  Items,
+  activar,
+  desactivar,
+  modificar,
+  categoriaSeleccionada,
+  Buscar,
+}) {
+  const [idRecurso, setIdRecurso] = useState(null);
+  const [show, setShow] = useState(false);
+  const [datosExistencias, setDatosExistencias] = useState([]);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
-  function handleTodos(){
-    setCategoriaSeleccionada(0)
+  // Estados para la descripción
+  const [showDescripcion, setShowDescripcion] = useState(false);
+  const [textoDescripcion, setTextoDescripcion] = useState("");
+  const handleDescripcionClose = () => setShowDescripcion(false);
+  const handleDescripcionShow = () => setShowDescripcion(true);
+
+  // Función para mostrar la descripción
+  function verDescripcion(texto) {
+    setTextoDescripcion(texto);
+    handleDescripcionShow();
   }
 
-  // esto esta al reves porque en realidad es la categoria que no queremos mostrar
-  function handlePerifericos(){
-    setCategoriaSeleccionada(2)
-  }
+  // Paginación
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsActuales, setItemsActuales] = useState([]);
+  const [paginasTotales, setPaginasTotales] = useState(1);
 
-  // esto esta al reves porque en realidad es la categoria que no queremos mostrar
-  function handleComponentes(){
-    setCategoriaSeleccionada(1)
-  }
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Función para buscar recursos
-  async function Buscar() {
-    setEstaCargado(true)
-    const data = await recursosService.Buscar({ activo });
-    setRecursos(data);
-    setEstaCargado(false)
-  }
-
+  // filtrado y paginado
   useEffect(() => {
-    Buscar();
-  }, []);
-
-  // Función para agregar un nuevo recurso
-  function agregarRecurso() {
-    const nuevoRecurso = {
-      id: 0,
-      nombre: "",
-      cantidad: 0,
-      cantidadCritica: 0,
-      categoria: "",
-      descripcion: "",
-      existencias: [],
-      activo: true,
-    };
-    setRecurso(nuevoRecurso);
-    setMostrarRegistroRecurso(true);
-  }
-
-  // Función para modificar un recurso existente
-  function modificarRecurso(recurso) {
-    if (!recurso.activo) {
-      toast.error("No puede modificarse un registro Inactivo.");
-      return;
-  }
-    setRecurso(recurso);
-    setMostrarRegistroRecurso(true);
-  }
-
-  // Función para guardar el recurso (tanto nuevo como modificado)
-  async function guardarRecurso(data) {
+    // filtrado
+    let _items = Items?.filter((item) => categoriaSeleccionada === 0 || item.categoria === categoriaSeleccionada);
     
-    if (!(await recursosService.save(data))) {
-      setMostrarRegistroRecurso(false);
-      Buscar();
-    }
-  }
+    // paginado
+    const itemsPerPage = 7;
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = _items?.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(_items.length / itemsPerPage);
 
-  // Función para desactivar un recurso
-  async function desactivarRecurso(id) {
-    await recursosService.desactivar(id);
-    Buscar();
-  }
-
-  // Función para activar un recurso
-  async function activarRecurso(id) {
-    await recursosService.activar(id);
-    Buscar();
-  }
-
-  // Función para buscar recursos por nombre
-  const handleSearch = () => {
-    if (searchTerm.trim() === "") {
-      Buscar(); // Si el término está vacío, busca todos
-    } else {
-      const filteredRecursos = Recursos.filter(recurso =>
-        recurso.nombre.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setRecursos(filteredRecursos);
-    }
-  };
-
-  // Si `mostrarRegistroRecurso` es verdadero, muestra el formulario de registro
-  if (mostrarRegistroRecurso) {
-    return (
-      <RegistroRecurso
-        guardar={guardarRecurso}
-        volver={() => setMostrarRegistroRecurso(false)}
-        recurso={recurso}
-      />
-    );
-  }
+    setCurrentPage(totalPages < currentPage ? 1 : currentPage);
+    setItemsActuales(currentItems);
+    setPaginasTotales(totalPages);
+  }, [categoriaSeleccionada, Items, currentPage]);
 
   return (
-    <>
-      <BuscadorRecursos
-        activo={activo}
-        setActivo={setActivo}
-        buscarRecursos={handleSearch}
-        agregarRecurso={agregarRecurso}
-        handleComponentes={handleComponentes}
-        handleTodos={handleTodos}
-        handlePerifericos={handlePerifericos}
-        setSearchTerm={setSearchTerm}
-      />
-      {
-        estaCargando ?
-        <LoaderBloque texto={"Cargando recursos..."}/>
-        :
+    <div className="container-fluid">
+      {/* Modal para la descripción */}
+      <Modal show={showDescripcion} onHide={handleDescripcionClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Descripción</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{textoDescripcion}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleDescripcionClose}>
+            Cerrar
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
-        <ListadoRecursos
-        Items={Recursos}
-        modificar={modificarRecurso}
-        activar={activarRecurso}
-        desactivar={desactivarRecurso}
-        categoriaSeleccionada={categoriaSeleccionada}
+      {/* Modal para las existencias */}
+      <ModalExistencias
+        show={show}
+        handleClose={handleClose}
+        existencias={datosExistencias}
+        idRecurso={idRecurso}
         Buscar={Buscar}
       />
-      }
-      
 
-    </>
+      <div className="card" id="TableSorterCard">
+        <div className="table-responsive">
+          <table className="table table-hover table-sm table-bordered table-striped">
+            <thead className="table-light">
+              <tr>
+                <th className="text-center">Nombre</th>
+                <th className="text-end">Cantidad</th>
+                <th className="text-end">Cantidad crítica</th>
+                <th className="text-center">Categoría</th>
+                <th className="text-center">Descripción</th>
+                <th className="text-center">Existencias</th>
+                <th className="text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {itemsActuales?.map((Item) => (
+                <tr className={!Item.activo && "efecto-desactivado"} key={Item.id}>
+                  <td className={`text-center text-dark`}>{Item.nombre}</td>
+                  <td className="text-end">
+                    {Item.existencias?.reduce(
+                      (accumulator, currentValue) =>
+                        accumulator + currentValue.cantidad,
+                      0
+                    )}
+                  </td>
+                  <td className={`text-end`}>{Item.cantidadCritica}</td>
+                  <td className="text-center ">
+                    {Item.categoria === 1 ? "Componente" : "Periférico"}
+                  </td>
+                  <td className="text-center">
+                    <button
+                      className="btn btn-info"
+                      onClick={() => verDescripcion(Item.descripcion)}
+                    >
+                      Ver descripción
+                    </button>
+                  </td>
+                  <td className="text-center">
+                    <button
+                      className="btn btn-info"
+                      onClick={() => {
+                        handleShow();
+                        setDatosExistencias(Item.existencias);
+                        setIdRecurso(Item.id);
+                      }}
+                    >
+                      Ver
+                    </button>
+                  </td>
+                  <td className="text-center text-nowrap">
+                    <button
+                      className="btn btn-sm btn-warning me-2"
+                      title="Modificar"
+                      onClick={() => modificar(Item)}
+                    >
+                      <i className="fa fa-pencil"></i>
+                    </button>
+                    <button
+                      className={`btn btn-sm ${
+                        !!Item.activo ? "btn-danger" : "btn-primary"
+                      }`}
+                      title={!!Item.activo ? "Borrar" : "Reactivar"}
+                      onClick={
+                        !!Item.activo
+                          ? () => desactivar(Item.id)
+                          : () => activar(Item.id)
+                      }
+                    >
+                      <i
+                        className={
+                          !!Item.activo
+                            ? "fas fa-trash"
+                            : "fas fa-trash-restore"
+                        }
+                      ></i>
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Pagination className="justify-content-center">
+          {[...Array(paginasTotales).keys()].map((page) => (
+            <Pagination.Item
+              key={page + 1}
+              active={page + 1 === currentPage}
+              onClick={() => handlePageChange(page + 1)}
+            >
+              {page + 1}
+            </Pagination.Item>
+          ))}
+        </Pagination>
+      </div>
+    </div>
   );
 }

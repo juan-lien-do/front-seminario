@@ -99,8 +99,17 @@ async function actualizarContrasena (nombre, nuevaPassword) {
     const respuesta = await sonnerQuestion.pregunta(
       "¿Está seguro de que desea actualizar la contraseña?"
     );
-        await instance.patch(url, data);
-
+    if (respuesta) {
+        try{
+          await instance.patch(url, data);
+          toast.success("Se actualizo la contraseña correctamente")
+        }
+        
+        catch (error) {
+          console.error(error);
+          toast.error("Surgió un error")
+        }
+      }
 };
 
 

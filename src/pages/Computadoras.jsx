@@ -144,6 +144,7 @@ function Computadoras() {
                 handleNotebooks={handleNotebooks}
                 handleTodos={handleTodos}
                 setSearchTerm={setSearchTerm}
+                categoriaSeleccionada={categoriaSeleccionada}
             />
             {
                 estaCargando ? 

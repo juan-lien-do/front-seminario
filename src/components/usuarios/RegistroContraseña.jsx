@@ -8,9 +8,8 @@ export default function RegistroContraseña({ usuario, onComplete }) {
     minLength: false,
     hasNumber: false,
     hasUpperCase: false,
-    hasSpecialChar: false, // Asegúrate de incluir esto en el estado de validaciones
+    hasSpecialChar: false,
   });
-  const specialCharacters = "!@#$%^&*()-_+=<>?";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,9 +25,7 @@ export default function RegistroContraseña({ usuario, onComplete }) {
     }
 
     try {
-      // Llama al servicio con los datos requeridos
       await usuariosService.actualizarContrasena(usuario.nombre, password);
-      alert("Contraseña actualizada exitosamente.");
       onComplete(); // Notifica al componente padre, si aplica
     } catch (error) {
       alert("Error al actualizar la contraseña. Por favor, intente de nuevo.");
@@ -44,7 +41,7 @@ export default function RegistroContraseña({ usuario, onComplete }) {
       minLength: newPassword.length >= 6,
       hasNumber: /[0-9]/.test(newPassword),
       hasUpperCase: /[A-Z]/.test(newPassword),
-      hasSpecialChar: /[!@#$%^&*()\-_=+<>?]/.test(newPassword), // Escapando caracteres especiales en la expresión regular
+      hasSpecialChar: /[!@#$%^&*()\-_=+<>?]/.test(newPassword),
     });
   };
 

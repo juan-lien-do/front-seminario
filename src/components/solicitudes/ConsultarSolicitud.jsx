@@ -55,7 +55,7 @@ export default function ConsultarSolicitud({handleVolver, solicitud}) {
                             }
                             readOnly
                             value={elemento.descripcion}
-                            maxLength="100"
+                            maxLength="500"
                             rows="1"
                             style={{ resize: "none", overflow: "hidden" }}
                             onInput={(e) => {

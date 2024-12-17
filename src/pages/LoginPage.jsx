@@ -80,7 +80,7 @@ export default function LoginPage({ usuario, onLogin }) {
 
   // Si el usuario tiene primerLogin true y la contraseña no está expirada, mostramos el componente de RegistroContraseña
   if (userData && userData.primerLogin === true && !passwordExpired) {
-    return <RegistroContraseña usuario={userData} onComplete={() => navigate("/home")} />;
+    return <RegistroContraseña usuario={userData} onComplete={() => navigate("/login")} />;
   }
 
   return (
