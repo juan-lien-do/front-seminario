@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
 import devolucionesServices from "../../services/devoluciones.services.js";
+import envioServices from "../../services/envios.services.js";
 import "./modal.css";
 
 function ModalDevoluciones({ show, handleClose, envio, onConfirmDevolucion }) {
@@ -34,7 +35,7 @@ function ModalDevoluciones({ show, handleClose, envio, onConfirmDevolucion }) {
 
   const cargarFotos = async () => {
     try {
-      const res = await devolucionesServices.obtenerFotosDevolucion(envio.idEnvio);
+      const res = await envioServices.obtenerFotos(envio.idEnvio);
       const fotosConvertidas = res.map((foto) => {
         const extension = foto.nombreArchivo.split('.').pop();
         const mimeType = extension === 'png' ? 'image/png' : 'image/jpeg';

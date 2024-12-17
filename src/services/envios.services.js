@@ -24,6 +24,7 @@ async function guardar(envio) {
 
 async function actualizarEstado(idEnvio, nuevoEstado) {
     try {
+        console.log(idEnvio + "-" + nuevoEstado)
         const res = await instance.put(`${urlResource}/${idEnvio}/${nuevoEstado}`);
         return res.data;
     } catch (error) {

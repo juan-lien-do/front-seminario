@@ -4,6 +4,17 @@ import { useState, useEffect } from "react";
 import { Pagination } from "react-bootstrap";
 
 export default function ListadoEmpleados({ empleados, modificar, desactivar, activar, buscaActivos }) {
+  function formatearFechaSimple(fechaISO) {
+    const fecha = new Date(fechaISO);
+    const dia = String(fecha.getDate()).padStart(2, '0');
+    const mes = String(fecha.getMonth() + 1).padStart(2, '0'); // Los meses van de 0 a 11
+    const año = fecha.getFullYear();
+    const horas = String(fecha.getHours()).padStart(2, '0');
+    const minutos = String(fecha.getMinutes()).padStart(2, '0');
+    const segundos = String(fecha.getSeconds()).padStart(2, '0');
+    return `${dia}/${mes}/${año} ${horas}:${minutos}:${segundos}`.slice(0,10);
+  }
+
   const [paginaActual, setPaginaActual] = useState(1)
   const itemsPorPagina = 7;
 
@@ -61,7 +72,7 @@ export default function ListadoEmpleados({ empleados, modificar, desactivar, act
                   <></>
                   :
                   <td className="text-center">
-                    {empleado?.deleteDate}
+                    {formatearFechaSimple(empleado?.deleteDate)}
                   </td>
                 }
                 <td className={`text-center text-nowrap text-dark" }`}>
