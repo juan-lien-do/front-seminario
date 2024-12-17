@@ -1,0 +1,35 @@
+/* Estilo de imágenes pequeñas */
+.foto {
+    width: 100px; /* Ancho pequeño */
+    height: auto; /* Mantiene la proporción */
+    margin: 5px;
+    cursor: pointer; /* Indica que la imagen es clickeable */
+    transition: transform 0.2s ease; /* Efecto de escala al pasar el cursor */
+  }
+  
+  .foto:hover {
+    transform: scale(1.1); /* Pequeña ampliación al pasar el cursor */
+  }
+  
+  /* Estilo del modal */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8); /* Fondo oscuro */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .modal-image {
+    max-width: 90%;
+    max-height: 90%;
+    border: 2px solid white;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5);
+    cursor: pointer; /* Permite cerrar el modal al hacer clic */
+  }
+  

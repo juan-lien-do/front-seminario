@@ -45,7 +45,7 @@ export default function ModalDetallesEnvio({show, handleClose, envio}){
             <thead className="thead-dark">
               <tr>
                 <th className="text-center"> Número de serie </th>
-                <th className="text-center"> Masterizado </th>
+                <th className="text-center"> Descripcion </th>
                 <th className="text-center"> Número de ws </th>
               </tr>
             </thead>
@@ -57,11 +57,7 @@ export default function ModalDetallesEnvio({show, handleClose, envio}){
                       {det.computadoraDTO.nroSerie}
                   </td>
                   <td className="text-center">
-                      {det.computadoraDTO.esMasterizado ?
-                      <i className="fa-solid fa-check"></i>
-                      :
-                      <i class="fa-solid fa-xmark"></i>
-                      }
+                      {det.computadoraDTO.descripcion}
                   </td>
                   <td className="text-center">
                       {det.computadoraDTO.nroWs}

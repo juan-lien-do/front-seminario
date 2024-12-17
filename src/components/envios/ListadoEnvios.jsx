@@ -27,15 +27,15 @@ export default function ListadoEnvios({ envios, recargarEnvios }) {
   ];
 
   const transicionesPosibles = [
-    {id: 1, transiciones:[2, 9, 8, 7]},
-    {id: 2, transiciones:[9, 1, 7, 8]},
-    {id: 3, transiciones:[4, 7, ]},
+    {id: 1, transiciones:[2, 9, 7]},
+    {id: 2, transiciones:[9, 7, 8]},
+    {id: 3, transiciones:[4, 7, 8]},
     {id: 4, transiciones:[]},
     {id: 5, transiciones:[]},
     {id: 6, transiciones:[]},
     {id: 7, transiciones:[]},
-    {id: 8, transiciones:[4, 7, 9, 2]},
-    {id: 9, transiciones:[1, 2, 3, 7, 8]},
+    {id: 8, transiciones:[3, 4, 7]},
+    {id: 9, transiciones:[7, 8]},
   ]
 
   function handleClose() {
@@ -125,6 +125,7 @@ export default function ListadoEnvios({ envios, recargarEnvios }) {
       <table className="table table-hover table-sm table-bordered table-striped">
         <thead className="table-light">
           <tr>
+            <th className="text-center">ID</th>
             <th className="text-center">Empleado</th>
             <th className="text-center">Usuario</th>
             <th className="text-center">Cambiar estado</th>
@@ -145,6 +146,7 @@ export default function ListadoEnvios({ envios, recargarEnvios }) {
                 key={envio.idEnvio}
                 className={esEntregado ? "table-success" : ""}
               >
+              <td className="text-center">{envio.idEnvio}</td>
                 <td className="text-center">
                   {envio?.nombreEmpleado} - <code>{envio?.cuilEmpleado}</code>
                 </td>
