@@ -180,7 +180,7 @@ export default function RegistrarEnvio({
   useEffect(() => {
     const empleadosOptions = empleados?.map((empleado) => ({
       value: empleado.idEmpleado,
-      label: `${empleado.nombre} - ${empleado.ws}`,
+      label: `${empleado.nombre} - ${empleado.cuil}`,
     }));
     setEmpleadosFiltrados(empleadosOptions);
   }, [empleados]);

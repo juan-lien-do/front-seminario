@@ -22,7 +22,6 @@ function ListadoDevoluciones({ devoluciones, abrirModalDevolucion, estadoSelecci
     }
     return true; // Mostrar todos si no se especifica filtro
   });
-  
 
   return (
     <div className="container-fluid">
@@ -59,12 +58,21 @@ function ListadoDevoluciones({ devoluciones, abrirModalDevolucion, estadoSelecci
                       </button>
                     </td>
                     <td className="text-center">
-                      <button
-                        className="btn btn-primary btn-sm"
-                        onClick={() => abrirModalDevolucion(devolucion)}
-                      >
-                        Confirmar Devolución
-                      </button>
+                      {estadoSeleccionado === 6 ? (
+                        <button
+                          className="btn btn-secondary btn-sm"
+                          onClick={() => abrirModalDevolucion(devolucion)}
+                        >
+                          Ver Devolución
+                        </button>
+                      ) : (
+                        <button
+                          className="btn btn-primary btn-sm"
+                          onClick={() => abrirModalDevolucion(devolucion)}
+                        >
+                          Confirmar Devolución
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))

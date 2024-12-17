@@ -43,7 +43,7 @@ function Computadoras() {
     };
 
     function filtrarPorDescripcion(data){
-        return data.filter(x => x.descripcion.toUpperCase().includes(searchTerm.toUpperCase()));
+        return data?.filter(x => x.descripcion.toUpperCase().includes(searchTerm.toUpperCase()));
     }
 
     async function Buscar() {

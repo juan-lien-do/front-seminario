@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import ModalGenerarReporte from "../components/reportes/ModalGenerarReporte";
 import reportesService from "../services/reportes.service";
 import ExcelDownloadButton from "../components/DownloadExcelButton";
-
+import { NavLink } from "react-router-dom";
 const mockRecursos = [
   { nombre: "Mouse genérico", cantidad: 12, critica: 15 },
   { nombre: "Monitor 19''", cantidad: 1, critica: 5 },
@@ -61,16 +61,42 @@ export default function Home({ usuario }) {
     setMostrarRegistro(true)
   }
 
+/*
+NavLink className="nav-link" to="/inventario">
+                <i className="fa-solid fa-boxes-stacked"></i> Inventario
+              </NavLink>
+*/
+
+  function QuickAccess({  }){
+    return (
+      <div className="d-flex justify-content-between align-items-center p-2 my-2 ">
+        {/* Texto a la izquierda */}
+        <div className="text-dark fw-bold" style={{ fontSize: "1.2rem" }}>
+          Accedé rápidamente a los envíos
+        </div>
+        {/* Botón a la derecha */}
+        <button
+          className="btn btn-primary d-flex align-items-center gap-2"
+        >
+          <NavLink className="nav-link" to="/envios">
+            <i className="fa-solid fa-parachute-box me-2"></i>
+            Administrar envíos
+          </NavLink>
+        </button>
+      </div>
+    );
+  };
+  
+  
+
   return (
     <div className="container mt-5">
-      <div className="card px-3 py-1 my-2 shadow">
+      <div className="card px-3 pt-3 my-4 shadow">
         <h2 className="ms-2">Sesión iniciada como {usuario.nombre}</h2>
+        <QuickAccess />
       </div>
 
-      {!!usuario.isAdmin && (
-        <>
-          <ModalGenerarReporte cerrarModal={cerrarModal} generarReporte={generarReporte} mostrarRegistro={mostrarRegistro}/>
-          <div className="card my-2 px-3 py-2 shadow">
+      <div className="card my-2 px-3 pt-3 my-4 shadow">
             <h2 className="ms-2">
               Recursos por debajo de las cantidades críticas
             </h2>
@@ -103,6 +129,11 @@ export default function Home({ usuario }) {
               </div>
             </div>
           </div>
+
+      {!!usuario.isAdmin && (
+        <>
+          <ModalGenerarReporte cerrarModal={cerrarModal} generarReporte={generarReporte} mostrarRegistro={mostrarRegistro}/>
+          
           <div className="card px-3 py-2 shadow" id="tabla-descargar">
 
 

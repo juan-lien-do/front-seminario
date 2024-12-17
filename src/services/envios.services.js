@@ -24,6 +24,7 @@ async function guardar(envio) {
 
 async function actualizarEstado(idEnvio, nuevoEstado) {
     try {
+        console.log(idEnvio + "-" + nuevoEstado)
         const res = await instance.put(`${urlResource}/${idEnvio}/${nuevoEstado}`);
         return res.data;
     } catch (error) {
@@ -34,7 +35,7 @@ async function actualizarEstado(idEnvio, nuevoEstado) {
 
 // Subir fotos al envío
 async function subirFotos(envioId, formData) {
-    const url = `http://localhost:8080/archivos/cargar_foto/${envioId}`;
+    const url = `http://localhost:8080/archivos/cargar_fotoEnv/${envioId}`;
     try {
         const response = await instance.post(url, formData, {
             headers: { "Content-Type": "multipart/form-data" },
@@ -47,7 +48,7 @@ async function subirFotos(envioId, formData) {
 }
 
 async function obtenerFotos(envioId) {
-    const url = `http://localhost:8080/archivos/fotos/${envioId}`;
+    const url = `http://localhost:8080/archivos/fotos-envio/${envioId}`;
 
         try {
             const response = await instance.get(url);
