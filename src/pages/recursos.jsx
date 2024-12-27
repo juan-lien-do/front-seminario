@@ -122,6 +122,7 @@ export default function Recursos() {
         handleTodos={handleTodos}
         handlePerifericos={handlePerifericos}
         setSearchTerm={setSearchTerm}
+        categoriaSeleccionada={categoriaSeleccionada}
       />
       {
         estaCargando ?

@@ -91,17 +91,27 @@ async function blanquearContrasena(id) {
 
 async function actualizarContrasena (nombre, nuevaPassword) {
 
-    const data = { nombre, nuevaPassword };
+  const data = { nombre, nuevaPassword };
 
-    console.log("Datos enviados:", data); // Verifica el cuerpo de la solicitud
+  console.log("Datos enviados:", data); // Verifica el cuerpo de la solicitud
 
-    const url = `${baseUrl}/${("actualizar_password")}`;
-    const respuesta = await sonnerQuestion.pregunta(
-      "¿Está seguro de que desea actualizar la contraseña?"
-    );
+  const url = `${baseUrl}/${("actualizar_password")}`;
+  const respuesta = await sonnerQuestion.pregunta(
+    "¿Está seguro de que desea actualizar la contraseña?"
+  );
+  if (respuesta) {
+      try{
         await instance.patch(url, data);
-
+        toast.success("Se actualizo la contraseña correctamente")
+      }
+      
+      catch (error) {
+        console.error(error);
+        toast.error("Surgió un error")
+      }
+    }
 };
+
 
 
 async function activar(id) {

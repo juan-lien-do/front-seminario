@@ -28,7 +28,6 @@ export default function RegistroContraseña({ usuario, onComplete }) {
     try {
       // Llama al servicio con los datos requeridos
       await usuariosService.actualizarContrasena(usuario.nombre, password);
-      alert("Contraseña actualizada exitosamente.");
       onComplete(); // Notifica al componente padre, si aplica
     } catch (error) {
       alert("Error al actualizar la contraseña. Por favor, intente de nuevo.");

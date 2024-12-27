@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 
@@ -13,18 +13,46 @@ export default function BuscadorRecursos({
   setSearchTerm,
   categoriaSeleccionada,
 }) {
-  const estadoActivo = activo ? "" : "inactivos";
+
   let tipoSeleccionado = "Todos recursos"; 
-  switch (categoriaSeleccionada) {
-    case 1:
-      tipoSeleccionado = "Componentes";
-      break;
-    case 2:
-      tipoSeleccionado = "Periféricos";
-      break;
-    default:
-      tipoSeleccionado = "Todos los recursos";
+
+  /*
+  useEffect( () => {
+    switch (tipoSeleccionado) {
+      case 1:
+        categoriaSeleccionada = "Componentes";
+        break;
+      case 2:
+        categoriaSeleccionada = "Periféricos";
+        break;
+      default:
+        categoriaSeleccionada = "Todos los recursos";
+    }
   }
+    
+    ,[tipoSeleccionado])*/
+
+    const [tipo, setTipo] = useState("recursos"    )
+
+    
+  useEffect( () => {
+    switch (categoriaSeleccionada) {
+      case 1:
+        setTipo("computadoras");
+        break;
+      case 2:
+        setTipo("periféricos");
+        break;
+      default:
+        setTipo("recursos");
+    }
+  }
+    
+    ,[categoriaSeleccionada])
+
+
+
+  const estadoActivo = activo ? "" : "inactivos";
 
   return (
     <form
@@ -88,7 +116,7 @@ export default function BuscadorRecursos({
 
             {/* Encabezado que muestra el estado, debajo de los filtros */}
             <h5 className="text-center">
-              Se están mostrando {tipoSeleccionado} {estadoActivo}
+              Se están mostrando {tipo} {estadoActivo}
             </h5>
           </div>
         </div>
